@@ -1,10 +1,11 @@
+#!/bin/sh
 #=============================================================================#
 # File:   ~/.bashrc                                                           #
 # Author: hradecek <ivohradek@gmail.com>                                      #
 #=============================================================================#
 
 # Directory where everything is stored
-BASH="$HOME/dotfiles/.bash"
+BASH="$HOME/dotfiles/bash"
 
 # Choose theme
 THEME="rjorgenson"
@@ -45,7 +46,7 @@ stty -ixon
 # Environment variables
 export EDITOR="/usr/bin/vim"
 export JAVA_HOME="/usr/lib/jvm/java-8-openjdk"
-export PATH="$PATH:/opt/android-sdk/platform-tools/:/opt/android-sdk/tools/:/home/ivo/.gem/ruby/2.2.0/bin:/opt/jruby/bin:/usr/local/heroku/bin"
+export PATH="$PATH:/opt/android-sdk/platform-tools/:/opt/android-sdk/tools/:/home/ivo/.gem/ruby/2.2.0/bin:/opt/jruby/bin:/usr/local/heroku/bin:$JAVA_HOME"
 
 # Add cabal to PATH
 if [[ -d "$HOME/.cabal/bin" ]]; then
