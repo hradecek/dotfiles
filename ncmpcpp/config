@@ -13,15 +13,15 @@ mpd_connection_timeout             = "5"
 ncmpcpp_directory                  = "~/.ncmpcpp"
 
 # Format
-song_list_format                   = "$7[$3%l$7]$0 {$7%a$0 $8-}$0 {$2%t}$0 $R {$3%b$0}"
+song_list_format                   = "$7[$3%l$7]$0 {$7%a$0 $8-}|{$7%f}$0 {$2%t}$0 $R {$3%b$0}"
 progressbar_look                   = "=>"
 now_playing_prefix                 = "$b$5~> "
 now_playing_suffix                 = "$5♫♫♫$/b"
-song_status_format                 = "$b{$2%a$9 $3-$9 }$6{%t$9}"
+song_status_format                 = "$b{$2%a$9 $3-$9 }|{$2%f$9}$6{%t$9}"
 browser_sort_format                = "{%a - }{%t}|{%f} {(%l)}"
 progressbar_boldness               = "no"
-song_columns_list_format           = "(5)[green]{lr} (30)[cyan]{tE} (20)[red]{aE} (30)[yellow]{bE} "
-song_window_title_format           = "{%a - }{%t}|{%f}" 
+song_columns_list_format           = "(5)[green]{lr} (30)[cyan]{t|f} (20)[red]{aE} (30)[yellow]{bE}"
+song_window_title_format           = "{%a - }{%t}|{%f}"
 
 # Colors
 colors_enabled                     = "yes"
