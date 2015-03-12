@@ -3,8 +3,6 @@
 " Author: Ivo Hradek <ivohradek@gmail.com>                                    "
 " Description: Vim configuration file                                         "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" source ~/.vim/abbreviations.vim
-
 set nocompatible
 set encoding=utf-8
 
