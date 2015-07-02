@@ -1,6 +1,10 @@
 #=============================================================================#
-# File: ~/.ncmpcpp/bindings                                                   #
+# File:   ~/.ncmpcpp/bindings                                                 #
 # Author: hradecek <ivohradek@gmail.com>                                      #
 #=============================================================================#
 def_key "ctrl_c"
   quit
+def_key "j"
+    scroll_down
+def_key "k"
+    scroll_up
