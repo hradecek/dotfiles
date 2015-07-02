@@ -81,6 +81,22 @@ task :xinitrc do
     lnif 'xinitrc', 'xinitrc'
 end
 
+task :mpd do
+    lnif 'config/mpd/mpd.conf', 'config/mpd/mpd.conf'
+end
+
+task :git do
+    lnif 'gitconfig', 'gitconfig'
+end
+
+task :mpdscribble do
+    lnif 'mpdscribble/mpdscribble.conf', 'mpdscribble/mpdscribble.conf'
+end
+
+# task :systemd do
+#     lnif 'config/systemd/user/mpd
+# end
+
 task :vim do
     vim_install
 end
