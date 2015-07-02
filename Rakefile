@@ -48,7 +48,7 @@ def github_clone(what, where)
 end
 
 def vim_install
-    vundle = ENV['HOME'] + "/.vim/bundle/vundle"
+    vundle = ENV['HOME'] + "/.vim/bundle/Vundle.vim"
     lnif 'vimrc', 'vimrc'
 
     unless File.exists?(vundle)
