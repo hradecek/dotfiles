@@ -38,6 +38,8 @@ import XMonad.Layout.PerWorkspace
 import XMonad.Layout.ThreeColumns
 
 import Data.Data
+import Data.List
+import Data.Maybe
 import Data.Monoid
 import Data.Colour.SRGB
 import Data.String.Utils
@@ -48,6 +50,9 @@ import Control.Applicative
 import System.IO
 import System.Dzen
 import System.Exit
+import System.Random
+import System.Directory
+import System.FilePath.Posix
 
 import Graphics.X11.ExtraTypes.XF86
 
@@ -142,46 +147,50 @@ layoutHook' = avoidStruts
 --------------------------------------------------------------------------------
 keys' :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
-  [ ((modMask  .|. shiftMask  , xK_q      ), io (exitWith ExitSuccess))
-  , ((modMask                 , xK_q      ), spawn "xmonad --recompile && xmonad --restart")
-  , ((modMask                 , xK_c      ), kill)
-  , ((mod1Mask                , xK_F4     ), kill)
-  , ((modMask                 , xK_Tab    ), windows W.swapMaster)
-  , ((modMask                 , xK_j      ), windows W.swapDown)
-  , ((modMask                 , xK_k      ), windows W.swapUp)
-  , ((mod1Mask                , xK_j      ), windows W.focusDown)
-  , ((mod1Mask                , xK_k      ), windows W.focusUp)
-  , ((modMask                 , xK_t      ), withFocused $ windows . W.sink)
-  , ((modMask                 , xK_h      ), sendMessage Shrink)
-  , ((modMask                 , xK_l      ), sendMessage Expand)
-  , ((mod1Mask .|. controlMask, xK_Right  ), nextWS)
-  , ((mod1Mask .|. controlMask, xK_l      ), nextWS)
-  , ((mod1Mask .|. controlMask, xK_Left   ), prevWS)
-  , ((mod1Mask .|. controlMask, xK_h      ), prevWS)
-  , ((mod1Mask .|. shiftMask  , xK_Right  ), shiftToNext)
-  , ((mod1Mask .|. shiftMask  , xK_l      ), shiftToNext)
-  , ((mod1Mask .|. shiftMask  , xK_Left   ), shiftToPrev)
-  , ((mod1Mask .|. shiftMask  , xK_h      ), shiftToPrev)
-  , ((modMask                 , xK_b      ), sendMessage ToggleStruts)
-  , ((modMask                 , xK_space  ), sendMessage NextLayout)
-  , ((modMask  .|. shiftMask  , xK_space  ), setLayout $ XMonad.layoutHook conf)
+  [ ((modMask  .|. shiftMask   , xK_q         ), io (exitWith ExitSuccess))
+  , ((modMask                  , xK_q         ), spawn "xmonad --recompile && xmonad --restart")
+  , ((modMask                  , xK_c         ), kill)
+  , ((mod1Mask                 , xK_F4        ), kill)
+  , ((modMask                  , xK_Tab       ), windows W.swapMaster)
+  , ((modMask                  , xK_j         ), windows W.swapDown)
+  , ((modMask                  , xK_k         ), windows W.swapUp)
+  , ((mod1Mask                 , xK_j         ), windows W.focusDown)
+  , ((mod1Mask                 , xK_k         ), windows W.focusUp)
+  , ((modMask                  , xK_t         ), withFocused $ windows . W.sink)
+  , ((modMask                  , xK_h         ), sendMessage Shrink)
+  , ((modMask                  , xK_l         ), sendMessage Expand)
+  , ((mod1Mask .|. controlMask , xK_Right     ), nextWS)
+  , ((mod1Mask .|. controlMask , xK_l         ), nextWS)
+  , ((mod1Mask .|. controlMask , xK_Left      ), prevWS)
+  , ((mod1Mask .|. controlMask , xK_h         ), prevWS)
+  , ((mod1Mask .|. shiftMask   , xK_Right     ), shiftToNext)
+  , ((mod1Mask .|. shiftMask   , xK_l         ), shiftToNext)
+  , ((mod1Mask .|. shiftMask   , xK_Left      ), shiftToPrev)
+  , ((mod1Mask .|. shiftMask   , xK_h         ), shiftToPrev)
+  , ((modMask                  , xK_b         ), sendMessage ToggleStruts)
+  , ((modMask                  , xK_space     ), sendMessage NextLayout)
+  , ((modMask  .|. shiftMask   , xK_space     ), setLayout $ XMonad.layoutHook conf)
 
-  , ((modMask  .|. shiftMask  , xK_Return ), spawn $ XMonad.terminal conf)
-  , ((mod1Mask .|. shiftMask  , xK_f      ), spawn "/usr/bin/firefox" )
-  , ((mod1Mask .|. shiftMask  , xK_v      ), spawn "/usr/bin/virtualbox")
-  , ((mod1Mask .|. shiftMask  , xK_Return ), shellPrompt shellConfig')
-  , ((modMask                 , xK_x      ), spawn "/usr/bin/xcalib -invert -alter")
-  , ((modMask                 , xK_s      ), spawn "sleep 1; xset dpms force off")
-  , ((mod1Mask                , xK_Escape ), spawn "/home/ivo/.xmonad/bin/changeLayout.pl")
-  
-  , ((mod1Mask                , xK_Down   ), spawn "mpc toggle")
-  , ((mod1Mask                , xK_Left   ), spawn "mpc prev")
-  , ((mod1Mask                , xK_Right  ), spawn "mpc next")
-  , ((mod1Mask                , xK_Up     ), spawn "mpc stop")
+  , ((modMask  .|. shiftMask   , xK_Return    ), spawn $ XMonad.terminal conf)
+  , ((mod1Mask .|. shiftMask   , xK_f         ), spawn "/usr/bin/firefox" )
+  , ((mod1Mask .|. shiftMask   , xK_v         ), spawn "/usr/bin/virtualbox")
+  , ((mod1Mask .|. shiftMask   , xK_Return    ), shellPrompt shellConfig')
+  , ((modMask                  , xK_x         ), spawn "/usr/bin/xcalib -invert -alter")
+  , ((modMask                  , xK_s         ), spawn "sleep 1; xset dpms force off")
+  , ((mod1Mask                 , xK_Escape    ), spawn "/home/ivo/.xmonad/bin/changeLayout.pl")
 
-  , ((0                , xF86XK_AudioMute ), spawn "/usr/bin/amixer set Master toggle")
-  , ((0         , xF86XK_AudioRaiseVolume ), spawn "/usr/bin/amixer set Master 5%+")
-  , ((0         , xF86XK_AudioLowerVolume ), spawn "/usr/bin/amixer set Master 5%-")
+  , ((mod1Mask .|. controlMask , xK_Page_Up   ), io setPrevWallpaper >>= spawn)
+  , ((mod1Mask .|. controlMask , xK_Page_Down ), io setNextWallpaper >>= spawn)
+  , ((mod1Mask .|. controlMask , xK_End       ), io setRandomWallpaper >>= spawn)
+
+  , ((mod1Mask                 , xK_Down      ), spawn "mpc toggle")
+  , ((mod1Mask                 , xK_Left      ), spawn "mpc prev")
+  , ((mod1Mask                 , xK_Right     ), spawn "mpc next")
+  , ((mod1Mask                 , xK_Up        ), spawn "mpc stop")
+
+  , ((0                    , xF86XK_AudioMute ), spawn "/usr/bin/amixer set Master toggle")
+  , ((0             , xF86XK_AudioRaiseVolume ), spawn "/usr/bin/amixer set Master 5%+")
+  , ((0             , xF86XK_AudioLowerVolume ), spawn "/usr/bin/amixer set Master 5%-")
   ]
   
 --------------------------------------------------------------------------------
@@ -190,10 +199,12 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 mouseBindings' :: XConfig Layout -> M.Map (KeyMask, Button) (Window -> X ())
 mouseBindings' (XConfig {XMonad.modMask = modMask}) = M.fromList
   [ ((modMask, button1), \w -> focus w >> mouseMoveWindow w
-                                        >> windows W.shiftMaster)
+                                       >> windows W.shiftMaster)
   , ((modMask, button2), windows . (W.shiftMaster .) . W.focusWindow)
   , ((modMask, button3), \w -> focus w >> mouseResizeWindow w
                                        >> windows W.shiftMaster)
+  , ((modMask .|. shiftMask, button1), \_ -> shiftToPrev)
+  , ((modMask .|. shiftMask, button3), \_ -> shiftToNext)
   ]
 
 
@@ -369,6 +380,43 @@ bottomBarLogHook h = dynamicLogWithPP defaultPP
   , ppVisible         = dzenBoxStyle windowsWSBox
   , ppHiddenNoWindows = dzenBoxStyle noWindowsWSBox
   }
+
+pick :: [a] -> IO a
+pick xs = randomRIO (0, length xs - 1) >>= return . (xs !!)
+
+nextElem, prevElem :: Eq a => a -> [a] -> Maybe a
+nextElem e xs = listToMaybe . drop 1 . dropWhile (/= e) $ xs ++ (take 1 xs)
+prevElem e xs = nextElem e $ reverse xs
+randElem xs = pick xs
+
+setRandomWallpaper = do
+    allWall <- getAllWallpapers
+    newWall <- randElem allWall
+    return $ "/usr/bin/feh --bg-scale \"/data/Pictures/Wallpapers/" ++ newWall ++ "\""
+
+setNextWallpaper = do
+    allWall <- getAllWallpapers
+    curWall <- getCurrentWallpaper
+    let newWall = fromJust $ nextElem curWall allWall
+    return $ "/usr/bin/feh --bg-scale \"/data/Pictures/Wallpapers/" ++ newWall ++ "\""
+
+setPrevWallpaper = do
+    allWall <- getAllWallpapers
+    curWall <- getCurrentWallpaper
+    let newWall = fromJust $ prevElem curWall allWall
+    return $ "/usr/bin/feh --bg-scale \"/data/Pictures/Wallpapers/" ++ newWall ++ "\""
+
+getCurrentWallpaper :: IO [Char]
+getCurrentWallpaper =
+        init
+    <$> rstrip
+    <$> takeFileName
+    <$> readFile "/home/ivo/.fehbg"
+
+getAllWallpapers :: IO [FilePath]
+getAllWallpapers =
+        drop 2
+    <$> getDirectoryContents "/data/Pictures/Wallpapers"
 
 --------------------------------------------------------------------------------
 --                                   MAIN                                     --
