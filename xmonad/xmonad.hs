@@ -56,6 +56,8 @@ import System.FilePath.Posix
 
 import Graphics.X11.ExtraTypes.XF86
 
+import qualified Control.Exception as E
+
 import qualified Data.Map as M
 import qualified Data.Colour.Names as C
 
@@ -247,18 +249,25 @@ dzenBoxStyle box text = toString $
   +++ fg (bgDB box) (rect 1920 (hDB box))
   +++ pos (-1920)
 
+dzenBoxStyleL :: DzenBox -> Logger -> Logger
+dzenBoxStyleL = (fmap . fmap) . dzenBoxStyle
+
 dzenSpawnPipe :: (MonadIO m, Show a) => a -> m Handle
 dzenSpawnPipe df = spawnPipe $ "/usr/bin/dzen2 " ++ show df ++ " -p -e onstart=lower"
 
 --------------------------------------------------------------------------------
 --                                SETTINGS                                    --
 --------------------------------------------------------------------------------
-yRes             = 768
-xRes             = 1366
-dzenFont         = "xft:monofur:size=10:antialias=true:hinting=true"
-dzenHeight       = 16
-dzenBoxLeftIcon  = "/home/ivo/.xmonad/icons/xbm/boxleft.xbm"
-dzenBoxRightIcon = "/home/ivo/.xmonad/icons/xbm/boxright.xbm"
+yRes                  = 768
+xRes                  = 1366
+dzenFont              = "xft:monofur:size=8:antialias=true:hinting=true"
+dzenHeight            = 14
+dzenBoxFullIcon       = "/home/ivo/.xmonad/icons/xbm/boxFull.xbm"
+dzenBoxLeftIcon       = "/home/ivo/.xmonad/icons/xbm/boxLeft.xbm"
+dzenBoxRightIcon      = "/home/ivo/.xmonad/icons/xbm/boxRight.xbm"
+dzenBoxSmallRightIcon = "/home/ivo/.xmonad/icons/xbm/boxSmallRight.xbm"
+dzenBoxSmallLeftIcon  = "/home/ivo/.xmonad/icons/xbm/boxSmallLeft.xbm"
+dzenBoxSmallFullIcon  = "/home/ivo/.xmonad/icons/xbm/boxSmallFull.xbm"
 
 workspaces' :: [WorkspaceId]
 workspaces' =  map show [1..9]
@@ -278,7 +287,7 @@ workspacesNames =
 
 shellConfig' :: XPConfig
 shellConfig' = defaultXPConfig
-  { font              = dzenFont
+  { font              = "xft:monofur:size=9:antialias=true:hinting=true"
   , height            = fromIntegral dzenHeight
   , bgColor           = sRGB24show C.black
   , fgColor           = sRGB24show C.lightgray
@@ -301,7 +310,7 @@ tabConfigTheme = defaultTheme
   , activeBorderColor   = sRGB24show C.darkgray
   , inactiveBorderColor = sRGB24show C.darkgray
   , urgentBorderColor   = sRGB24show C.darkgray
-  , fontName            = dzenFont
+  , fontName            = "xft:monofur:size=9:antialias=true:hinting=true"
   , decoHeight          = 14
   }
 
@@ -329,8 +338,8 @@ dzenTopFlags = DF
   , fnDF = dzenFont
   }
 
-windowsWSBox :: DzenBox
-windowsWSBox = DB
+darkorangeDzenBoxLR :: DzenBox
+darkorangeDzenBoxLR = DB
   { colDB = C.darkorange
   , bgDB  = C.black
   , fgDB  = C.black
@@ -339,8 +348,28 @@ windowsWSBox = DB
   , hDB   = dzenHeight
   }
 
-noWindowsWSBox :: DzenBox
-noWindowsWSBox = DB
+dodgerblueDzenBoxL :: DzenBox
+dodgerblueDzenBoxL = DB
+  { colDB = C.dodgerblue
+  , bgDB  = C.black
+  , fgDB  = C.black
+  , liDB  = dzenBoxSmallLeftIcon
+  , riDB  = dzenBoxSmallFullIcon
+  , hDB   = dzenHeight
+  }
+
+dodgerblueDzenBoxR :: DzenBox
+dodgerblueDzenBoxR = DB
+  { colDB = C.dodgerblue
+  , bgDB  = C.black
+  , fgDB  = C.black
+  , liDB  = dzenBoxSmallFullIcon
+  , riDB  = dzenBoxSmallRightIcon
+  , hDB   = dzenHeight
+  }
+
+dimgrayDzenBoxLR :: DzenBox
+dimgrayDzenBoxLR = DB
   { colDB = C.dimgray
   , bgDB  = C.black
   , fgDB  = C.silver
@@ -349,8 +378,8 @@ noWindowsWSBox = DB
   , hDB   = dzenHeight
   }
 
-currentWSBox :: DzenBox
-currentWSBox = DB
+dodgerblueDzenBoxLR :: DzenBox
+dodgerblueDzenBoxLR = DB
   { colDB = C.dodgerblue
   , bgDB  = C.black
   , fgDB  = C.black
@@ -373,13 +402,31 @@ bottomBarLogHook h = dynamicLogWithPP defaultPP
   , ppOrder           = \(ws:_:_:x) -> [ws] ++ x
   , ppWsSep           = "-"
   , ppOutput          = hPutStrLn h
-  , ppExtras          = [battery, date "%T"]
-  , ppHidden          = dzenBoxStyle windowsWSBox
-  , ppUrgent          = dzenBoxStyle windowsWSBox
-  , ppCurrent         = dzenBoxStyle currentWSBox
-  , ppVisible         = dzenBoxStyle windowsWSBox
-  , ppHiddenNoWindows = dzenBoxStyle noWindowsWSBox
+  , ppExtras          = [batteryL, dateL, uptimeL]
+  , ppHidden          = dzenBoxStyle dodgerblueDzenBoxLR
+  , ppUrgent          = dzenBoxStyle dodgerblueDzenBoxLR
+  , ppCurrent         = dzenBoxStyle dodgerblueDzenBoxLR
+  , ppVisible         = dzenBoxStyle dodgerblueDzenBoxLR
+  , ppHiddenNoWindows = dzenBoxStyle dimgrayDzenBoxLR
   }
+
+dzenClickWorkspace ws =
+     "^ca(1,"
+  ++ xdo "w;"
+  ++ xdo id
+  ++ ")"
+  ++ "^ca(3,"
+  ++ xdo "w;"
+  ++ xdo id
+  ++ ")"
+  ++ ws
+  ++ "^ca()^ca()"
+  where
+    wsIdxToString Nothing  = "1"
+    wsIdxToString (Just n) = show $ mod (n+1) $ length workspaces'
+
+    id                     = wsIdxToString (elemIndex ws workspaces')
+    xdo key                = "/usr/bin/xdotool key super+" ++ key
 
 pick :: [a] -> IO a
 pick xs = randomRIO (0, length xs - 1) >>= return . (xs !!)
@@ -392,19 +439,19 @@ randElem xs = pick xs
 setRandomWallpaper = do
     allWall <- getAllWallpapers
     newWall <- randElem allWall
-    return $ "/usr/bin/feh --bg-scale \"/data/Pictures/Wallpapers/" ++ newWall ++ "\""
+    return $ "/usr/bin/feh --bg-scale \"/data/Pictures/Wallpapers/Selected/" ++ newWall ++ "\""
 
 setNextWallpaper = do
     allWall <- getAllWallpapers
     curWall <- getCurrentWallpaper
     let newWall = fromJust $ nextElem curWall allWall
-    return $ "/usr/bin/feh --bg-scale \"/data/Pictures/Wallpapers/" ++ newWall ++ "\""
+    return $ "/usr/bin/feh --bg-scale \"/data/Pictures/Wallpapers/Selected/" ++ newWall ++ "\""
 
 setPrevWallpaper = do
     allWall <- getAllWallpapers
     curWall <- getCurrentWallpaper
     let newWall = fromJust $ prevElem curWall allWall
-    return $ "/usr/bin/feh --bg-scale \"/data/Pictures/Wallpapers/" ++ newWall ++ "\""
+    return $ "/usr/bin/feh --bg-scale \"/data/Pictures/Wallpapers/Selected/" ++ newWall ++ "\""
 
 getCurrentWallpaper :: IO [Char]
 getCurrentWallpaper =
@@ -416,7 +463,54 @@ getCurrentWallpaper =
 getAllWallpapers :: IO [FilePath]
 getAllWallpapers =
         drop 2
-    <$> getDirectoryContents "/data/Pictures/Wallpapers"
+    <$> getDirectoryContents "/data/Pictures/Wallpapers/Selected"
+
+
+(|++|) :: Logger -> Logger -> Logger
+l1 |++| l2 = (liftA2 . liftA2) (++) l1 l2
+
+labelL :: String -> Logger
+labelL = return . return
+
+batteryL =
+       (dzenBoxStyleL dodgerblueDzenBoxL $ labelL "BATTERY")
+  |++| (labelL " ")
+  |++| (dzenBoxStyleL dodgerblueDzenBoxR battery)
+
+dateL =
+       (dzenBoxStyleL dodgerblueDzenBoxL $ labelL "TIME")
+  |++| (labelL " ")
+  |++| (dzenBoxStyleL dodgerblueDzenBoxR $ date "%T")
+
+uptimeL =
+       (dzenBoxStyleL dodgerblueDzenBoxL $ labelL "UPTIME")
+  |++| (labelL " ")
+  |++| (dzenBoxStyleL dodgerblueDzenBoxR uptime)
+
+uptime :: Logger
+uptime = fileToLogger format "0" "/proc/uptime"
+  where
+    u x = read (takeWhile (/= '.') x) :: Integer
+    h x = div (u x) 3600
+    hr x = mod (u x) 3600
+    m x = div (hr x) 60
+    s x = mod (hr x) 60
+    format x = (show $ h x) ++ "h " ++ (show $ m x) ++ "m " ++ (show $ s x) ++ "s"
+initNotNull :: String -> String
+initNotNull [] = "0\n"
+initNotNull xs = init xs
+
+tailNotNull :: [String] -> [String]
+tailNotNull [] = ["0\n"]
+tailNotNull xs = tail xs
+
+fileToLogger :: (String -> String) -> String -> FilePath -> Logger
+fileToLogger f e p = do
+  let readWithE f1 e1 p1 = E.catch (do
+    contents <- readFile p1
+    return $ f1 (initNotNull contents)) ((\_ -> return e1) :: E.SomeException -> IO String)
+  str <- liftIO $ readWithE f e p
+  return $ return str
 
 --------------------------------------------------------------------------------
 --                                   MAIN                                     --
