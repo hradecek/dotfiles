@@ -1,0 +1,12 @@
+[user]
+	email = ivohradek@gmail.com
+	name = hradecek
+[core]
+	editor = vim
+[color]
+	ui = auto
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
+
