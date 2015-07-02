@@ -43,10 +43,15 @@ shopt -s cdspell
 # Disable old XON/XOFF flow control
 stty -ixon
 
+# 
+eval "$(dircolors ~/.dircolors)"
+
 # Environment variables
 export EDITOR="/usr/bin/vim"
-export JAVA_HOME="/usr/lib/jvm/java-8-openjdk"
-export PATH="$PATH:/opt/android-sdk/platform-tools/:/opt/android-sdk/tools/:/home/ivo/.gem/ruby/2.2.0/bin:/opt/jruby/bin:/usr/local/heroku/bin:$JAVA_HOME"
+export JAVA_HOME="/usr/lib/jvm/java-7-openjdk"
+# export SOLR_HOME="~/bin/solr/bin"
+export ANDROID_HOME="/opt/android-sdk"
+export PATH="$PATH:/opt/android-sdk/platform-tools/:/opt/android-sdk/tools/:/home/ivo/.gem/ruby/2.2.0/bin:/opt/jruby/bin:/usr/local/heroku/bin:/home/ivo/bin:$JAVA_HOME"
 
 # Add cabal to PATH
 if [[ -d "$HOME/.cabal/bin" ]]; then
@@ -87,5 +92,5 @@ if [ $PROMPT ]; then
 fi
 
 # added by duckpan installer
-eval $(perl -I${HOME}/perl5/lib/perl5 -Mlocal::lib)
+# eval $(perl -I${HOME}/perl5/lib/perl5 -Mlocal::lib)
 
