@@ -18,8 +18,8 @@ fi
 # Start MPD
 [[ ! -s ~/.config/mpd/pid ]] && mpd
 
-# Set/Restore wallpaper
-nitrogen --restore
+# Set random wallpaper
+feh --bg-scale --recursive --randomize ~/Pictures/Wallpapers/* &
 
 # Set left cursor
 xsetroot -cursor_name left_ptr &
