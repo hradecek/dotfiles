@@ -19,7 +19,7 @@ fi
 [[ ! -s ~/.config/mpd/pid ]] && mpd
 
 # Set random wallpaper
-feh --bg-scale --recursive --randomize ~/Pictures/Wallpapers/* &
+feh --bg-scale --recursive --randomize ~/Pictures/Wallpapers/Selected/* &
 
 # Set left cursor
 xsetroot -cursor_name left_ptr &
