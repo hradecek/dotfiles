@@ -78,14 +78,18 @@ logHook' = sequence_
 --                               STARTUP HOOK                                 --
 --------------------------------------------------------------------------------
 startupHook' :: X ()
-startupHook' =
-      setWMName "LG3D"
-  <+> setDefaultCursor xC_left_ptr
-  <+> (liftIO $ threadDelay 1000000)
-  <+> (startTimer 1 >>= XS.put . TID)
-  <+> addScreenCorners [ (SCLowerRight, nextWS)
-                       , (SCLowerLeft,  prevWS)
-                       ]
+startupHook' = foldl1 (<+>) $
+  [ setWMName "LG3D"
+  , setDefaultCursor xC_left_ptr
+  , (liftIO $ threadDelay 1000000)
+  , (startTimer 1 >>= XS.put . TID)
+  , corn
+  ] where
+      corn = addScreenCorners
+               [ (SCLowerRight, nextWS)
+               , (SCLowerLeft,  prevWS)
+               ]
+
 
 --------------------------------------------------------------------------------
 --                                EVENT HOOK                                  --
@@ -96,12 +100,13 @@ instance ExtensionClass TidState where
     initialValue = TID 0
 
 handleEventHook' :: Event -> X All
-handleEventHook' e =
-      clockEventHook e
-  <+> docksEventHook e
-  <+> handleTimerEvent e
-  <+> fullscreenEventHook e
-  <+> screenCornerEventHook e
+handleEventHook' e = foldl1 (<+>) $
+  [ clockEventHook
+  , docksEventHook
+  , handleTimerEvent
+  , fullscreenEventHook
+  , screenCornerEventHook
+  ] <*> [e]
 
 
 clockEventHook :: Event -> X All
@@ -117,10 +122,11 @@ clockEventHook e = do
 --                                WINDOW HOOK                                 --
 --------------------------------------------------------------------------------
 manageHook' :: ManageHook
-manageHook' =
-      manageDocks
-  <+> windowsHook
-  <+> dynamicMasterHook
+manageHook' = foldl1 (<+>) $
+   [ manageDocks
+   , windowsHook
+   , dynamicMasterHook
+   ]
 
 windowsHook :: ManageHook
 windowsHook = composeAll . concat $
@@ -540,7 +546,7 @@ fileToLogger f e p = do
 -- Battery percent
 batPercent :: Int -> String -> Logger
 batPercent v c = fileToLogger format "N/A" "/sys/class/power_supply/BAT0/capacity" where
-	format x = if ((read x::Int) <= v) then "^fg(" ++ c ++ ")" ++ x ++ "%^fg()" else (x ++ "%")
+    format x = if ((read x::Int) <= v) then "^fg(" ++ c ++ ")" ++ x ++ "%^fg()" else (x ++ "%")
 
 -- Battery status
 batStatus :: Logger
@@ -549,29 +555,29 @@ batStatus = fileToLogger (\x -> x) "AC Conection" "/sys/class/power_supply/BAT0/
 -- Brightness percenn
 brightPerc :: Int -> Logger
 brightPerc p = fileToLogger format "0" "/sys/class/backlight/ideapad/actual_brightness" where
-	format x = (show $ div ((read x::Int) * 100) p) ++ "%"
+    format x = (show $ div ((read x::Int) * 100) p) ++ "%"
 
 -- wifi signal
 wifiSignal :: Logger
 wifiSignal = fileToLogger format "N/A" "/proc/net/wireless" where
-	format x = if (length $ lines x) >= 3 then (initNotNull ((words ((lines x) !! 2)) !! 2) ++ "%") else "Off"
+    format x = if (length $ lines x) >= 3 then (initNotNull ((words ((lines x) !! 2)) !! 2) ++ "%") else "Off"
 
 -- CPU temperature
 cpuTemp :: Int -> Int -> String -> Logger
 cpuTemp n v c = initL $ concatWithSpaceL $ map (fileToLogger divc "0") pathtemps where
-	pathtemps = map (++"/thermal_zone/temp") $ map ("/sys/bus/acpi/devices/LNXTHERM:0"++) $ take n $ map show [0..]
-	divc x = crit $ div (read x::Int) 1000
-	crit x = if (x >= v) then "^fg(" ++ c ++ ")" ++ show x ++ "°^fg()" else (show x ++ "°")
+    pathtemps = map (++"/thermal_zone/temp") $ map ("/sys/bus/acpi/devices/LNXTHERM:0"++) $ take n $ map show [0..]
+    divc x = crit $ div (read x::Int) 1000
+    crit x = if (x >= v) then "^fg(" ++ c ++ ")" ++ show x ++ "°^fg()" else (show x ++ "°")
 
 -- Memory usage
 memUsage :: [(String -> String)] -> Logger
 memUsage xs = initL $ concatWithSpaceL $ map funct xs where
-	funct x = fileToLogger x "N/A" "/proc/meminfo"
+    funct x = fileToLogger x "N/A" "/proc/meminfo"
 
 _memUsed x = (_memValues x !! 0) - (_memValues x !! 2)  --new format
 _memPerc x = div (_memUsed x * 100) (_memValues x !! 0)
 _memValues x = map (getValues x) $ take 4 [0..] where
-	getValues x n = read (words (lines x !! n) !! 1)::Int
+    getValues x n = read (words (lines x !! n) !! 1)::Int
 
 freeBMemUsage x  = (show $ _memValues x !! 1) ++ "B"
 freeMBMemUsage x = (show $ div (_memValues x !! 1) 1024) ++ "MB"
