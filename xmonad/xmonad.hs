@@ -3,7 +3,7 @@
 -- File        : ~/.xmonad/xmonad.hs                                          --
 -- Author      : hradecek <ivohradek@gmail.com>                               --
 -- Stability   : unstable                                                     --
--- Description : Xmonad + Default dzen2 configuration                         --
+-- Description : Xmonad + dzen2                                               --
 --------------------------------------------------------------------------------
 {-# LANGUAGE DeriveDataTypeable #-}
 
@@ -33,7 +33,11 @@ import XMonad.Hooks.DynamicHooks
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageHelpers
 
+import XMonad.Layout.Grid
 import XMonad.Layout.Tabbed
+import XMonad.Layout.Maximize
+import XMonad.Layout.Minimize
+import XMonad.Layout.Magnifier
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.ThreeColumns
 
@@ -102,7 +106,7 @@ clockEventHook e = do
     ask >>= logHook . config
     return Nothing
   return $ All True
-  
+
 --------------------------------------------------------------------------------
 --                                WINDOW HOOK                                 --
 --------------------------------------------------------------------------------
@@ -114,15 +118,32 @@ manageHook' =
 
 windowsHook :: ManageHook
 windowsHook = composeAll . concat $
-  [
-    [ isDialog --> doFloat ]
-  , [ isFullscreen --> doFullFloat ]
-  ]
-
+  [ [ className =? c --> doShift (workspaces' !! 1) | c <- webs     ]
+  , [ className =? c --> doShift (workspaces' !! 2) | c <- graphics ]
+  , [ className =? c --> doCenterFloat              | c <- floats   ]
+  , [ isDialog       --> doFloat                                    ]
+  , [ isFullscreen   --> doFullFloat                                ]
+  ] where
+      webs     = ["Chromium", "Firefox", "Opera"]
+      graphics = ["Gimp", "gimp", "GIMP"]
+      floats   = [ "Choose a file"
+                 , "Open Image"
+                 , "File Operation Progress"
+                 , "Firefox Preferences"
+                 , "Rename File"
+                 , "Copying files"
+                 , "Moving files"
+                 , "File Properties"
+                 , "Replace"
+                 , "Quit GIMP"
+                 ]
 --------------------------------------------------------------------------------
 --                                LAYOUT HOOK                                 --
 --------------------------------------------------------------------------------
-layoutHook' = avoidStruts
+layoutHook' =
+    avoidStruts
+  $ minimize
+  $ maximize
   $ onWorkspace (workspaces' !! 2) webLayouts
   $ onWorkspace (workspaces' !! 3) develLayouts
   $ onWorkspace (workspaces' !! 4) develLayouts
@@ -136,12 +157,15 @@ layoutHook' = avoidStruts
         ||| tabbed shrinkText tabConfigTheme
       allLayouts =
             tiled
+        ||| mag
+        ||| Grid
         ||| threeCol
         ||| tabbed shrinkText tabConfigTheme
-      delta = 2/100
-      ratio = 1/2
-      nmaster = 1
-      tiled = Tall nmaster delta ratio
+      delta    = 2/100
+      ratio    = 1/2
+      nmaster  = 1
+      mag      = magnifier (Tall 1 (3/100) (1/2))
+      tiled    = Tall nmaster delta ratio
       threeCol = ThreeCol nmaster delta ratio
 
 --------------------------------------------------------------------------------
@@ -194,7 +218,7 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((0             , xF86XK_AudioRaiseVolume ), spawn "/usr/bin/amixer set Master 5%+")
   , ((0             , xF86XK_AudioLowerVolume ), spawn "/usr/bin/amixer set Master 5%-")
   ]
-  
+
 --------------------------------------------------------------------------------
 --                              MOUSE BINDINGS                                --
 --------------------------------------------------------------------------------
@@ -208,7 +232,6 @@ mouseBindings' (XConfig {XMonad.modMask = modMask}) = M.fromList
   , ((modMask .|. shiftMask, button1), \_ -> shiftToPrev)
   , ((modMask .|. shiftMask, button3), \_ -> shiftToNext)
   ]
-
 
 --------------------------------------------------------------------------------
 --                                   DZEN                                     --
@@ -226,31 +249,35 @@ data DF = DF
 
 instance Show DF where
   show df = concat $ zipWith (\a v -> a ++ " '" ++ v ++ "' ") (gs df) (fs <*> [df])
-        where
-          gs = map (replace "DF" "" . (++) "-") . constrFields. toConstr
-          fs = [show . xDF, show . yDF, show . wDF, show . hDF, taDF, fgDF, bgDF, fnDF]
+    where
+      gs = map (replace "DF" "" . (++) "-") . constrFields. toConstr
+      fs = [show . xDF, show . yDF, show . wDF, show . hDF, taDF, fgDF, bgDF, fnDF]
 
 data DzenBox = DB
-  { colDB  :: DColour
-  , bgDB   :: DColour
+  { bgDB   :: DColour
   , fgDB   :: DColour
   , liDB   :: FilePath
   , riDB   :: FilePath
   , hDB    :: Int
   }
 
-dzenBoxStyle :: DzenBox -> String -> String
-dzenBoxStyle box text = toString $
-      fg (colDB box) (icon (liDB box)
-  +++ rect 1920 (hDB box)
-  +++ pos (-1920)
-  +++ fg (fgDB box) (str text)
-  +++ fg (colDB box) (icon (riDB box)))
-  +++ fg (bgDB box) (rect 1920 (hDB box))
-  +++ pos (-1920)
+dzenBoxStyleText :: DzenBox -> String -> String
+dzenBoxStyleText box text = toString $ ignoreBg False $
+     fg (bgDB box) (icon (liDB box))
+ +++ bg (bgDB box) (fg (fgDB box) (str text))
+ +++ fg (bgDB box) (icon (riDB box))
 
-dzenBoxStyleL :: DzenBox -> Logger -> Logger
-dzenBoxStyleL = (fmap . fmap) . dzenBoxStyle
+dzenBoxStyleIcon :: DzenBox -> FilePath -> String
+dzenBoxStyleIcon box file = toString $ ignoreBg False $
+     fg (bgDB box) (icon (liDB box))
+ +++ bg (bgDB box) (fg (fgDB box) (icon file))
+ +++ fg (bgDB box) (icon (riDB box))
+
+dzenBoxStyleTextL :: DzenBox -> Logger -> Logger
+dzenBoxStyleTextL = (fmap . fmap) . dzenBoxStyleText
+
+dzenBoxStyleIconL :: DzenBox -> Logger -> Logger
+dzenBoxStyleIconL = (fmap . fmap) . dzenBoxStyleIcon
 
 dzenSpawnPipe :: (MonadIO m, Show a) => a -> m Handle
 dzenSpawnPipe df = spawnPipe $ "/usr/bin/dzen2 " ++ show df ++ " -p -e onstart=lower"
@@ -260,6 +287,8 @@ dzenSpawnPipe df = spawnPipe $ "/usr/bin/dzen2 " ++ show df ++ " -p -e onstart=l
 --------------------------------------------------------------------------------
 yRes                  = 768
 xRes                  = 1366
+dzenBg                = sRGB24show C.black
+dzenFg                = sRGB24show base3
 dzenFont              = "xft:monofur:size=8:antialias=true:hinting=true"
 dzenHeight            = 14
 dzenBoxFullIcon       = "/home/ivo/.xmonad/icons/xbm/boxFull.xbm"
@@ -269,11 +298,30 @@ dzenBoxSmallRightIcon = "/home/ivo/.xmonad/icons/xbm/boxSmallRight.xbm"
 dzenBoxSmallLeftIcon  = "/home/ivo/.xmonad/icons/xbm/boxSmallLeft.xbm"
 dzenBoxSmallFullIcon  = "/home/ivo/.xmonad/icons/xbm/boxSmallFull.xbm"
 
+base0   = sRGB24read "#839496"
+base1   = sRGB24read "#93a1a1"
+base2   = sRGB24read "#eee8d5"
+base3   = sRGB24read "#fdf6e3"
+
+base00  = sRGB24read "#657b83"
+base01  = sRGB24read "#586e75"
+base02  = sRGB24read "#073642"
+base03  = sRGB24read "#002b36"
+
+red     = sRGB24read "#dc322f"
+blue    = sRGB24read "#268bd2"
+cyan    = sRGB24read "#2aa198"
+green   = sRGB24read "#859900"
+orange  = sRGB24read "#cb4b16"
+violet  = sRGB24read "#6c71c4"
+yellow  = sRGB24read "#b58900"
+magenta = sRGB24read "#d33682"
+
 workspaces' :: [WorkspaceId]
 workspaces' =  map show [1..9]
 
-workspacesNames :: [WorkspaceId]
-workspacesNames =
+workspacesNames' :: [WorkspaceId]
+workspacesNames' =
   [ "Main"
   , "Web"
   , "Web2"
@@ -289,27 +337,27 @@ shellConfig' :: XPConfig
 shellConfig' = defaultXPConfig
   { font              = "xft:monofur:size=9:antialias=true:hinting=true"
   , height            = fromIntegral dzenHeight
-  , bgColor           = sRGB24show C.black
-  , fgColor           = sRGB24show C.lightgray
-  , bgHLight          = sRGB24show C.dodgerblue
-  , fgHLight          = sRGB24show C.lightgray
+  , bgColor           = sRGB24show base03
+  , fgColor           = sRGB24show base3
+  , bgHLight          = sRGB24show blue
+  , fgHLight          = sRGB24show base3
   , position          = Top
-  , borderColor       = sRGB24show C.black
-  , historySize       = 100
+  , borderColor       = sRGB24show base3
+  , historySize       = 0
   , autoComplete      = Nothing
   , historyFilter     = deleteConsecutive
   , completionKey     = xK_Tab
-  , promptBorderWidth = 1
+  , promptBorderWidth = 0
   }
 
 tabConfigTheme :: Theme
 tabConfigTheme = defaultTheme
-  { activeColor         = sRGB24show C.dodgerblue
-  , inactiveColor       = sRGB24show C.darkgray
-  , urgentColor         = sRGB24show C.darkorange
-  , activeBorderColor   = sRGB24show C.darkgray
-  , inactiveBorderColor = sRGB24show C.darkgray
-  , urgentBorderColor   = sRGB24show C.darkgray
+  { activeColor         = sRGB24show blue
+  , activeBorderColor   = sRGB24show base01
+  , inactiveColor       = sRGB24show base03
+  , inactiveBorderColor = sRGB24show base01
+  , urgentColor         = sRGB24show red
+  , urgentBorderColor   = sRGB24show base01
   , fontName            = "xft:monofur:size=9:antialias=true:hinting=true"
   , decoHeight          = 14
   }
@@ -321,8 +369,8 @@ dzenBottomFlags = DF
   , wDF  = xRes
   , hDF  = dzenHeight
   , taDF = "l"
-  , bgDF = sRGB24show C.black
-  , fgDF = sRGB24show C.lightgray
+  , bgDF = dzenBg
+  , fgDF = dzenFg
   , fnDF = dzenFont
   }
 
@@ -333,57 +381,49 @@ dzenTopFlags = DF
   , wDF  = xRes
   , hDF  = dzenHeight
   , taDF = "l"
-  , bgDF = sRGB24show C.black
-  , fgDF = sRGB24show C.lightgray
+  , bgDF = dzenBg
+  , fgDF = dzenFg
   , fnDF = dzenFont
   }
 
-darkorangeDzenBoxLR :: DzenBox
-darkorangeDzenBoxLR = DB
-  { colDB = C.darkorange
-  , bgDB  = C.black
-  , fgDB  = C.black
-  , liDB  = dzenBoxLeftIcon
-  , riDB  = dzenBoxRightIcon
-  , hDB   = dzenHeight
-  }
-
-dodgerblueDzenBoxL :: DzenBox
-dodgerblueDzenBoxL = DB
-  { colDB = C.dodgerblue
-  , bgDB  = C.black
-  , fgDB  = C.black
-  , liDB  = dzenBoxSmallLeftIcon
-  , riDB  = dzenBoxSmallFullIcon
-  , hDB   = dzenHeight
-  }
-
-dodgerblueDzenBoxR :: DzenBox
-dodgerblueDzenBoxR = DB
-  { colDB = C.dodgerblue
-  , bgDB  = C.black
-  , fgDB  = C.black
-  , liDB  = dzenBoxSmallFullIcon
+dzenBoxSmallR :: DzenBox
+dzenBoxSmallR = DB
+  { liDB  = dzenBoxSmallFullIcon
   , riDB  = dzenBoxSmallRightIcon
   , hDB   = dzenHeight
   }
 
-dimgrayDzenBoxLR :: DzenBox
-dimgrayDzenBoxLR = DB
-  { colDB = C.dimgray
-  , bgDB  = C.black
-  , fgDB  = C.silver
-  , liDB  = dzenBoxLeftIcon
+dzenBoxSmallL :: DzenBox
+dzenBoxSmallL = DB
+  { liDB  = dzenBoxSmallLeftIcon
+  , riDB  = dzenBoxSmallFullIcon
+  , hDB   = dzenHeight
+  }
+
+dzenBoxSmallLR :: DzenBox
+dzenBoxSmallLR = DB
+  { liDB  = dzenBoxSmallLeftIcon
+  , riDB  = dzenBoxSmallRightIcon
+  , hDB   = dzenHeight
+  }
+
+dzenBoxL :: DzenBox
+dzenBoxL  = DB
+  { liDB  = dzenBoxLeftIcon
+  , riDB  = dzenBoxFullIcon
+  , hDB   = dzenHeight
+  }
+
+dzenBoxR :: DzenBox
+dzenBoxR  = DB
+  { liDB  = dzenBoxFullIcon
   , riDB  = dzenBoxRightIcon
   , hDB   = dzenHeight
   }
 
-dodgerblueDzenBoxLR :: DzenBox
-dodgerblueDzenBoxLR = DB
-  { colDB = C.dodgerblue
-  , bgDB  = C.black
-  , fgDB  = C.black
-  , liDB  = dzenBoxLeftIcon
+dzenBoxLR :: DzenBox
+dzenBoxLR  = DB
+  { liDB  = dzenBoxLeftIcon
   , riDB  = dzenBoxRightIcon
   , hDB   = dzenHeight
   }
@@ -391,9 +431,9 @@ dodgerblueDzenBoxLR = DB
 topBarLogHook :: Handle -> X ()
 topBarLogHook h = dynamicLogWithPP defaultPP
     { ppOutput = hPutStrLn h
-    , ppOrder  = \(_:a:b:x) -> [a,b]
+    , ppOrder  = \(_:_:_:x) -> x
     , ppSep    = " "
-    , ppExtras = [ ]
+    , ppExtras = [ logLayout, workspaceL, focusL ]
     }
 
 bottomBarLogHook :: Handle -> X ()
@@ -402,31 +442,138 @@ bottomBarLogHook h = dynamicLogWithPP defaultPP
   , ppOrder           = \(ws:_:_:x) -> [ws] ++ x
   , ppWsSep           = "-"
   , ppOutput          = hPutStrLn h
-  , ppExtras          = [batteryL, dateL, uptimeL]
-  , ppHidden          = dzenBoxStyle dodgerblueDzenBoxLR
-  , ppUrgent          = dzenBoxStyle dodgerblueDzenBoxLR
-  , ppCurrent         = dzenBoxStyle dodgerblueDzenBoxLR
-  , ppVisible         = dzenBoxStyle dodgerblueDzenBoxLR
-  , ppHiddenNoWindows = dzenBoxStyle dimgrayDzenBoxLR
-  }
+  , ppExtras          = [batteryL, dateL, uptimeL, tempL, brightL, memoryL]
+  , ppHidden          = ds blue   base3
+  , ppUrgent          = ds red    base3
+  , ppCurrent         = ds orange base3
+  , ppHiddenNoWindows = ds base03 base01
+  } where
+      ds b f = dzenBoxStyleText dzenBoxLR { bgDB = b, fgDB = f }
 
-dzenClickWorkspace ws =
-     "^ca(1,"
-  ++ xdo "w;"
-  ++ xdo id
-  ++ ")"
-  ++ "^ca(3,"
-  ++ xdo "w;"
-  ++ xdo id
-  ++ ")"
-  ++ ws
-  ++ "^ca()^ca()"
+(|+>) :: Logger -> Logger -> Logger
+l1 |+> l2 = (liftA2 . liftA2) (++) l1 l2
+
+labelL :: String -> Logger
+labelL = return . return
+
+left  = dzenBoxStyleTextL $ dzenBoxL { bgDB = base01, fgDB = base03 }
+right = dzenBoxStyleTextL $ dzenBoxR { bgDB = base03, fgDB = base01 }
+
+batteryL =
+      (left $ labelL "BATTERY")
+  |+> (labelL " ")
+  |+> (right battery)
+
+dateL =
+      (left $ labelL "TIME")
+  |+> (labelL " ")
+  |+> (right $ date "%T")
+
+uptimeL =
+      (left $ labelL "UPTIME")
+  |+> (labelL " ")
+  |+> (right uptime)
+
+memoryL =
+      (left $ labelL "MEM")
+  |+> (labelL " ")
+  |+> (right $ memUsage [percMemUsage, totMBMemUsage])
+
+workspaceL =
+      (left $ labelL "WORKSPACE")
+  |+> (labelL " ")
+  |+> (right $ onLogger namedWorkspaces logCurrent)
+    where
+      namedWorkspaces w = workspacesNames' !! (mod ((read w::Int) - 1) 10)
+
+focusL =
+      (left $ labelL "FOCUS")
+  |+> (right $ shortenL 100 logTitle)
+
+brightL =
+      (left $ labelL "BRIGHT")
+  |+> (labelL " ")
+  |+> (right $ brightPerc 15)
+
+tempL = concatWithSpaceL
+  [ left $ labelL "CPU"
+  , right $ cpuTemp 3 70 $ sRGB24show red
+  ]
+
+concatWithSpaceL :: [Logger] -> Logger
+concatWithSpaceL [] = return $ return ""
+concatWithSpaceL (x:xs) = x |+> (labelL " ") |+> concatWithSpaceL xs
+
+uptime :: Logger
+uptime = fileToLogger format "0" "/proc/uptime"
   where
-    wsIdxToString Nothing  = "1"
-    wsIdxToString (Just n) = show $ mod (n+1) $ length workspaces'
+    u x = read (takeWhile (/= '.') x) :: Integer
+    h x = div (u x) 3600
+    hr x = mod (u x) 3600
+    m x = div (hr x) 60
+    s x = mod (hr x) 60
+    format x = (show $ h x) ++ "h " ++ (show $ m x) ++ "m " ++ (show $ s x) ++ "s"
 
-    id                     = wsIdxToString (elemIndex ws workspaces')
-    xdo key                = "/usr/bin/xdotool key super+" ++ key
+initNotNull :: String -> String
+initNotNull [] = "0\n"
+initNotNull xs = init xs
+
+tailNotNull :: [String] -> [String]
+tailNotNull [] = ["0\n"]
+tailNotNull xs = tail xs
+
+initL :: Logger -> Logger
+initL = (fmap . fmap) initNotNull
+
+fileToLogger :: (String -> String) -> String -> FilePath -> Logger
+fileToLogger f e p = do
+  let readWithE f1 e1 p1 = E.catch (do
+      contents <- readFile p1
+      return $ f1 (initNotNull contents)) ((\_ -> return e1) :: E.SomeException -> IO String)
+  str <- liftIO $ readWithE f e p
+  return $ return str
+
+-- Battery percent
+batPercent :: Int -> String -> Logger
+batPercent v c = fileToLogger format "N/A" "/sys/class/power_supply/BAT0/capacity" where
+	format x = if ((read x::Int) <= v) then "^fg(" ++ c ++ ")" ++ x ++ "%^fg()" else (x ++ "%")
+
+-- Battery status
+batStatus :: Logger
+batStatus = fileToLogger (\x -> x) "AC Conection" "/sys/class/power_supply/BAT0/status"
+
+-- Brightness percenn
+brightPerc :: Int -> Logger
+brightPerc p = fileToLogger format "0" "/sys/class/backlight/ideapad/actual_brightness" where
+	format x = (show $ div ((read x::Int) * 100) p) ++ "%"
+
+-- wifi signal
+wifiSignal :: Logger
+wifiSignal = fileToLogger format "N/A" "/proc/net/wireless" where
+	format x = if (length $ lines x) >= 3 then (initNotNull ((words ((lines x) !! 2)) !! 2) ++ "%") else "Off"
+
+-- CPU temperature
+cpuTemp :: Int -> Int -> String -> Logger
+cpuTemp n v c = initL $ concatWithSpaceL $ map (fileToLogger divc "0") pathtemps where
+	pathtemps = map (++"/thermal_zone/temp") $ map ("/sys/bus/acpi/devices/LNXTHERM:0"++) $ take n $ map show [0..]
+	divc x = crit $ div (read x::Int) 1000
+	crit x = if (x >= v) then "^fg(" ++ c ++ ")" ++ show x ++ "°^fg()" else (show x ++ "°")
+
+-- Memory usage
+memUsage :: [(String -> String)] -> Logger
+memUsage xs = initL $ concatWithSpaceL $ map funct xs where
+	funct x = fileToLogger x "N/A" "/proc/meminfo"
+
+_memUsed x = (_memValues x !! 0) - (_memValues x !! 2)  --new format
+_memPerc x = div (_memUsed x * 100) (_memValues x !! 0)
+_memValues x = map (getValues x) $ take 4 [0..] where
+	getValues x n = read (words (lines x !! n) !! 1)::Int
+
+freeBMemUsage x  = (show $ _memValues x !! 1) ++ "B"
+freeMBMemUsage x = (show $ div (_memValues x !! 1) 1024) ++ "MB"
+totBMemUsage     = (++ "B") . show . _memUsed
+totMBMemUsage    = (++ "MB") . show . (`div` 1024) . _memUsed
+percMemUsage     = (++ "%") . show . _memPerc
 
 pick :: [a] -> IO a
 pick xs = randomRIO (0, length xs - 1) >>= return . (xs !!)
@@ -464,54 +611,6 @@ getAllWallpapers :: IO [FilePath]
 getAllWallpapers =
         drop 2
     <$> getDirectoryContents "/data/Pictures/Wallpapers/Selected"
-
-
-(|++|) :: Logger -> Logger -> Logger
-l1 |++| l2 = (liftA2 . liftA2) (++) l1 l2
-
-labelL :: String -> Logger
-labelL = return . return
-
-batteryL =
-       (dzenBoxStyleL dodgerblueDzenBoxL $ labelL "BATTERY")
-  |++| (labelL " ")
-  |++| (dzenBoxStyleL dodgerblueDzenBoxR battery)
-
-dateL =
-       (dzenBoxStyleL dodgerblueDzenBoxL $ labelL "TIME")
-  |++| (labelL " ")
-  |++| (dzenBoxStyleL dodgerblueDzenBoxR $ date "%T")
-
-uptimeL =
-       (dzenBoxStyleL dodgerblueDzenBoxL $ labelL "UPTIME")
-  |++| (labelL " ")
-  |++| (dzenBoxStyleL dodgerblueDzenBoxR uptime)
-
-uptime :: Logger
-uptime = fileToLogger format "0" "/proc/uptime"
-  where
-    u x = read (takeWhile (/= '.') x) :: Integer
-    h x = div (u x) 3600
-    hr x = mod (u x) 3600
-    m x = div (hr x) 60
-    s x = mod (hr x) 60
-    format x = (show $ h x) ++ "h " ++ (show $ m x) ++ "m " ++ (show $ s x) ++ "s"
-initNotNull :: String -> String
-initNotNull [] = "0\n"
-initNotNull xs = init xs
-
-tailNotNull :: [String] -> [String]
-tailNotNull [] = ["0\n"]
-tailNotNull xs = tail xs
-
-fileToLogger :: (String -> String) -> String -> FilePath -> Logger
-fileToLogger f e p = do
-  let readWithE f1 e1 p1 = E.catch (do
-    contents <- readFile p1
-    return $ f1 (initNotNull contents)) ((\_ -> return e1) :: E.SomeException -> IO String)
-  str <- liftIO $ readWithE f e p
-  return $ return str
-
 --------------------------------------------------------------------------------
 --                                   MAIN                                     --
 --------------------------------------------------------------------------------
@@ -533,6 +632,6 @@ main = do
     , handleEventHook    = handleEventHook'
     , clickJustFocuses   = True
     , focusFollowsMouse  = True
-    , normalBorderColor  = sRGB24show C.black
-    , focusedBorderColor = sRGB24show C.lightgray
+    , normalBorderColor  = sRGB24show base03
+    , focusedBorderColor = sRGB24show base3
   }
