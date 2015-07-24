@@ -32,6 +32,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicHooks
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.ScreenCorners
 
 import XMonad.Layout.Grid
 import XMonad.Layout.Tabbed
@@ -82,6 +83,9 @@ startupHook' =
   <+> setDefaultCursor xC_left_ptr
   <+> (liftIO $ threadDelay 1000000)
   <+> (startTimer 1 >>= XS.put . TID)
+  <+> addScreenCorners [ (SCLowerRight, nextWS)
+                       , (SCLowerLeft,  prevWS)
+                       ]
 
 --------------------------------------------------------------------------------
 --                                EVENT HOOK                                  --
@@ -97,6 +101,8 @@ handleEventHook' e =
   <+> docksEventHook e
   <+> handleTimerEvent e
   <+> fullscreenEventHook e
+  <+> screenCornerEventHook e
+
 
 clockEventHook :: Event -> X All
 clockEventHook e = do
@@ -198,8 +204,6 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask  .|. shiftMask   , xK_space     ), setLayout $ XMonad.layoutHook conf)
 
   , ((modMask  .|. shiftMask   , xK_Return    ), spawn $ XMonad.terminal conf)
-  , ((mod1Mask .|. shiftMask   , xK_f         ), spawn "/usr/bin/firefox" )
-  , ((mod1Mask .|. shiftMask   , xK_v         ), spawn "/usr/bin/virtualbox")
   , ((mod1Mask .|. shiftMask   , xK_Return    ), shellPrompt shellConfig')
   , ((modMask                  , xK_x         ), spawn "/usr/bin/xcalib -invert -alter")
   , ((modMask                  , xK_s         ), spawn "sleep 1; xset dpms force off")
