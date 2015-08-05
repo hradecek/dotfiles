@@ -15,9 +15,6 @@ fi
 # Merge user resources
 [[ -f $XRESOURCES && -r $XRESOURCES ]] && xrdb -merge $XRESOURCES
 
-# Start MPD
-[[ ! -s ~/.config/mpd/pid ]] && mpd
-
 # Set random wallpaper
 feh --bg-scale --recursive --randomize ~/Pictures/Wallpapers/Selected/* &
 
