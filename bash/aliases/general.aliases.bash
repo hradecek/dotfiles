@@ -15,8 +15,8 @@ alias lh='ls -lh'
 alias la='ls -A'
 alias lah='ls -lAh'
 alias lla='ls -lA'
-alias lsd="ls -d */"
 alias lld="ls -ld */"
+alias lsd="ls -l --color=always | grep --color=never '^d'"
 alias tree="tree -C"
 
 # Pacman
@@ -30,7 +30,7 @@ alias docvalidate="xmllint --valid --noout"
 alias doc2html1="xsltproc /usr/share/xml/docbook/xhtml/docbook.xsl"
 alias doc2multihtml="xsltproc /usr/share/xml/docbook/xhtml/chunk.xsl"
 
-# Other 
+# Other
 alias rm='rm -i'
 alias h='history'
 alias bc="bc -q -l"
