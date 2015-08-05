@@ -41,6 +41,7 @@ import XMonad.Layout.Minimize
 import XMonad.Layout.Magnifier
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.ThreeColumns
+import XMonad.Layout.LayoutCombinators hiding ((|||))
 
 import Data.Data
 import Data.List
@@ -87,7 +88,9 @@ startupHook' = foldl1 (<+>) $
   ] where
       corn = addScreenCorners
                [ (SCLowerRight, nextWS)
-               , (SCLowerLeft,  prevWS)
+               , (SCUpperRight, prevWS)
+               , (SCLowerLeft , prevWS)
+               , (SCUpperLeft , shellPrompt shellConfig')
                ]
 
 
@@ -208,6 +211,7 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask                  , xK_b         ), sendMessage ToggleStruts)
   , ((modMask                  , xK_space     ), sendMessage NextLayout)
   , ((modMask  .|. shiftMask   , xK_space     ), setLayout $ XMonad.layoutHook conf)
+  , ((mod1Mask                 , xK_f         ), sendMessage $ JumpToLayout "Full")
 
   , ((modMask  .|. shiftMask   , xK_Return    ), spawn $ XMonad.terminal conf)
   , ((mod1Mask .|. shiftMask   , xK_Return    ), shellPrompt shellConfig')
@@ -219,6 +223,8 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((mod1Mask .|. controlMask , xK_Page_Down ), io setNextWallpaper >>= spawn)
   , ((mod1Mask .|. controlMask , xK_End       ), io setRandomWallpaper >>= spawn)
 
+  , ((0                        , xK_Print     ), spawn "/usr/bin/scrot '%F-%T_$wx$h.png' -z -e 'mv $f ~'")
+
   , ((mod1Mask                 , xK_Down      ), spawn "mpc toggle")
   , ((mod1Mask                 , xK_Left      ), spawn "mpc prev")
   , ((mod1Mask                 , xK_Right     ), spawn "mpc next")
@@ -227,6 +233,10 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((0                    , xF86XK_AudioMute ), spawn "/usr/bin/amixer set Master toggle")
   , ((0             , xF86XK_AudioRaiseVolume ), spawn "/usr/bin/amixer set Master 5%+")
   , ((0             , xF86XK_AudioLowerVolume ), spawn "/usr/bin/amixer set Master 5%-")
+  ] ++
+  [ ((m .|. modMask , k                       ), windows $ f i)
+  | (i, k) <- zip (XMonad.workspaces conf) ([xK_1 .. xK_9] ++ [xK_0])
+  , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
   ]
 
 --------------------------------------------------------------------------------
