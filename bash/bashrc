@@ -60,7 +60,7 @@ if [[ -d "$HOME/.cabal/bin" ]]; then
 fi
 
 # Load extension functions
-FUNCTIONS="$BASH/.bash.functions.bash"
+FUNCTIONS="$BASH/functions.bash"
 if [[ -f $FUNCTIONS ]]; then
     source $FUNCTIONS
 fi
