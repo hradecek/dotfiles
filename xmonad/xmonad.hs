@@ -23,6 +23,7 @@ import XMonad.Util.Loggers
 import XMonad.Util.EZConfig
 import XMonad.Util.Scratchpad
 
+import XMonad.Actions.Volume
 import XMonad.Actions.CycleWS
 import XMonad.Actions.ShowText
 
@@ -43,6 +44,7 @@ import XMonad.Layout.PerWorkspace
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.LayoutCombinators hiding ((|||))
 
+import Data.Char
 import Data.Data
 import Data.List
 import Data.Maybe
@@ -68,6 +70,7 @@ import qualified Data.Map as M
 import qualified Data.Colour.Names as C
 
 import qualified XMonad.StackSet as W
+import qualified XMonad.Util.Dzen as DZ
 import qualified XMonad.Util.ExtensibleState as XS
 --------------------------------------------------------------------------------
 --                                 LOG HOOK                                   --
@@ -88,11 +91,9 @@ startupHook' = foldl1 (<+>) $
   ] where
       corn = addScreenCorners
                [ (SCLowerRight, nextWS)
-               , (SCUpperRight, prevWS)
                , (SCLowerLeft , prevWS)
-               , (SCUpperLeft , shellPrompt shellConfig')
+               , (SCUpperLeft , shellPrompt shellConfig)
                ]
-
 
 --------------------------------------------------------------------------------
 --                                EVENT HOOK                                  --
@@ -125,7 +126,7 @@ clockEventHook e = do
 --                                WINDOW HOOK                                 --
 --------------------------------------------------------------------------------
 manageHook' :: ManageHook
-manageHook' = foldl1 (<+>) $
+manageHook' = foldl1 (<+>)
    [ manageDocks
    , windowsHook
    , dynamicMasterHook
@@ -192,6 +193,7 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask                  , xK_q         ), spawn "xmonad --recompile && xmonad --restart")
   , ((modMask                  , xK_c         ), kill)
   , ((mod1Mask                 , xK_F4        ), kill)
+
   , ((modMask                  , xK_Tab       ), windows W.swapMaster)
   , ((modMask                  , xK_j         ), windows W.swapDown)
   , ((modMask                  , xK_k         ), windows W.swapUp)
@@ -214,30 +216,33 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((mod1Mask                 , xK_f         ), sendMessage $ JumpToLayout "Full")
 
   , ((modMask  .|. shiftMask   , xK_Return    ), spawn $ XMonad.terminal conf)
-  , ((mod1Mask .|. shiftMask   , xK_Return    ), shellPrompt shellConfig')
-  , ((modMask                  , xK_x         ), spawn "/usr/bin/xcalib -invert -alter")
-  , ((modMask                  , xK_s         ), spawn "sleep 1; xset dpms force off")
-  , ((mod1Mask                 , xK_Escape    ), spawn "/home/ivo/.xmonad/bin/changeLayout.pl")
+  , ((mod1Mask .|. shiftMask   , xK_Return    ), shellPrompt shellConfig)
+  , ((modMask                  , xK_x         ), flashSpawn "Invert colors" "/usr/bin/xcalib -invert -alter")
+  , ((modMask                  , xK_s         ), flashSpawn "Turn off screen" "sleep 1; xset dpms force off")
+  , ((mod1Mask .|. shiftMask   , 0            ), spawn "/home/ivo/.xmonad/bin/changeLayout.pl")
 
-  , ((mod1Mask .|. controlMask , xK_Page_Up   ), io setPrevWallpaper >>= spawn)
-  , ((mod1Mask .|. controlMask , xK_Page_Down ), io setNextWallpaper >>= spawn)
-  , ((mod1Mask .|. controlMask , xK_End       ), io setRandomWallpaper >>= spawn)
+  , ((mod1Mask .|. controlMask , xK_Page_Up   ), oneSecFlash "Prev wallpaper" >> io setPrevWallpaper >>= spawn)
+  , ((mod1Mask .|. controlMask , xK_Page_Down ), oneSecFlash "Next wallpaper" >> io setNextWallpaper >>= spawn)
+  , ((mod1Mask .|. controlMask , xK_End       ), oneSecFlash "Random wallpaper" >> io setRandomWallpaper >>= spawn)
 
-  , ((0                        , xK_Print     ), spawn "/usr/bin/scrot '%F-%T_$wx$h.png' -z -e 'mv $f ~'")
+  , ((0                        , xK_Print     ), flashSpawn "Smile! :)" "sleep 1; /usr/bin/scrot '%F-%T_$wx$h.png' -z -e 'mv $f ~'")
 
-  , ((mod1Mask                 , xK_Down      ), spawn "mpc toggle")
-  , ((mod1Mask                 , xK_Left      ), spawn "mpc prev")
-  , ((mod1Mask                 , xK_Right     ), spawn "mpc next")
-  , ((mod1Mask                 , xK_Up        ), spawn "mpc stop")
+  , ((mod1Mask                 , xK_Down      ), flashSpawn "Toggle song" "mpc toggle")
+  , ((mod1Mask                 , xK_Left      ), flashSpawn "Previous song" "mpc prev")
+  , ((mod1Mask                 , xK_Right     ), flashSpawn "Next song" "mpc next")
+  , ((mod1Mask                 , xK_Up        ), flashSpawn "Stop song" "mpc stop")
 
   , ((0                    , xF86XK_AudioMute ), spawn "/usr/bin/amixer set Master toggle")
-  , ((0             , xF86XK_AudioRaiseVolume ), spawn "/usr/bin/amixer set Master 5%+")
-  , ((0             , xF86XK_AudioLowerVolume ), spawn "/usr/bin/amixer set Master 5%-")
+  , ((0             , xF86XK_AudioRaiseVolume ), raiseVolume 5 >>= alert)
+  , ((0             , xF86XK_AudioLowerVolume ), lowerVolume 5 >>= alert)
   ] ++
   [ ((m .|. modMask , k                       ), windows $ f i)
   | (i, k) <- zip (XMonad.workspaces conf) ([xK_1 .. xK_9] ++ [xK_0])
   , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
-  ]
+  ] where
+      oneSecFlash = flashText showTextConfig 1
+      flashSpawn  = (. spawn) . (>>) . oneSecFlash
+
 
 --------------------------------------------------------------------------------
 --                              MOUSE BINDINGS                                --
@@ -281,6 +286,30 @@ data DzenBox = DB
   , hDB    :: Int
   }
 
+data GDBS = Outlined | Vertical deriving (Data, Typeable)
+
+instance Show GDBS where
+  show = return . toLower . head . show . toConstr
+
+data GDBF = GDBF
+  { hGDB    :: Int
+  , wGDB    :: Int
+  , sGDB    :: GDBS
+  , bgGDB   :: String
+  , fgGDB   :: String
+  , ssGDB   :: Int
+  , swGDB   :: Int
+  , maxGDB  :: Int
+  , minGDB  :: Int
+  , nonlGDB :: Bool
+  } deriving (Data, Typeable)
+
+instance Show GDBF where
+  show gdbar = concat (zipWith (\a v -> a ++ " '" ++ v ++ "' ") (gs gdbar) (fs <*> [gdbar])) ++ "-nonl"
+    where
+      gs      = map (replace "GDB" "" . (++) "-") . constrFields. toConstr
+      fs      = [show . hGDB, show . wGDB, show . sGDB, bgGDB, fgGDB, show . ssGDB, show . swGDB, show . maxGDB, show . minGDB]
+
 dzenBoxStyleText :: DzenBox -> String -> String
 dzenBoxStyleText box text = toString $ ignoreBg False $
      fg (bgDB box) (icon (liDB box))
@@ -299,8 +328,28 @@ dzenBoxStyleTextL = (fmap . fmap) . dzenBoxStyleText
 dzenBoxStyleIconL :: DzenBox -> Logger -> Logger
 dzenBoxStyleIconL = (fmap . fmap) . dzenBoxStyleIcon
 
-dzenSpawnPipe :: (MonadIO m, Show a) => a -> m Handle
+dzenSpawnPipe :: (MonadIO m) => DF -> m Handle
 dzenSpawnPipe df = spawnPipe $ "/usr/bin/dzen2 " ++ show df ++ " -p -e onstart=lower"
+
+-- gdbarSpawn :: (MonadIO m) => Int -> GDBF -> DF -> m ()
+gdbarSpawn val gdbf dzen = --spawn $
+     "echo BRI $(echo "
+  ++ show val
+  ++ " | /usr/bin/gdbar "
+  ++ show gdbf ++ ") "
+  ++ show val ++ "%"
+  ++ " | /usr/bin/dzen2 "
+  ++ show dzen
+  ++ " -p 1 -e ''"
+
+-- changeLayout = 
+
+alert = DZ.dzenConfig centered . show . round
+  where centered =
+                 DZ.onCurr (DZ.center 150 66)
+          DZ.>=> DZ.font "-*-helvetica-*-r-*-*-64-*-*-*-*-*-*-*"
+          DZ.>=> DZ.addArgs ["-fg", "#80c0ff"]
+          DZ.>=> DZ.addArgs ["-bg", "#000040"]
 
 --------------------------------------------------------------------------------
 --                                SETTINGS                                    --
@@ -340,8 +389,8 @@ magenta = sRGB24read "#d33682"
 workspaces' :: [WorkspaceId]
 workspaces' =  map show [1..9]
 
-workspacesNames' :: [WorkspaceId]
-workspacesNames' =
+workspacesNames :: [WorkspaceId]
+workspacesNames =
   [ "Main"
   , "Web"
   , "Web2"
@@ -353,8 +402,8 @@ workspacesNames' =
   , "Alternative4"
   ]
 
-shellConfig' :: XPConfig
-shellConfig' = defaultXPConfig
+shellConfig :: XPConfig
+shellConfig = defaultXPConfig
   { font              = "xft:monofur:size=9:antialias=true:hinting=true"
   , height            = fromIntegral dzenHeight
   , bgColor           = sRGB24show base03
@@ -363,7 +412,7 @@ shellConfig' = defaultXPConfig
   , fgHLight          = sRGB24show base3
   , position          = Top
   , borderColor       = sRGB24show base3
-  , historySize       = 0
+  , historySize       = 50
   , autoComplete      = Nothing
   , historyFilter     = deleteConsecutive
   , completionKey     = xK_Tab
@@ -382,6 +431,13 @@ tabConfigTheme = defaultTheme
   , decoHeight          = 14
   }
 
+showTextConfig  :: ShowTextConfig
+showTextConfig = STC
+  { st_font = dzenFont
+  , st_bg   = dzenBg
+  , st_fg   = dzenFg
+  }
+
 dzenBottomFlags :: DF
 dzenBottomFlags = DF
   { xDF  = 0
@@ -393,6 +449,32 @@ dzenBottomFlags = DF
   , fgDF = dzenFg
   , fnDF = dzenFont
   }
+
+dzenBriFlags :: DF
+dzenBriFlags = DF
+  { xDF  = 550
+  , yDF  = 17
+  , wDF  = 200
+  , hDF  = 16
+  , taDF = "l"
+  , bgDF = dzenBg
+  , fgDF = dzenFg
+  , fnDF = dzenFont
+  }
+
+gdbar = GDBF
+  { hGDB    = 9
+  , wGDB    = 140
+  , sGDB    = Outlined
+  , bgGDB   = "#363636"
+  , fgGDB   = "#3955c4"
+  , ssGDB   = 1
+  , swGDB   = 2
+  , maxGDB  = 100
+  , minGDB  = 0
+  , nonlGDB = True
+  }
+
 
 dzenTopFlags :: DF
 dzenTopFlags = DF
@@ -504,7 +586,7 @@ workspaceL =
   |+> (labelL " ")
   |+> (right $ onLogger namedWorkspaces logCurrent)
     where
-      namedWorkspaces w = workspacesNames' !! (mod ((read w::Int) - 1) 10)
+      namedWorkspaces w = workspacesNames !! (mod ((read w::Int) - 1) 10)
 
 focusL =
       (left $ labelL "FOCUS")
