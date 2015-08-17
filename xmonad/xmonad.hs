@@ -112,7 +112,6 @@ handleEventHook' e = foldl1 (<+>) $
   , screenCornerEventHook
   ] <*> [e]
 
-
 clockEventHook :: Event -> X All
 clockEventHook e = do
   (TID t) <- XS.get
@@ -127,10 +126,10 @@ clockEventHook e = do
 --------------------------------------------------------------------------------
 manageHook' :: ManageHook
 manageHook' = foldl1 (<+>)
-   [ manageDocks
-   , windowsHook
-   , dynamicMasterHook
-   ]
+  [ manageDocks
+  , windowsHook
+  , dynamicMasterHook
+  ]
 
 windowsHook :: ManageHook
 windowsHook = composeAll . concat $
@@ -171,7 +170,7 @@ layoutHook' =
       develLayouts =
             tiled
         ||| tabbed shrinkText tabConfigTheme
-      allLayouts =
+      allLayouts   =
             tiled
         ||| mag
         ||| Grid
@@ -232,17 +231,21 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((mod1Mask                 , xK_Right     ), flashSpawn "Next song" "mpc next")
   , ((mod1Mask                 , xK_Up        ), flashSpawn "Stop song" "mpc stop")
 
-  , ((0                    , xF86XK_AudioMute ), spawn "/usr/bin/amixer set Master toggle")
-  , ((0             , xF86XK_AudioRaiseVolume ), raiseVolume 5 >>= alert)
-  , ((0             , xF86XK_AudioLowerVolume ), lowerVolume 5 >>= alert)
+  , ((0            , xF86XK_AudioMute         ), spawn "/usr/bin/amixer set Master toggle")
+  , ((0            , xF86XK_AudioRaiseVolume  ), raiseVolume 3 >>= (gdbarSpawn gdbarInfoFlags dzenInfoFlags) . ceiling)
+  , ((0            , xF86XK_AudioLowerVolume  ), lowerVolume 3 >>= (gdbarSpawn gdbarInfoFlags dzenInfoFlags) . ceiling)
+--  , ((0            , xF86XK_MonBrightnessUp   ), io getBrightness)
+--  , ((0            , xF86XK_MonBrightnessDown ), io getBrightness)
   ] ++
   [ ((m .|. modMask , k                       ), windows $ f i)
   | (i, k) <- zip (XMonad.workspaces conf) ([xK_1 .. xK_9] ++ [xK_0])
   , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
   ] where
-      oneSecFlash = flashText showTextConfig 1
-      flashSpawn  = (. spawn) . (>>) . oneSecFlash
-
+      oneSecFlash   = flashText showTextConfig 1
+      flashSpawn    = (. spawn) . (>>) . oneSecFlash
+      getBrightness = do
+        c <- init <$> readFile "/sys/class/backlight/ideapad/actual_brightness"
+        gdbarSpawn gdbarInfoFlags dzenInfoFlags c
 
 --------------------------------------------------------------------------------
 --                              MOUSE BINDINGS                                --
@@ -331,8 +334,7 @@ dzenBoxStyleIconL = (fmap . fmap) . dzenBoxStyleIcon
 dzenSpawnPipe :: (MonadIO m) => DF -> m Handle
 dzenSpawnPipe df = spawnPipe $ "/usr/bin/dzen2 " ++ show df ++ " -p -e onstart=lower"
 
--- gdbarSpawn :: (MonadIO m) => Int -> GDBF -> DF -> m ()
-gdbarSpawn val gdbf dzen = --spawn $
+gdbarSpawn gdbf dzen val = spawn $
      "echo BRI $(echo "
   ++ show val
   ++ " | /usr/bin/gdbar "
@@ -341,15 +343,6 @@ gdbarSpawn val gdbf dzen = --spawn $
   ++ " | /usr/bin/dzen2 "
   ++ show dzen
   ++ " -p 1 -e ''"
-
--- changeLayout = 
-
-alert = DZ.dzenConfig centered . show . round
-  where centered =
-                 DZ.onCurr (DZ.center 150 66)
-          DZ.>=> DZ.font "-*-helvetica-*-r-*-*-64-*-*-*-*-*-*-*"
-          DZ.>=> DZ.addArgs ["-fg", "#80c0ff"]
-          DZ.>=> DZ.addArgs ["-bg", "#000040"]
 
 --------------------------------------------------------------------------------
 --                                SETTINGS                                    --
@@ -450,31 +443,31 @@ dzenBottomFlags = DF
   , fnDF = dzenFont
   }
 
-dzenBriFlags :: DF
-dzenBriFlags = DF
+dzenInfoFlags :: DF
+dzenInfoFlags = DF
   { xDF  = 550
   , yDF  = 17
   , wDF  = 200
   , hDF  = 16
   , taDF = "l"
-  , bgDF = dzenBg
-  , fgDF = dzenFg
+  , bgDF = sRGB24show base03
+  , fgDF = sRGB24show base3
   , fnDF = dzenFont
   }
 
-gdbar = GDBF
+gdbarInfoFlags :: GDBF
+gdbarInfoFlags = GDBF
   { hGDB    = 9
   , wGDB    = 140
   , sGDB    = Outlined
-  , bgGDB   = "#363636"
-  , fgGDB   = "#3955c4"
+  , bgGDB   = sRGB24show base01
+  , fgGDB   = sRGB24show blue
   , ssGDB   = 1
   , swGDB   = 2
   , maxGDB  = 100
   , minGDB  = 0
   , nonlGDB = True
   }
-
 
 dzenTopFlags :: DF
 dzenTopFlags = DF
