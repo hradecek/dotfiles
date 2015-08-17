@@ -140,6 +140,8 @@ Bundle 'scrooloose/nerdcommenter'
 Bundle 'slim-template/vim-slim.git'
 Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'altercation/vim-colors-solarized.git'
+Plugin 'derekwyatt/vim-scala'
+
 call vundle#end()
 
 filetype off
