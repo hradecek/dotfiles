@@ -6,7 +6,7 @@
 set nocompatible
 set encoding=utf-8
 
-let mapleader=","
+let mapleader="\<Space>"
 
 " let g:solarized_termcolors=256
 let g:airline_theme="murmur"
@@ -89,7 +89,7 @@ nmap <leader>hs :set hlsearch! hlsearch?<CR>
 " Adjust viewports to the same size
 map <Leader>= <C-w>=
 
-nnoremap <leader><space> :noh<cr>
+nnoremap <leader>/ :noh<cr>
 nnoremap <tab> %
 vnoremap <tab> %
 
@@ -116,31 +116,38 @@ inoremap <left> <nop>
 inoremap <right> <nop>
 
 nmap <silent> <special> <leader>n :NERDTreeToggle<return>
+nmap <silent> <special> <leader>rt :TagbarToggle<return>
 
 map <leader>f :Ack<space>
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " Plugins
 call vundle#begin()
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
-Bundle 'Buffergator'
-Bundle 'mileszs/ack.vim'
-Bundle 'tomtom/tlib_vim'
-Bundle 'ervandew/supertab'
-Bundle 'bling/vim-airline'
-Bundle 'tpope/vim-fugitive'
-Bundle 'honza/vim-snippets'
-Bundle 'garbas/vim-snipmate'
-Bundle 'tristen/vim-sparkup'
-Bundle 'scrooloose/syntastic'
-Bundle 'scrooloose/nerdtree.git'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'slim-template/vim-slim.git'
-Bundle 'MarcWeber/vim-addon-mw-utils'
-Bundle 'altercation/vim-colors-solarized.git'
-Plugin 'derekwyatt/vim-scala'
+" Plugin 'Buffergator'
+" Plugin 'mileszs/ack.vim'
+" Plugin 'tomtom/tlib_vim'
+Plugin 'ervandew/supertab'
+Plugin 'bling/vim-airline'
+" Plugin 'majutsushi/tagbar'
+" Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-surround'
+" Plugin 'honza/vim-snippets'
+" Plugin 'garbas/vim-snipmate'
+Plugin 'tristen/vim-sparkup'
+ Plugin 'derekwyatt/vim-scala'
+" Plugin 'scrooloose/syntastic'
+Plugin 'airblade/vim-gitgutter'
+" Plugin 'Valloric/YouCompleteMe'
+Plugin 'scrooloose/nerdtree.git'
+" Plugin 'Lokaltog/vim-easymotion'
+Plugin 'scrooloose/nerdcommenter'
+" Plugin 'slim-template/vim-slim.git'
+" Plugin 'MarcWeber/vim-addon-mw-utils'
+" Plugin 'terryma/vim-multiple-cursors'
+Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'altercation/vim-colors-solarized.git'
 
 call vundle#end()
 
