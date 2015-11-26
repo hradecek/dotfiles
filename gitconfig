@@ -3,6 +3,8 @@
 	name = hradecek
 [core]
 	editor = vim
+	autocrlf = input
+	trustctime = false
 [color]
 	ui = auto
 [diff]
@@ -10,3 +12,7 @@
 [difftool]
 	prompt = false
 
+[merge]
+	tool = meld
+[mergetool]
+	trustExitCode = true
