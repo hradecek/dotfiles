@@ -14,6 +14,7 @@ alias lo='ls -o'
 alias lh='ls -lh'
 alias la='ls -A'
 alias lah='ls -lAh'
+alias lad="ls -a | grep --color=never '^\.'"
 alias lla='ls -lA'
 alias lld="ls -ld */"
 alias lsd="ls -l --color=always | grep --color=never '^d'"

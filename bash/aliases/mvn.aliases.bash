@@ -1,4 +1,5 @@
 # Maven aliases
+alias mco='mvn compile'
 alias mci='mvn clean install'
 alias mi='mvn install'
 alias mrprep='mvn release:prepare'
