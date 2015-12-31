@@ -1,0 +1,6 @@
+username = ivehigio
+password = 1fbbb3c3197950446768c659105038a8
+host = localhost
+port = 6600
+runas = mpd
+debug = 0
