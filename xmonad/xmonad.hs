@@ -10,7 +10,7 @@
 --------------------------------------------------------------------------------
 --                                  IMPORTS                                   --
 --------------------------------------------------------------------------------
-import XMonad
+import XMonad hiding ( (|||) )
 
 import XMonad.Prompt
 import XMonad.Prompt.Shell
@@ -35,14 +35,16 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.ScreenCorners
 
+import XMonad.Layout.Gaps
 import XMonad.Layout.Grid
 import XMonad.Layout.Tabbed
 import XMonad.Layout.Maximize
 import XMonad.Layout.Minimize
+import XMonad.Layout.NoBorders
 import XMonad.Layout.Magnifier
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.ThreeColumns
-import XMonad.Layout.LayoutCombinators hiding ((|||))
+import XMonad.Layout.LayoutCombinators
 
 import Data.Char
 import Data.Data
@@ -133,8 +135,8 @@ manageHook' = foldl1 (<+>)
 
 windowsHook :: ManageHook
 windowsHook = composeAll . concat $
-  [ [ className =? c --> doShift (workspaces' !! 1) | c <- webs     ]
-  , [ className =? c --> doShift (workspaces' !! 2) | c <- graphics ]
+  [ [ className =? c --> doShift (workspaces' !! 0) | c <- webs     ]
+  , [ className =? c --> doShift (workspaces' !! 9) | c <- graphics ]
   , [ className =? c --> doCenterFloat              | c <- floats   ]
   , [ isDialog       --> doFloat                                    ]
   , [ isFullscreen   --> doFullFloat                                ]
@@ -159,6 +161,7 @@ layoutHook' =
     avoidStruts
   $ minimize
   $ maximize
+  $ smartBorders
   $ onWorkspace (workspaces' !! 2) webLayouts
   $ onWorkspace (workspaces' !! 3) develLayouts
   $ onWorkspace (workspaces' !! 4) develLayouts
@@ -211,6 +214,10 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((mod1Mask .|. shiftMask   , xK_h         ), shiftToPrev)
   , ((modMask                  , xK_b         ), sendMessage ToggleStruts)
   , ((modMask                  , xK_space     ), sendMessage NextLayout)
+  -- TU
+  , ((modMask  .|. shiftMask   , xK_l         ), spawn $ showLayoutFlags ["^ca(1,/usr/bin/xdotool key super+shift+w) tile^ca()"] dzenLayoutFlags)
+  , ((modMask  .|. shiftMask   , xK_w         ), sendMessage $ JumpToLayout "Tall")
+  -- TU
   , ((modMask  .|. shiftMask   , xK_space     ), setLayout $ XMonad.layoutHook conf)
   , ((mod1Mask                 , xK_f         ), sendMessage $ JumpToLayout "Full")
 
@@ -232,8 +239,8 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((mod1Mask                 , xK_Up        ), flashSpawn "Stop song" "mpc stop")
 
   , ((0            , xF86XK_AudioMute         ), spawn "/usr/bin/amixer set Master toggle")
-  , ((0            , xF86XK_AudioRaiseVolume  ), raiseVolume 3 >>= (gdbarSpawn gdbarInfoFlags dzenInfoFlags) . ceiling)
-  , ((0            , xF86XK_AudioLowerVolume  ), lowerVolume 3 >>= (gdbarSpawn gdbarInfoFlags dzenInfoFlags) . ceiling)
+  , ((0            , xF86XK_AudioRaiseVolume  ), raiseVolume 3 >>= (gdbarSpawn gdbarInfoFlags dzenInfoFlags "VOL") . ceiling)
+  , ((0            , xF86XK_AudioLowerVolume  ), lowerVolume 3 >>= (gdbarSpawn gdbarInfoFlags dzenInfoFlags "VOL") . ceiling)
 --  , ((0            , xF86XK_MonBrightnessUp   ), io getBrightness)
 --  , ((0            , xF86XK_MonBrightnessDown ), io getBrightness)
   ] ++
@@ -245,7 +252,7 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       flashSpawn    = (. spawn) . (>>) . oneSecFlash
       getBrightness = do
         c <- init <$> readFile "/sys/class/backlight/ideapad/actual_brightness"
-        gdbarSpawn gdbarInfoFlags dzenInfoFlags c
+        gdbarSpawn gdbarInfoFlags dzenInfoFlags "BRI" c
 
 --------------------------------------------------------------------------------
 --                              MOUSE BINDINGS                                --
@@ -319,30 +326,26 @@ dzenBoxStyleText box text = toString $ ignoreBg False $
  +++ bg (bgDB box) (fg (fgDB box) (str text))
  +++ fg (bgDB box) (icon (riDB box))
 
-dzenBoxStyleIcon :: DzenBox -> FilePath -> String
-dzenBoxStyleIcon box file = toString $ ignoreBg False $
-     fg (bgDB box) (icon (liDB box))
- +++ bg (bgDB box) (fg (fgDB box) (icon file))
- +++ fg (bgDB box) (icon (riDB box))
-
 dzenBoxStyleTextL :: DzenBox -> Logger -> Logger
 dzenBoxStyleTextL = (fmap . fmap) . dzenBoxStyleText
-
-dzenBoxStyleIconL :: DzenBox -> Logger -> Logger
-dzenBoxStyleIconL = (fmap . fmap) . dzenBoxStyleIcon
 
 dzenSpawnPipe :: (MonadIO m) => DF -> m Handle
 dzenSpawnPipe df = spawnPipe $ "/usr/bin/dzen2 " ++ show df ++ " -p -e onstart=lower"
 
-gdbarSpawn gdbf dzen val = spawn $
-     "echo BRI $(echo "
-  ++ show val
-  ++ " | /usr/bin/gdbar "
-  ++ show gdbf ++ ") "
-  ++ show val ++ "%"
-  ++ " | /usr/bin/dzen2 "
-  ++ show dzen
-  ++ " -p 1 -e ''"
+gdbarSpawn gdbf dzen text val = spawn $ foldl1 (++) $
+  ["echo "
+  , text
+  , "$(echo "
+  , show val
+  , " | /usr/bin/gdbar "
+  , show gdbf
+  , ") "
+  , show val
+  , "%"
+  , " | /usr/bin/dzen2 "
+  , show dzen
+  , " -p 1 -e ''"
+  ]
 
 --------------------------------------------------------------------------------
 --                                SETTINGS                                    --
@@ -442,6 +445,51 @@ dzenBottomFlags = DF
   , fgDF = dzenFg
   , fnDF = dzenFont
   }
+data CA = CA
+  { leftClickCA   :: String
+  , middleClickCA :: String
+  , rightClickCA  :: String
+  , wheelUpCA     :: String
+  , wheelDownCA   :: String
+  }
+
+dzenClickStyle :: CA -> String -> String
+dzenClickStyle ca text =
+  "^ca(1," ++ leftClickCA ca ++
+  ")^ca(2," ++ middleClickCA ca ++
+  ")^ca(3," ++ rightClickCA ca ++
+  ")^ca(4," ++ wheelUpCA ca ++
+  ")^ca(5," ++ wheelDownCA ca ++
+  ")" ++ text ++
+  "^ca()^ca()^ca()^ca()^ca()"
+
+layoutCA = CA
+  { leftClickCA   = "/usr/bin/xdotool key super+shift+l"
+  , middleClickCA = "/usr/bin/xdotool key super+shift+l"
+  , rightClickCA  = "/usr/bin/xdotool key super+shift+l"
+  , wheelUpCA     = "/usr/bin/xdotool key super+shift+l"
+  , wheelDownCA   = "/usr/bin/xdotool key super+shift+l"
+  }
+
+dzenLayoutFlags = DF
+  { xDF  = 0
+  , yDF  = 17
+  , wDF  = 200
+  , hDF  = 16
+  , taDF = "l"
+  , bgDF = sRGB24show base03
+  , fgDF = sRGB24show base3
+  , fnDF = dzenFont
+  }
+
+showLayoutFlags layouts dzen = foldl1 (++) $
+  ["printf "
+  , "'" ++ l ++ "'"
+  , " | /usr/bin/dzen2 "
+  , show dzen
+  , " -p 1 -e 'onstart=uncollapse;key_Escape=ungrabkeys,exit' -l " ++ lines
+  ] where l = join "\n" layouts ++ "\n"
+          lines = show $ (length layouts) - 1
 
 dzenInfoFlags :: DF
 dzenInfoFlags = DF
@@ -528,7 +576,7 @@ topBarLogHook h = dynamicLogWithPP defaultPP
     { ppOutput = hPutStrLn h
     , ppOrder  = \(_:_:_:x) -> x
     , ppSep    = " "
-    , ppExtras = [ logLayout, workspaceL, focusL ]
+    , ppExtras = [ layoutL, workspaceL, focusL ]
     }
 
 bottomBarLogHook :: Handle -> X ()
@@ -553,6 +601,11 @@ labelL = return . return
 
 left  = dzenBoxStyleTextL $ dzenBoxL { bgDB = base01, fgDB = base03 }
 right = dzenBoxStyleTextL $ dzenBoxR { bgDB = base03, fgDB = base01 }
+
+layoutL =
+      (left $ labelL "LAYOUT")
+  |+> (labelL " ")
+  |+> (right $ onLogger (unwords . tail . tail . words) logLayout)
 
 batteryL =
       (left $ labelL "BATTERY")
@@ -706,6 +759,7 @@ getAllWallpapers :: IO [FilePath]
 getAllWallpapers =
         drop 2
     <$> getDirectoryContents "/data/Pictures/Wallpapers/Selected"
+
 --------------------------------------------------------------------------------
 --                                   MAIN                                     --
 --------------------------------------------------------------------------------

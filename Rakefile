@@ -63,7 +63,7 @@ def vim_install
     action_msg 'vim +PluginInstall +qall 2&> /dev/null', 'Installing vim plugins'
 end
 
-task :default => [:xinitrc, :bash, :xresources, :vim, :ncmpcpp, :mpd, :mpdscribble, :xmonad]
+task :default => [:xinitrc, :bash, :xresources, :vim, :ncmpcpp, :mpd, :mpdas, :xmonad]
 
 task :bash do
     bashrc = ENV['HOME'] + "/.bashrc"
@@ -81,9 +81,9 @@ task :mpd do
     lnif 'config/mpd/mpd.conf', 'config/mpd/mpd.conf'
 end
 
-task :mpdscribble do
-    lnif 'config/systemd/user/mpdscribble.service', 'config/systemd/user/mpdscribble.service'
-    lnif 'mpdscribble/mpdscribble.conf', 'mpdscribble/mpdscribble.conf'
+task :mpdas do
+    lnif 'config/systemd/user/mpdas.service', 'config/systemd/user/mpdas.service'
+    lnif 'mpdasrc', 'mpdasrc'
 end
 
 task :ncmpcpp do
