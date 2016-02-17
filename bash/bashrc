@@ -48,7 +48,7 @@ eval "$(dircolors ~/.dircolors)"
 
 # Environment variables
 export EDITOR="/usr/bin/vim"
-export JAVA_HOME="/usr/lib/jvm/java-7-openjdk"
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk"
 # export SOLR_HOME="~/bin/solr/bin"
 export ANDROID_HOME="/opt/android-sdk"
 export PATH="$PATH:/opt/android-sdk/platform-tools/:/opt/android-sdk/tools/:/home/ivo/.gem/ruby/2.2.0/bin:/opt/jruby/bin:/usr/local/heroku/bin:/home/ivo/bin:$JAVA_HOME"
@@ -91,3 +91,9 @@ if [ $PROMPT ]; then
     export PS1=$PROMPT
 fi
 
+
+PATH="/home/ivo/perl5/bin${PATH+:}${PATH}"; export PATH;
+PERL5LIB="/home/ivo/perl5/lib/perl5${PERL5LIB+:}${PERL5LIB}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/ivo/perl5${PERL_LOCAL_LIB_ROOT+:}${PERL_LOCAL_LIB_ROOT}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/ivo/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/ivo/perl5"; export PERL_MM_OPT;

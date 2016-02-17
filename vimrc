@@ -13,7 +13,24 @@ let g:airline_theme="murmur"
 let g:airline_powerline_fonts = 1
 let g:ack_autoclose = 1
 let g:ackhighlight = 1
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+let g:indent_guides_start_level=2
+let g:indent_guides_guide_size=1
+let g:molokai_original = 1
+
+nmap s <Plug>(easymotion-s)
+" nmap s <Plug>(easymotion-s2)
+let g:EasyMotion_smartcase = 1
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
 " let g:ack_use_dispatch = 1
+
+" Store swap files in fixed location, not current directory.
+set dir=~/.vimswap
+"
+" Store undo files
+set undodir=~/.vimundo
 
 " Basic settings
 set list
@@ -126,28 +143,33 @@ call vundle#begin()
 Plugin 'gmarik/vundle'
 
 " Plugin 'Buffergator'
-" Plugin 'mileszs/ack.vim'
-" Plugin 'tomtom/tlib_vim'
+Plugin 'mileszs/ack.vim'
+Plugin 'tomtom/tlib_vim' " dependency snipmate
 Plugin 'ervandew/supertab'
 Plugin 'bling/vim-airline'
-" Plugin 'majutsushi/tagbar'
+Plugin 'majutsushi/tagbar'
+Plugin 'ap/vim-css-color'
 " Plugin 'tpope/vim-fugitive'
+Plugin 'edsono/vim-matchit'
 Plugin 'tpope/vim-surround'
-" Plugin 'honza/vim-snippets'
-" Plugin 'garbas/vim-snipmate'
+Plugin 'honza/vim-snippets'
+Plugin 'scrooloose/nerdtree'
+Plugin 'garbas/vim-snipmate'
 Plugin 'tristen/vim-sparkup'
- Plugin 'derekwyatt/vim-scala'
+Plugin 'derekwyatt/vim-scala'
 " Plugin 'scrooloose/syntastic'
 Plugin 'airblade/vim-gitgutter'
-" Plugin 'Valloric/YouCompleteMe'
-Plugin 'scrooloose/nerdtree.git'
-" Plugin 'Lokaltog/vim-easymotion'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'lokaltog/vim-easymotion'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'vim-scripts/closetag.vim'
+Plugin 'nathanaelkane/vim-indent-guides'
 " Plugin 'slim-template/vim-slim.git'
-" Plugin 'MarcWeber/vim-addon-mw-utils'
-" Plugin 'terryma/vim-multiple-cursors'
+Plugin 'MarcWeber/vim-addon-mw-utils' " dependency snipmate
+Plugin 'terryma/vim-multiple-cursors'
 Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'altercation/vim-colors-solarized.git'
+Plugin 'tomasr/molokai'
+Plugin 'altercation/vim-colors-solarized'
 
 call vundle#end()
 
@@ -156,5 +178,6 @@ filetype plugin indent on
 
 syntax on
 set background=dark
-colorscheme solarized
+colorscheme molokai
+" colorscheme solarized
 
