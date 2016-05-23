@@ -147,6 +147,7 @@ Plugin 'mileszs/ack.vim'
 Plugin 'tomtom/tlib_vim' " dependency snipmate
 Plugin 'ervandew/supertab'
 Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'majutsushi/tagbar'
 Plugin 'ap/vim-css-color'
 " Plugin 'tpope/vim-fugitive'
@@ -178,6 +179,5 @@ filetype plugin indent on
 
 syntax on
 set background=dark
-colorscheme molokai
-" colorscheme solarized
+colorscheme solarized
 
