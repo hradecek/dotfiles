@@ -24,6 +24,12 @@ xsetroot -cursor_name left_ptr &
 # Start urxvt daemon
 urxvtd -q -o -f
 
+if [[ $HOSTNAME -eq "Antares" ]]; then
+    xrandr --output eDP1 --mode 1600x900 --rotate normal --output DP2-2 --auto --right-of eDP1
+fi
+
+xcreensaver &
+
 # Run WM
 xmonad &
 wait $!
