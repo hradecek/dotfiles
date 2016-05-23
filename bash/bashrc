@@ -48,15 +48,23 @@ eval "$(dircolors ~/.dircolors)"
 
 # Environment variables
 export EDITOR="/usr/bin/vim"
-export JAVA_HOME=
 export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
 export ANDROID_HOME="/opt/android-sdk"
-export PATH="$PATH:/opt/android-sdk/platform-tools/:/opt/android-sdk/tools/:/home/ivo/.gem/ruby/2.2.0/bin:/opt/jruby/bin:/usr/local/heroku/bin:/home/ivo/bin:$JAVA_HOME"
-
-# Add cabal to PATH
+if [[ $HOSTNAME -eq "Antares" ]]; then
+    export KRB5_PATH="$HOME/Kerberos5"
+    export EAP6_PATH="$HOME/EAP-6.4.0"
+fi
+if [[ -d /opt/android-sdk ]]; then
+    PATH="$PATH:/opt/android-sdk/platform-tools/:/opt/android-sdk/tools"
+fi
+if [[ $(which ruby) ]]; then
+    PATH="$PATH:$HOME/.gem/ruby/2.2.0/bin"
+fi
+if [[ -d $HOME/bin ]]; then
+    PATH="$PATH:$HOME/bin"
+fi
 if [[ -d "$HOME/.cabal/bin" ]]; then
     PATH="$HOME/.cabal/bin:$PATH"
-    export PATH
 fi
 
 # Load extension functions
