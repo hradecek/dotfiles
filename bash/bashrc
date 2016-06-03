@@ -51,9 +51,11 @@ export EDITOR="/usr/bin/vim"
 export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
 export ANDROID_HOME="/opt/android-sdk"
 if [[ $HOSTNAME -eq "Antares" ]]; then
-    export KRB5_PATH="$HOME/Kerberos5"
-    export EAP6_PATH="$HOME/EAP-6.4.0"
+    export EAP="$HOME/EAP"
+    export EAP700="$EAP/JBEAP-7/7.0.0"
+    export EAP701CPCR1="$EAP/JBEAP-7.0.1.CP.CR1"
 fi
+
 if [[ -d /opt/android-sdk ]]; then
     PATH="$PATH:/opt/android-sdk/platform-tools/:/opt/android-sdk/tools"
 fi

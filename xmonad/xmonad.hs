@@ -22,6 +22,7 @@ import XMonad.Util.Cursor
 import XMonad.Util.Loggers
 import XMonad.Util.EZConfig
 import XMonad.Util.Scratchpad
+import XMonad.Util.NamedWindows
 
 import XMonad.Actions.Volume
 import XMonad.Actions.CycleWS
@@ -30,6 +31,7 @@ import XMonad.Actions.ShowText
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.DynamicHooks
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageHelpers
@@ -124,6 +126,17 @@ clockEventHook e = do
   return $ All True
 
 --------------------------------------------------------------------------------
+--                               URGENCY HOOK                                 --
+--------------------------------------------------------------------------------
+data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
+
+instance UrgencyHook LibNotifyUrgencyHook where
+  urgencyHook LibNotifyUrgencyHook w = do
+    name <- getName w
+    Just idx <- fmap (W.findTag w) $ gets windowset
+    safeSpawn "notify-send" [show name, "workspace " ++ idx]
+
+--------------------------------------------------------------------------------
 --                                WINDOW HOOK                                 --
 --------------------------------------------------------------------------------
 manageHook' :: ManageHook
@@ -158,7 +171,7 @@ windowsHook = composeAll . concat $
 --                                LAYOUT HOOK                                 --
 --------------------------------------------------------------------------------
 layoutHook' =
-    avoidStruts
+    gaps [(U, dzenHeight), (D, dzenHeight)]
   $ minimize
   $ maximize
   $ smartBorders
@@ -197,8 +210,8 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((mod1Mask                 , xK_F4        ), kill)
 
   , ((modMask                  , xK_Tab       ), windows W.swapMaster)
-  , ((modMask                  , xK_j         ), windows W.swapDown)
-  , ((modMask                  , xK_k         ), windows W.swapUp)
+  -- , ((modMask                  , xK_j         ), windows W.swapDown)
+  -- , ((modMask                  , xK_k         ), windows W.swapUp)
   , ((mod1Mask                 , xK_j         ), windows W.focusDown)
   , ((mod1Mask                 , xK_k         ), windows W.focusUp)
   , ((modMask                  , xK_t         ), withFocused $ windows . W.sink)
@@ -215,11 +228,11 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask                  , xK_b         ), sendMessage ToggleStruts)
   , ((modMask                  , xK_space     ), sendMessage NextLayout)
   -- TU
-  , ((modMask  .|. shiftMask   , xK_l         ), spawn $ showLayoutFlags ["^ca(1,/usr/bin/xdotool key super+shift+w) tile^ca()"] dzenLayoutFlags)
+--  , ((modMask  .|. shiftMask   , xK_l         ), spawn $ showLayoutFlags ["^ca(1,/usr/bin/xdotool key super+shift+w) tile^ca()"] dzenLayoutFlags)
   , ((modMask  .|. shiftMask   , xK_w         ), sendMessage $ JumpToLayout "Tall")
   -- TU
   , ((modMask  .|. shiftMask   , xK_space     ), setLayout $ XMonad.layoutHook conf)
-  , ((mod1Mask                 , xK_f         ), sendMessage $ JumpToLayout "Full")
+  , ((mod1Mask                 , xK_f         ), fullFloatFocused)
 
   , ((modMask  .|. shiftMask   , xK_Return    ), spawn $ XMonad.terminal conf)
   , ((mod1Mask .|. shiftMask   , xK_Return    ), shellPrompt shellConfig)
@@ -241,15 +254,24 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((0            , xF86XK_AudioMute         ), spawn "/usr/bin/amixer set Master toggle")
   , ((0            , xF86XK_AudioRaiseVolume  ), raiseVolume 3 >>= (gdbarSpawn gdbarInfoFlags dzenInfoFlags "VOL") . ceiling)
   , ((0            , xF86XK_AudioLowerVolume  ), lowerVolume 3 >>= (gdbarSpawn gdbarInfoFlags dzenInfoFlags "VOL") . ceiling)
---  , ((0            , xF86XK_MonBrightnessUp   ), io getBrightness)
---  , ((0            , xF86XK_MonBrightnessDown ), io getBrightness)
+  , ((0            , xF86XK_MonBrightnessUp   ), spawn "xbacklight -inc 10" >> spawn "/home/ihradek/.xmonad/bin/bridzen.sh")
+  , ((0            , xF86XK_MonBrightnessDown ), spawn "xbacklight -dec 10" >> spawn "/home/ihradek/.xmonad/bin/bridzen.sh")
+  , ((modMask , xK_l                     ), shiftNextScreen)
+  , ((modMask , xK_j                     ), shiftPrevScreen)
+  , ((modMask , xK_e ), nextScreen)
+  , ((modMask, xK_w ), prevScreen)
   ] ++
+  -- [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
+  -- | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+  -- , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
+  -- ] ++
   [ ((m .|. modMask , k                       ), windows $ f i)
   | (i, k) <- zip (XMonad.workspaces conf) ([xK_1 .. xK_9] ++ [xK_0])
   , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
   ] where
       oneSecFlash   = flashText showTextConfig 1
       flashSpawn    = (. spawn) . (>>) . oneSecFlash
+      fullFloatFocused = withFocused $ \f -> windows =<< appEndo `fmap` runQuery doFullFloat f
       getBrightness = do
         c <- init <$> readFile "/sys/class/backlight/ideapad/actual_brightness"
         gdbarSpawn gdbarInfoFlags dzenInfoFlags "BRI" c
@@ -350,18 +372,18 @@ gdbarSpawn gdbf dzen text val = spawn $ foldl1 (++) $
 --------------------------------------------------------------------------------
 --                                SETTINGS                                    --
 --------------------------------------------------------------------------------
-yRes                  = 768
-xRes                  = 1366
+yRes                  = 900
+xRes                  = 1600
 dzenBg                = sRGB24show C.black
 dzenFg                = sRGB24show base3
 dzenFont              = "xft:monofur:size=8:antialias=true:hinting=true"
 dzenHeight            = 14
-dzenBoxFullIcon       = "/home/ivo/.xmonad/icons/xbm/boxFull.xbm"
-dzenBoxLeftIcon       = "/home/ivo/.xmonad/icons/xbm/boxLeft.xbm"
-dzenBoxRightIcon      = "/home/ivo/.xmonad/icons/xbm/boxRight.xbm"
-dzenBoxSmallRightIcon = "/home/ivo/.xmonad/icons/xbm/boxSmallRight.xbm"
-dzenBoxSmallLeftIcon  = "/home/ivo/.xmonad/icons/xbm/boxSmallLeft.xbm"
-dzenBoxSmallFullIcon  = "/home/ivo/.xmonad/icons/xbm/boxSmallFull.xbm"
+dzenBoxFullIcon       = "/home/ihradek/.xmonad/icons/xbm/boxFull.xbm"
+dzenBoxLeftIcon       = "/home/ihradek/.xmonad/icons/xbm/boxLeft.xbm"
+dzenBoxRightIcon      = "/home/ihradek/.xmonad/icons/xbm/boxRight.xbm"
+dzenBoxSmallRightIcon = "/home/ihradek/.xmonad/icons/xbm/boxSmallRight.xbm"
+dzenBoxSmallLeftIcon  = "/home/ihradek/.xmonad/icons/xbm/boxSmallLeft.xbm"
+dzenBoxSmallFullIcon  = "/home/ihradek/.xmonad/icons/xbm/boxSmallFull.xbm"
 
 base0   = sRGB24read "#839496"
 base1   = sRGB24read "#93a1a1"
@@ -421,7 +443,7 @@ tabConfigTheme = defaultTheme
   , activeBorderColor   = sRGB24show base01
   , inactiveColor       = sRGB24show base03
   , inactiveBorderColor = sRGB24show base01
-  , urgentColor         = sRGB24show red
+  , urgentColor         = sRGB24show green
   , urgentBorderColor   = sRGB24show base01
   , fontName            = "xft:monofur:size=9:antialias=true:hinting=true"
   , decoHeight          = 14
@@ -587,7 +609,7 @@ bottomBarLogHook h = dynamicLogWithPP defaultPP
   , ppOutput          = hPutStrLn h
   , ppExtras          = [batteryL, dateL, uptimeL, tempL, brightL, memoryL]
   , ppHidden          = ds blue   base3
-  , ppUrgent          = ds red    base3
+  , ppUrgent          = ds green  base3
   , ppCurrent         = ds orange base3
   , ppHiddenNoWindows = ds base03 base01
   } where
@@ -767,7 +789,7 @@ main :: IO ()
 main = do
   topBar    <- dzenSpawnPipe dzenTopFlags
   bottomBar <- dzenSpawnPipe dzenBottomFlags
-  xmonad XConfig {
+  xmonad $ withUrgencyHook LibNotifyUrgencyHook $ defaultConfig {
       keys               = keys'
     , logHook            = logHook' [topBarLogHook topBar, bottomBarLogHook bottomBar]
     , modMask            = mod4Mask
