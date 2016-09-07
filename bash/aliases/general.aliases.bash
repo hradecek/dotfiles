@@ -33,7 +33,6 @@ alias doc2multihtml="xsltproc /usr/share/xml/docbook/xhtml/chunk.xsl"
 
 # Other
 alias rm='rm -i'
-alias h='history'
 alias bc="bc -q -l"
 alias gdb="gdb -q"
 alias svim="sudo vim"
