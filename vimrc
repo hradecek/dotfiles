@@ -18,9 +18,10 @@ let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
 let g:molokai_original = 1
 
-nmap s <Plug>(easymotion-s)
-" nmap s <Plug>(easymotion-s2)
+" Easy Motion Settings
 let g:EasyMotion_smartcase = 1
+nmap <Leader>s <Plug>(easymotion-s)
+nmap ss <Plug>(easymotion-s2)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 
@@ -118,6 +119,7 @@ imap <C-s> <Esc>:w<cr>i
 
 imap } }<Esc>=%``a
 
+" Allow cursor movements in insert mode
 imap <C-h> <C-o>h
 imap <C-j> <C-o>j
 imap <C-k> <C-o>k
@@ -181,3 +183,19 @@ syntax on
 set background=dark
 colorscheme solarized
 
+command W w !sudo tee %
+nmap <leader>w :w<CR>
+nmap <leader>q :q<CR>
+
+" Disable Ex mode
+nmap Q <Nop>
+
+" Substitue the word under the cursor
+nmap <leader>s :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
+noremap <leader>v :vsp<CR><C-w><C-w>
+
+" Open a new tab and search for something.
+nmap <leader>a :tab split<CR>:Ack ""<Left>
+
+" Immediately search for the word under the cursor in a new tab.
+nmap <leader>A :tab split<CR>:Ack "\W<C-r><C-w>\W"<CR>

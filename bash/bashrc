@@ -12,7 +12,7 @@ THEME="rjorgenson"
 
 # History control
 HISTSIZE=2000
-HISFILESIZE=2000
+HISFILESIZE=10000
 HISTCONTROL=ignoreboth
 
 # Press CTRL+D two time to exit shell
@@ -48,47 +48,52 @@ eval "$(dircolors ~/.dircolors)"
 
 # Environment variables
 export EDITOR="/usr/bin/vim"
+export GOPATH="$HOME/go"
 export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
 export ANDROID_HOME="/opt/android-sdk"
-if [[ $HOSTNAME -eq "Antares" ]]; then
-    export EAP="$HOME/EAP"
-    export EAP700="$EAP/JBEAP-7/7.0.0"
-    export EAP701CPCR1="$EAP/JBEAP-7.0.1.CP.CR1"
-fi
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
-if [[ -d /opt/android-sdk ]]; then
-    PATH="$PATH:/opt/android-sdk/platform-tools/:/opt/android-sdk/tools"
-fi
-if [[ $(which ruby) ]]; then
-    PATH="$PATH:$HOME/.gem/ruby/2.2.0/bin"
-fi
-if [[ -d $HOME/bin ]]; then
-    PATH="$PATH:$HOME/bin"
-fi
-if [[ -d "$HOME/.cabal/bin" ]]; then
-    PATH="$HOME/.cabal/bin:$PATH"
-fi
+# Add user bin
+[[ -d $HOME/bin ]] && PATH="$PATH:$HOME/bin"
+
+# Add go
+[[ -d $GOPATH ]] && PATH="$PATH:$GOPATH/bin"
+
+# Add ruby
+[[ $(which ruby) ]] && PATH="$PATH:$HOME/.gem/ruby/2.2.0/bin"
+
+# Add Android SDK
+[[ -d /opt/android-sdk ]] && PATH="$PATH:/opt/android-sdk/platform-tools/:/opt/android-sdk/tools"
+
+# Add 'cabal'
+[[ -d $HOME/.cabal/bin ]] && PATH="$HOME/.cabal/bin:$PATH"
+
+# Load 'mysql-colorize'
+[[ -d $BASH/plugins/mysql-colorize ]] && source "$BASH/plugins/mysql-colorize/mysql-colorize.bash"
+
+# Load qfc
+[[ $(which qfc) ]] && source "$HOME/.qfc/bin/qfc.sh"
+
+# Alias 'thefuck' to 'fuck'
+[[ $(which thefuck) ]] && eval "$(thefuck --alias)"
+
+# Configure 'hstr'
+if [[ $(which hstr) ]]; then
+    export HH_CONFIG=hicolor
+    export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
+    [[ $- =~ .*i.* ]] && bind '"\C-r": "\C-a hh \C-j"'
+
+fi;
 
 # Load extension functions
 FUNCTIONS="$BASH/functions.bash"
-if [[ -f $FUNCTIONS ]]; then
-    source $FUNCTIONS
-fi
+[[ -f $FUNCTIONS ]] && source $FUNCTIONS
 
-# Load completions
-COMPLETIONS="$BASH/completions/*.completion.bash"
-for file in $COMPLETIONS; do
-    if [[ -f $file ]]; then
-        source $file
-    fi
-done
-
-# Load aliases
+# Load completions and aliases
 ALIASES="$BASH/aliases/*.aliases.bash"
-for file in $ALIASES; do
-    if [[ -f $file ]]; then
-        source $file
-    fi
+COMPLETIONS="$BASH/completions/*.completion.bash"
+for file in $COMPLETIONS $ALIASES; do
+    [[ -f $file ]] && source $file
 done
 
 #Load theme
@@ -101,9 +106,3 @@ if [ $PROMPT ]; then
     export PS1=$PROMPT
 fi
 
-
-PATH="/home/ivo/perl5/bin${PATH+:}${PATH}"; export PATH;
-PERL5LIB="/home/ivo/perl5/lib/perl5${PERL5LIB+:}${PERL5LIB}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/home/ivo/perl5${PERL_LOCAL_LIB_ROOT+:}${PERL_LOCAL_LIB_ROOT}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/home/ivo/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/home/ivo/perl5"; export PERL_MM_OPT;

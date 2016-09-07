@@ -15,7 +15,6 @@ fi
 # Merge user resources
 [[ -f $XRESOURCES && -r $XRESOURCES ]] && xrdb -merge $XRESOURCES
 
-
 # Set left cursor
 xsetroot -cursor_name left_ptr &
 
