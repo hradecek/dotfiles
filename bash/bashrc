@@ -8,7 +8,7 @@
 BASH="$HOME/dotfiles/bash"
 
 # Choose theme
-THEME="rjorgenson"
+THEME="hradecek"
 
 # History control
 HISTSIZE=2000
@@ -83,7 +83,7 @@ if [[ $(which hstr) ]]; then
     export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
     [[ $- =~ .*i.* ]] && bind '"\C-r": "\C-a hh \C-j"'
 
-fi;
+fi
 
 # Load extension functions
 FUNCTIONS="$BASH/functions.bash"
