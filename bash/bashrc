@@ -72,7 +72,7 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 [[ -d $BASH/plugins/mysql-colorize ]] && source "$BASH/plugins/mysql-colorize/mysql-colorize.bash"
 
 # Load qfc
-[[ $(which qfc) ]] && source "$HOME/.qfc/bin/qfc.sh"
+[[ -s "$HOME/.qfc/bin/qfc.sh" ]] && source "$HOME/.qfc/bin/qfc.sh"
 
 # Alias 'thefuck' to 'fuck'
 [[ $(which thefuck) ]] && eval "$(thefuck --alias)"
@@ -106,3 +106,4 @@ if [ $PROMPT ]; then
     export PS1=$PROMPT
 fi
 
+fortune | cowsay -f tux | lolcat
