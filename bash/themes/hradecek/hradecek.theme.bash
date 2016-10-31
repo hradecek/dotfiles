@@ -84,10 +84,12 @@ prompt() {
     my_ps_path="${BRACKET_COLOR}[${STRING_COLOR}\w${BRACKET_COLOR}]${normal}";
     my_ps_time="${BRACKET_COLOR}[${STRING_COLOR}\t${BRACKET_COLOR}]${normal}";
 
-    top="${TITLEBAR}${BRACKET_COLOR}┌─${my_ps_time}${my_ps_user}${my_ps_host}$(modern_scm_prompt)${my_ps_path}$(is_vim_shell)$(files_count) $(print_result)"
+    top_left="${TITLEBAR}${BRACKET_COLOR}┌─${my_ps_time}${my_ps_user}${my_ps_host}${my_ps_path}$(modern_scm_prompt)$(is_vim_shell)$(files_count)"
+    top_right="$(print_result)"
     bottom="${BRACKET_COLOR}└─$(todo_txt_count)$(my_prompt_char)"
 
-    PS1="${top}\n${bottom}"
+    top=$(printf "%s %s" "${top_left}" "${top_right}")
+    PS1="$top\n${bottom}"
 }
 
 PS2="└─$(my_prompt_char)"
