@@ -26,6 +26,32 @@ function bd () {
     fi
 }
 
+function jboss_clean() {
+    jboss_folder=$(ls jboss-eap-?.? 2> /dev/null)
+    if [ ! "$jboss_folder" ]; then
+        if [ ! -f jboss-modules.jar ]; then
+            echo "You are not in JBoss folder"
+            return 1
+        else
+            cd ..
+        fi
+    fi
+
+    jboss_full_build=$(ls *full-build*)
+    if [ ! "$jboss_full_build" ]; then
+        echo "Full build doesn't exists"
+        return 1
+    fi
+
+    echo -n "# Removing JBoss folder"
+    rm -rf jboss-eap-?.? 1> /dev/null 2>&1
+    echo -ne "\033[1K\r# Extracting full build"
+    extract *full-build* 1> /dev/null 2>&1
+    echo -ne "\033[1K\r# CD to JBoss folder"
+    cd jboss-eap-?.?
+    echo -ne "\033[1K\r"
+}
+
 function extract() {
     if [ -f $1 ] ; then
         case $1 in
