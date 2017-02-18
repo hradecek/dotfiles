@@ -28,6 +28,7 @@ function bd () {
 
 function jboss_clean() {
     jboss_folder=$(ls jboss-eap-?.? 2> /dev/null)
+    echo $jboss_folder
     if [ ! "$jboss_folder" ]; then
         if [ ! -f jboss-modules.jar ]; then
             echo "You are not in JBoss folder"
@@ -37,7 +38,7 @@ function jboss_clean() {
         fi
     fi
 
-    jboss_full_build=$(ls *full-build*)
+    jboss_full_build=$(ls *full-build* 2> /dev/null)
     if [ ! "$jboss_full_build" ]; then
         echo "Full build doesn't exists"
         return 1
@@ -50,6 +51,76 @@ function jboss_clean() {
     echo -ne "\033[1K\r# CD to JBoss folder"
     cd jboss-eap-?.?
     echo -ne "\033[1K\r"
+}
+
+function jboss_cd() {
+    base_dir="/home/ihradek/EAP/"
+    while [[ $# -gt 1 ]]; do
+        case $1 in
+            -h|--help)
+                exit
+                ;;
+            -e|--eap-version)
+                shift
+                arg=$1
+                # Emtpy or next option was provided
+                if [ -z "$arg" ] || [[ $arg == -* ]]; then
+                    echo "Verions of EAP was not specified"
+                    return 1
+                fi
+                eaps=$(ls $base_dir)
+                # complete -F _complete_version 
+                if [[ $arg != JBEAP-* ]]; then
+                    arg="JBEAP-$arg/"
+                fi
+                index=$(search eaps[@] $arg)
+                if [[ $index == "-1" ]]; then
+                    # TODO:
+                    echo "Specified EAP version doesn't exists"
+                    return 1
+                fi
+                cd "$base_dir/${eaps[$found]}"
+                ;;
+        esac
+    done
+}
+
+function _complete_version() {
+    eaps=$(ls /home/ihradek/EAP)
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP WORDS[COMP_CWORD]}"
+    prev="${COMP WORDS[COMP_CWORD-1]}"
+    opts=$1
+
+    # COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+}
+
+function search() {
+    declare -a arr=("${!1}")
+    local i=1
+    needle="$2/"
+
+    for e in $arr; do
+        if [[ "$e" == "$needle" ]]; then
+            echo $i
+            return
+        else
+            ((++i))
+        fi
+    done
+    echo "-1"
+
+}
+
+function jboss_get_last_installed_version() {
+    base_dir=$1
+    if [ ! -d $base_dir ]; then
+        echo "ERROR: $base_dir directory doesn't exists"
+        return 1
+    fi
+
+    eaps=$(ls $base_dir)
 }
 
 function extract() {
