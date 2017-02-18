@@ -76,6 +76,8 @@ import qualified Data.Colour.Names as C
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.Dzen as DZ
 import qualified XMonad.Util.ExtensibleState as XS
+
+import qualified Hradecek.Hook.Handle as H
 --------------------------------------------------------------------------------
 --                                 LOG HOOK                                   --
 --------------------------------------------------------------------------------
@@ -800,7 +802,7 @@ main = do
     , borderWidth        = 1
     , startupHook        = startupHook'
     , mouseBindings      = mouseBindings'
-    , handleEventHook    = handleEventHook'
+    , handleEventHook    = H.handleEventHook
     , clickJustFocuses   = True
     , focusFollowsMouse  = True
     , normalBorderColor  = sRGB24show base03
