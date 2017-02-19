@@ -20,12 +20,6 @@ alias lld="ls -ld */"
 alias lsd="ls -l --color=always | grep --color=never '^d'"
 alias tree="tree -C"
 
-# Pacman
-alias pacs="sudo pacman -S"
-alias pacr="sudo pacman -R"
-alias pacu="sudo pacman -U"
-alias pacss="pacman -Ss"
-
 # Documents generating
 alias docvalidate="xmllint --valid --noout"
 alias doc2html1="xsltproc /usr/share/xml/docbook/xhtml/docbook.xsl"
