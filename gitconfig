@@ -1,6 +1,9 @@
 [user]
 	email = ivohradek@gmail.com
 	name = hradecek
+[author]
+	email = ivohradek@gmail.com
+	name = hradecek
 [core]
 	editor = vim
 	autocrlf = input
