@@ -60,7 +60,7 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 [[ -d $GOPATH ]] && PATH="$PATH:$GOPATH/bin"
 
 # Add ruby
-[[ $(which ruby) ]] && PATH="$PATH:$HOME/.gem/ruby/2.2.0/bin"
+[[ $(which ruby &> /dev/null) ]] && PATH="$PATH:$HOME/.gem/ruby/2.2.0/bin"
 
 # Add Android SDK
 [[ -d /opt/android-sdk ]] && PATH="$PATH:/opt/android-sdk/platform-tools/:/opt/android-sdk/tools"
@@ -69,16 +69,16 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 [[ -d $HOME/.cabal/bin ]] && PATH="$HOME/.cabal/bin:$PATH"
 
 # Load 'mysql-colorize'
-[[ -d $BASH/plugins/mysql-colorize ]] && source "$BASH/plugins/mysql-colorize/mysql-colorize.bash"
+[[ -f $BASH/plugins/mysql-colorize/mysql-colorize.bash ]] && source "$BASH/plugins/mysql-colorize/mysql-colorize.bash"
 
 # Load qfc
 [[ -s "$HOME/.qfc/bin/qfc.sh" ]] && source "$HOME/.qfc/bin/qfc.sh"
 
 # Alias 'thefuck' to 'fuck'
-[[ $(which thefuck) ]] && eval "$(thefuck --alias)"
+[[ $(which thefuck &> /dev/null) ]] && eval "$(thefuck --alias)"
 
 # Configure 'hstr'
-if [[ $(which hstr) ]]; then
+if [[ $(which hstr &> /dev/null) ]]; then
     export HH_CONFIG=hicolor
     export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
     [[ $- =~ .*i.* ]] && bind '"\C-r": "\C-a hh \C-j"'
