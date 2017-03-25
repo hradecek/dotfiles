@@ -36,11 +36,11 @@ URxvt.scrollTtyKeypress:    true
 URxvt.iso14755:               False
 URxvt.url-launcher:           /usr/bin/xdg-open
 URxvt.matcher.button:         1
-URxvt.perl-ext-common:        default,clipboard,matcher,font-size
-URxvt.keysym.C-Up:            perl:font-size:increase
-URxvt.keysym.C-Down:          perl:font-size:decrease
-URxvt.keysym.C-S-Up:          perl:font-size:incglobal
-URxvt.keysym.C-S-Down:        perl:font-size:decglobal
+URxvt.perl-ext-common:        default,clipboard,matcher,resize-font
+URxvt.keysym.C-Up:            perl:resize-font:increase
+URxvt.keysym.C-Down:          perl:resize-font:decrease
+URxvt.keysym.C-S-Up:          perl:resize-font:incglobal
+URxvt.keysym.C-S-Down:        perl:resize-font:decglobal
 URxvt.keysym.Shift-Control-C: perl:clipboard:copy
 URxvt.keysym.Shift-Control-V: perl:clipboard:paste
 
