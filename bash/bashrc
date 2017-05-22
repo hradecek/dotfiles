@@ -71,6 +71,9 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 # Load 'mysql-colorize'
 [[ -f $BASH/plugins/mysql-colorize/mysql-colorize.bash ]] && source "$BASH/plugins/mysql-colorize/mysql-colorize.bash"
 
+# Load 'jboss' plugin
+[[ -f $BASH/plugins/jboss.sh ]] && source "$BASH/plugins/jboss.sh"
+
 # Load qfc
 [[ -s "$HOME/.qfc/bin/qfc.sh" ]] && source "$HOME/.qfc/bin/qfc.sh"
 
