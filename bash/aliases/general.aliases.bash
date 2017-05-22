@@ -40,4 +40,3 @@ alias psgrep="ps -aux | grep -v grep | grep -i"
 
 # Personal aliases
 alias aisa="ssh xhradek@aisa.fi.muni.cz"
-alias jboss-clean='jboss_clean'
