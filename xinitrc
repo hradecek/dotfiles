@@ -21,16 +21,13 @@ xsetroot -cursor_name left_ptr &
 # Start urxvt daemon
 urxvtd -q -o -f
 
-if [[ $HOSTNAME -eq "Antares" ]]; then
-    xrandr --output eDP1 --mode 1600x900 --rotate normal --output DP2-2 --auto --right-of eDP1
-    feh --bg-scale --recursive --randomize ~/Pictures/Wallpapers/Selected/* --bg-scale --recursive --randomize ~/Pictures/Wallpapers/Selected/* &
-    hexchat &
-else
-    # Set random wallpaper
-    feh --bg-scale --recursive --randomize ~/Pictures/Wallpapers/Selected/* &
-fi
+# Set a random wallaper
+feh --bg-scale --recursive --randomize ~/Pictures/Wallpapers/Selected/* &
 
+# Startup processes
+mpd &
 xscreensaver &
+weechat &
 
 # Run WM
 xmonad &
