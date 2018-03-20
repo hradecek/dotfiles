@@ -1,0 +1,9 @@
+#=============================================================================#
+# File:   ~/.bash_profile                                                     #
+# Author: hradecek <ivohradek@gmail.com>                                      #
+#=============================================================================#
+GREEN="\[$(tput setaf 2)\]"
+RESET="\[$(tput sgr0)\]"
+
+export PS1="[${GREEN}$?${RESET}][${GREEN}\H${RESET}][${GREEN}\u${RESET}] -> "
+
