@@ -26,8 +26,7 @@ feh --bg-scale --recursive --randomize ~/Pictures/Wallpapers/Selected/* &
 
 # Startup processes
 mpd &
-xscreensaver &
-weechat &
+xscreensaver --no-splash &
 
 # Run WM
 xmonad &
