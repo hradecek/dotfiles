@@ -1,4 +1,5 @@
 /dist
+/target
 *history
 xmonad-x86_64-linux
 *.errors
