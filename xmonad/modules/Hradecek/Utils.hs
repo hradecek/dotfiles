@@ -3,16 +3,15 @@ module Hradecek.Utils
     isInstalled,
   ) where
 
-import System.Exit    ( ExitCode (..) )
-import System.Process ( readProcessWithExitCode )
+import Control.Monad.IO.Class ( MonadIO )
+import XMonad.Util.Run        ( runProcessWithInput )
 
-isInstalled :: String -> IO Bool
-isInstalled what = let which = readProcessWithExitCode "which" [what] []
-                   in  fromExitCode . exitCode <$> which
+which :: String
+which = "which"
 
-exitCode :: (ExitCode, String, String) -> ExitCode
-exitCode (e, _, _) = e
+isInstalled :: MonadIO m => String -> m Bool
+isInstalled what = let which' = runProcessWithInput which [what] []
+                   in  fromOutput <$> which'
 
-fromExitCode :: ExitCode -> Bool
-fromExitCode ExitSuccess = True
-fromExitCode _           = False
+fromOutput :: String -> Bool
+fromOutput out = if null out then False else True
