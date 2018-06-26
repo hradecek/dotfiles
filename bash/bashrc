@@ -4,8 +4,11 @@
 # Author: hradecek <ivohradek@gmail.com>                                      #
 #=============================================================================#
 
-# Directory where everything is stored
-BASH="$HOME/dotfiles/bash"
+# Base directory
+# Can be change via $BASH environment variable
+if [ -z ${BASH+x} ]; then
+    BASH="${HOME}/dotfiles/bash"
+fi
 
 # Choose theme
 THEME="hradecek"
