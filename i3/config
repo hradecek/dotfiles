@@ -22,17 +22,21 @@ bar {
 bindsym XF86AudioRaiseVolume exec --no-startup-id "amixer -q sset Master,0 1+ unmute"
 bindsym XF86AudioLowerVolume exec --no-startup-id "amixer -q sset Master,0 1- unmute"
 bindsym XF86AudioMute exec --no-startup-id "amixer set Master 1+ toggle"
+bindsym XF86MonBrightnessUp exec --no-startup-id "xbacklight -inc 10"
+bindsym XF86MonBrightnessDown exec --no-startup-id "xbacklight -dec 10"
+bindsym $win+x exec --no-startup-id "xcalib -invert -alter"
 
 ################################################################################
 # Application bindings
 ################################################################################
 bindsym $win+Shift+Return exec i3-sensible-terminal
-bindsym $alt+Shift+Return exec dmenu_run
+bindsym $alt+Shift+Return exec "dmenu_run -fn monofur-12"
 
 ################################################################################
 # Windows control bindings
 ################################################################################
 bindsym $win+Shift+q kill
+bindsym $alt+F4 kill
 
 # Change focus
 bindsym $alt+h focus left
