@@ -1,48 +1,7 @@
-!------------------------------------------------------------------------------!
-! File:   ~/.Xresources                                                        !
-! Author: hradecek <ivohradek@gmail.com>                                       !
-!------------------------------------------------------------------------------!
-
-! XFT settings
-Xft.dpi:                    96
-Xft.rgba:                   rgb
-Xft.hinting:                true
-Xft.antialias:              true
-Xft.hintstyle:              hintslight
-
-! URxvt settings
-URxvt.font:                 xft:monofur:regular:pixelsize=14,\
-                            xft:Inconsolata\ for\ Powerline:pixelsize=14
-URxvt.depth:                32
-URxvt.fading:               10
-URxvt.saveLines:            65535
-URxvt.scrollBar:            false
-URxvt.loginShell:           false
-URxvt.visualBell:           false
-URxvt.cursorBlink:          false
-URxvt.transparent:          false
-URxvt.scrollStyle:          plain
-URxvt.pointerBlank:         true
-URxvt.urgentOnBell:         false
-URxvt.internalBorder:       2
-URxvt.externalBorder:       0
-URxvt.cursorUnderline:      false
-URxvt.intensityStyles:      false
-URxvt.scrollTtyOutput:      false
-URxvt.scrollWithBuffer:     true
-URxvt.scrollTtyKeypress:    true
-
-! URxvt extensions
-URxvt.iso14755:               False
-URxvt.url-launcher:           /usr/bin/xdg-open
-URxvt.matcher.button:         1
-URxvt.perl-ext-common:        default,clipboard,matcher,resize-font
-URxvt.keysym.C-Up:            perl:resize-font:increase
-URxvt.keysym.C-Down:          perl:resize-font:decrease
-URxvt.keysym.C-S-Up:          perl:resize-font:incglobal
-URxvt.keysym.C-S-Down:        perl:resize-font:decglobal
-URxvt.keysym.Shift-Control-C: perl:clipboard:copy
-URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+!===============================================================================
+! File:   ~/.Xresources
+! Author: hradecek <ivohradek@gmail.com>
+!===============================================================================
 
 ! Color scheme
 #define S_yellow  #b58900
@@ -63,26 +22,72 @@ URxvt.keysym.Shift-Control-V: perl:clipboard:paste
 #define S_base3   #fdf6e3
 #define S_base0t  [90]#002b36
 
-URxvt*fadeColor:   S_base03
-URxvt*background:  S_base0t
-URxvt*foreground:  S_base0
-URxvt*cursorColor: S_base1
+!-------------------------------------------------------------------------------
+! XFT settings
+!-------------------------------------------------------------------------------
+Xft.dpi:                    192
+Xft.rgba:                   rgb
+Xft.hinting:                true
+Xft.antialias:              true
+Xft.hintstyle:              hintslight
+
+!-------------------------------------------------------------------------------
+! URxvt
+!-------------------------------------------------------------------------------
+! URxvt.font:                 xft:monofur:regular:size=14
+URxvt.font:                 xft:font awesome 5 free:regular:size=14
+URxvt.depth:                32
+URxvt.fading:               10
+URxvt.saveLines:            65535
+URxvt.scrollBar:            false
+URxvt.loginShell:           false
+URxvt.visualBell:           false
+URxvt.cursorBlink:          false
+URxvt.transparent:          false
+URxvt.scrollStyle:          plain
+URxvt.pointerBlank:         true
+URxvt.urgentOnBell:         false
+URxvt.internalBorder:       2
+URxvt.externalBorder:       0
+URxvt.cursorUnderline:      false
+URxvt.intensityStyles:      false
+URxvt.scrollTtyOutput:      false
+URxvt.scrollWithBuffer:     true
+URxvt.scrollTtyKeypress:    true
+
+! Extensions
+URxvt.iso14755:               False
+URxvt.url-launcher:           /usr/bin/xdg-open
+URxvt.matcher.button:         1
+URxvt.perl-ext-common:        default,clipboard,matcher,font-size
+URxvt.keysym.C-Up:            perl:font-size:increase
+URxvt.keysym.C-Down:          perl:font-size:decrease
+URxvt.keysym.C-S-Up:          perl:font-size:incglobal
+URxvt.keysym.C-S-Down:        perl:font-size:decglobal
+URxvt.keysym.Shift-Control-C: perl:clipboard:copy
+URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+
+! Colors
+URxvt*fadeColor:              S_base03
+URxvt*background:             S_base0t
+URxvt*foreground:             S_base0
+URxvt*cursorColor:            S_base1
 URxvt*pointerColorBackground: S_base01
 URxvt*pointerColorForeground: S_base1
-URxvt*color0:  S_base02
-URxvt*color1:  S_red
-URxvt*color2:  S_green
-URxvt*color3:  S_yellow
-URxvt*color4:  S_blue
-URxvt*color5:  S_magenta
-URxvt*color6:  S_cyan
-URxvt*color7:  S_base2
-URxvt*color8:  S_base03
-URxvt*color9:  S_orange
-URxvt*color10: S_base01
-URxvt*color11: S_base00
-URxvt*color12: S_base0
-URxvt*color13: S_violet
-URxvt*color14: S_base1
-URxvt*color15: S_base3
+URxvt*color0:                 S_base02
+URxvt*color1:                 S_red
+URxvt*color2:                 S_green
+URxvt*color3:                 S_yellow
+URxvt*color4:                 S_blue
+URxvt*color5:                 S_magenta
+URxvt*color6:                 S_cyan
+URxvt*color7:                 S_base2
+URxvt*color8:                 S_base03
+URxvt*color9:                 S_orange
+URxvt*color10:                S_base01
+URxvt*color11:                S_base00
+URxvt*color12:                S_base0
+URxvt*color13:                S_violet
+URxvt*color14:                S_base1
+URxvt*color15:                S_base3
 
