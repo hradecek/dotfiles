@@ -15,19 +15,18 @@ fi
 # Merge user resources
 [[ -f $XRESOURCES && -r $XRESOURCES ]] && xrdb -merge $XRESOURCES
 
+xrand --dpi 192
+
 # Set left cursor
 xsetroot -cursor_name left_ptr &
-
-# Start urxvt daemon
-urxvtd -q -o -f
 
 # Set a random wallaper
 feh --bg-scale --recursive --randomize ~/Pictures/Wallpapers/Selected/* &
 
 # Startup processes
 mpd &
-xscreensaver --no-splash &
+picom -b
 
 # Run WM
-xmonad &
-wait $!
+exec i3
+
