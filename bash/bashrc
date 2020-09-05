@@ -1,16 +1,15 @@
 #!/bin/sh
-#=============================================================================#
-# File:   ~/.bashrc                                                           #
-# Author: hradecek <ivohradek@gmail.com>                                      #
-#=============================================================================#
+#==============================================================================
+# File:   ~/.bashrc
+# Author: hradecek <ivohradek@gmail.com>
+#==============================================================================
 
 # Base directory
 # Can be change via $BASH environment variable
-if [ -z ${BASH+x} ]; then
-    BASH="${HOME}/dotfiles/bash"
+if [ -z ${BASH_ENV+x} ]; then
+    BASH_ENV="${HOME}/dotfiles/bash"
 fi
 
-# Choose theme
 THEME="hradecek"
 
 # History control
@@ -53,7 +52,6 @@ eval "$(dircolors ~/.dircolors)"
 export EDITOR="/usr/bin/vim"
 export GOPATH="$HOME/go"
 export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
-export ANDROID_HOME="/opt/android-sdk"
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 # Add user's bin folder
@@ -62,26 +60,11 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 # Add go
 [[ -d $GOPATH ]] && PATH="$PATH:$GOPATH/bin"
 
-# Add ruby
-[[ $(which ruby &> /dev/null) ]] && PATH="$PATH:$HOME/.gem/ruby/2.2.0/bin"
-
-# Add Android SDK
-[[ -d /opt/android-sdk ]] && PATH="$PATH:/opt/android-sdk/platform-tools/:/opt/android-sdk/tools"
-
 # Add 'cabal'
 [[ -d $HOME/.cabal/bin ]] && PATH="$HOME/.cabal/bin:$PATH"
 
-# Load 'mysql-colorize'
-[[ -f $BASH/plugins/mysql-colorize/mysql-colorize.bash ]] && source "$BASH/plugins/mysql-colorize/mysql-colorize.bash"
-
-# Load 'jboss' plugin
-[[ -f $BASH/plugins/jboss.sh ]] && source "$BASH/plugins/jboss.sh"
-
-# Load qfc
-[[ -s "$HOME/.qfc/bin/qfc.sh" ]] && source "$HOME/.qfc/bin/qfc.sh"
-
 # Alias 'thefuck' to 'fuck'
-[[ $(which thefuck &> /dev/null) ]] && eval "$(thefuck --alias)"
+[[ $(which thefuck) ]] && eval "$(thefuck --alias)"
 
 # Configure 'hstr'
 if [[ $(which hstr &> /dev/null) ]]; then
@@ -92,27 +75,28 @@ if [[ $(which hstr &> /dev/null) ]]; then
 fi
 
 # Load extension functions
-FUNCTIONS="$BASH/functions.bash"
+FUNCTIONS="$BASH_ENV/functions.bash"
 [[ -f $FUNCTIONS ]] && source $FUNCTIONS
 
 # Load completions and aliases
-ALIASES="$BASH/aliases/*.aliases.bash"
-COMPLETIONS="$BASH/completions/*.completion.bash"
+ALIASES="$BASH_ENV/aliases/*.aliases.bash"
+COMPLETIONS="$BASH_ENV/completions/*.completion.bash"
 for file in $COMPLETIONS $ALIASES; do
     [[ -f $file ]] && source $file
 done
 
 #Load theme
-source "$BASH/themes/colors.theme.bash"
-source "$BASH/themes/base.theme.bash"
-source "$BASH/themes/$THEME/${THEME}.theme.bash"
+source "$BASH_ENV/themes/colors.theme.bash"
+source "$BASH_ENV/themes/base.theme.bash"
+source "$BASH_ENV/themes/$THEME/${THEME}.theme.bash"
 
 # Main prompt
 if [ $PROMPT ]; then
     export PS1=$PROMPT
 fi
 
-# Tux with fortune will randomly appears on the screen, only for you
+# Tux with fortune
 if [[ $(($RANDOM % 5)) -eq 0 ]]; then
     fortune -se | cowsay -f tux | lolcat
 fi
+
