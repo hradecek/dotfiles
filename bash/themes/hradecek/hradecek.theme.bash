@@ -49,7 +49,7 @@ todo_txt_count() {
 
 modern_scm_prompt() {
     CHAR=$(scm_char)
-    if [ $CHAR = $SCM_NONE_CHAR ]
+    if [[ $CHAR = $SCM_NONE_CHAR ]]
     then
         return
     else
