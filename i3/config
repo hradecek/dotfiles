@@ -19,10 +19,10 @@ bindsym $win+Shift+x exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 exec_always --no-startup-id "$HOME/.config/polybar/launch.sh"
 
-for_window [class=".*"] border pixel 1
+for_window [class=".*"] border pixel 2
 hide_edge_borders both
 
-gaps inner 3
+gaps inner 2
 gaps outer 0
 
 #-------------------------------------------------------------------------------
