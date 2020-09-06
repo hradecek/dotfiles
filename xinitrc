@@ -15,13 +15,11 @@ fi
 # Merge user resources
 [[ -f $XRESOURCES && -r $XRESOURCES ]] && xrdb -merge $XRESOURCES
 
-xrand --dpi 192
-
 # Set left cursor
-xsetroot -cursor_name left_ptr &
+# xsetroot -cursor_name left_ptr &
 
 # Set a random wallaper
-feh --bg-scale --recursive --randomize ~/Pictures/Wallpapers/Selected/* &
+# feh --bg-scale --recursive --randomize ~/Pictures/Wallpapers/Selected/* &
 
 # Startup processes
 mpd &

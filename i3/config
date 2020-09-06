@@ -17,6 +17,8 @@ bindsym $win+Shift+c reload
 bindsym $win+Shift+r restart
 bindsym $win+Shift+x exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
+exec --no-startup-id "xrandr --dpi 192"
+exec --no-startup-id "feh --bg-scale --recursive --randomize ~/Pictures/Wallpapers/Selected/*"
 exec_always --no-startup-id "$HOME/.config/polybar/launch.sh"
 
 for_window [class=".*"] border pixel 2
