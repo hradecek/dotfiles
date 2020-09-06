@@ -9,43 +9,10 @@ foreground = #f4f2f0
 background = #2c2541
 cursorColor = #f4f2f0
 
-; Black
-color0 = #3d335c
-color8 = #483c6c
-
-; Red
-color1 = #da0f7a
-color9 = #ff217c
-
-; Green
-color2 = #00f58f
-color10 = #21ffa2
-
-; Yellow
-color3 = #ffc65c
-color11 = #ffd486
-
-; Blue
-color4 = #008bd7
-color12 = #0c86f0
-
-; Magenta
-color5 = #da70d6
-color13 = #e69ee4
-
-; Cyan
-color6 = #00ded3
-color14 = #0cffe1
-
-; White
-color7 = #b5bab5
-color15 = #d5d8d5
-
-background-alt = #444
-foreground-alt = ${colors.color7}
-primary = ${colors.color4}
+foreground-alt = #b5bab5
+primary = #008bd7
 secondary = #0000ff
-alert = ${colors.color3}
+alert = #ffc65c
 
 [settings]
 screenchange-reload = true
@@ -58,7 +25,7 @@ margin-bottom = 0
 dpi-x = 196
 dpi-y = 196
 
-bottom = false
+bottom = true
 width = 100%
 height = 48
 radius = 21.5
@@ -71,13 +38,13 @@ line-size = 2
 line-color = #f00
 
 border-left-size = 7
-border-top-size = 7
+border-top-size = 0
 border-right-size = 7
-border-bottom-size = 0
+border-bottom-size = 5
 border-color = #00000000
 
 padding-left = 0
-padding-right = 0
+padding-right = 1
 
 module-margin-left = 0
 module-margin-right = 0
@@ -137,26 +104,33 @@ balcklist-1 = scroll lock
 
 format = <label-layout> <label-indicator>
 format-padding = 1
-format-underline = ${colors.color9}
 
-label-layout = %{F#008bd7}%{F-} %layout%
+format-prefix = " "
+format-prefix-foreground = #008bd7
+
+label-layout = %layout%
 label-indicator = %name%
 
 label-indicator-on-capslock = CAPS
 
 [module/xbacklight]
 type = internal/xbacklight
-
-format = <label> <bar>
-label = %{F#008bd7}%{F-} %percentage%%
-format-padding = 1
-format-underline = ${colors.color9}
-
 enable-scroll = true
 
+format = <bar> <label>
+format-padding = 1
+
+format-prefix = " "
+format-prefix-foreground = #008bd7
+label = %percentage%%
+
 bar-width = 10
-bar-indicator = %{F#55aa55}█%{F-}
-bar-fill = %{F#55aa55}█%{F-}
+bar-gradient = true
+bar-foreground-0 = #1167b1
+bar-foreground-1 = #187bcd
+bar-foreground-2 = #2a9df4
+bar-indicator =
+bar-fill = █
 bar-empty = ─
 
 [module/cpu]
@@ -164,19 +138,21 @@ type = internal/cpu
 interval = 2
 
 format = <label>
+format-prefix = " "
+format-prefix-foreground = #008bd7
 format-padding = 1
-format-underline = #f90000
 
-label = %{F#008bd7}%{F-} %percentage%%
+label = %percentage%%
 
 [module/memory]
 type = internal/memory
 interval = 2
 
+format-prefix = " "
+format-prefix-foreground = #008bd7
 format-padding = 1
-format-underline = #4bffdc
 
-label = %{F#008bd7}%{F-} %percentage_used%%
+label = %percentage_used%%
 
 [module/wlan]
 type = internal/network
@@ -184,9 +160,10 @@ interface = wlp2s0
 interval = 3.0
 
 format-connected = <label-connected>
+format-connected-prefix = " "
+format-connected-prefix-foreground = #008bd7
 format-connected-padding = 1
-format-connected-underline = #9f78e1
-label-connected = %{F#008bd7} %{F-}%essid% (%signal%%) %{F#008bd7} %{F-}%local_ip% %{F#008bd7}%{F-}%downspeed:3% %{F#008bd7}%{F-}%upspeed%
+label-connected = %essid% (%signal%%) %{F#008bd7} %{F-}%local_ip% %{F#008bd7}%{F-}%downspeed:3% %{F#008bd7}%{F-}%upspeed%
 
 format-disconnected =
 
@@ -200,19 +177,17 @@ date-alt = " %d.%m.%Y"
 time = %H:%M
 time-alt = %H:%M:%S
 
-format-prefix = %{F#008bd7}%{F-}
-format-prefix-foreground = ${colors.foreground-alt}
+format-prefix =  
+format-prefix-foreground = #008bd7
 format-padding = 1
-format-underline = #0a6cf5
 
-label = %date% %time%
+label = %{A3:~/.config/polybar/scripts/popup-calendar.sh --popup:}%date% %time%%{A}
 
 [module/alsa]
 type = internal/alsa
 
 format-volume = <ramp-volume> <bar-volume> <label-volume>
 format-volume-padding = 1
-format-volume-underline = ${colors.color3}
 label-volume-foreground = ${colors.foreground}
 
 ramp-volume-0 = %{F#008bd7}%{F-}
@@ -225,17 +200,17 @@ label-muted = %{F#008bd7} %{F-}
 label-muted-foreground = ${colors.foreground}
 
 bar-volume-width = 10
-bar-volume-foreground-0 = #55aa55
-bar-volume-foreground-1 = #55aa55
-bar-volume-foreground-2 = #55aa55
-bar-volume-foreground-3 = #55aa55
-bar-volume-foreground-4 = #55aa55
-bar-volume-foreground-5 = #f5a70a
-bar-volume-foreground-6 = #f5a70a
-bar-volume-foreground-7 = #da0f7a
-bar-volume-foreground-8 = #da0f7a
-bar-volume-foreground-9 = #da0f7a
 bar-volume-gradient = true
+bar-volume-foreground-0 = #1167b1
+bar-volume-foreground-1 = #1167b1
+bar-volume-foreground-2 = #1167b1
+bar-volume-foreground-3 = #1167b1
+bar-volume-foreground-4 = #1167b1
+bar-volume-foreground-5 = #187bcd
+bar-volume-foreground-6 = #187bcd
+bar-volume-foreground-7 = #2a9df4
+bar-volume-foreground-8 = #2a9df4
+bar-volume-foreground-9 = #2a9df4
 bar-volume-indicator =
 bar-volume-indicator-font = 2
 bar-volume-fill = █
@@ -258,13 +233,9 @@ format-discharging-padding = 1
 label-full = %{F#008bd7}%{F-} %percentage%%
 
 format-charging = <animation-charging> <label-charging>
-format-charging-underline = #ffb52a
 
 format-discharging = <ramp-capacity> <label-discharging>
-format-discharging-underline = ${self.format-charging-underline}
 label-discharging = %percentage%% (%time%)
-
-format-full-underline = ${self.format-charging-underline}
 
 ramp-capacity-0 = %{F#008bd7}%{F-}
 ramp-capacity-1 = %{F#008bd7}%{F-}
@@ -283,7 +254,6 @@ type = custom/menu
 expand-right = true
 
 format-spacing = 1
-format-underline = ${colors.color10}
 
 label-open = %{F#008bd7}%{F-}
 label-open-foreground = ${colors.secondary}
@@ -296,6 +266,8 @@ menu-0-0 = reboot
 menu-0-0-exec = menu-open-1
 menu-0-1 = power off
 menu-0-1-exec = menu-open-2
+menu-0-2 = suspend
+menu-0-2-exec = menu-open-3
 
 menu-1-0 = cancel
 menu-1-0-exec = menu-open-0
@@ -307,3 +279,8 @@ menu-2-0-exec = sudo poweroff
 menu-2-1 = cancel
 menu-2-1-exec = menu-open-0
 
+
+menu-3-0 = suspend
+menu-3-0-exec = suspend
+menu-3-1 = cancel
+menu-3-1-exec = menu-open-0-
