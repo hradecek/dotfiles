@@ -1,16 +1,11 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" File: ~/.vimrc"
-" Author: hradecek <ivohradek@gmail.com>
-" Description: Vim configuration file
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"============================================================================="
+" @file: ~/.vimrc                                                             "
+" @author: hradecek <ivohradek@gmail.com>                                     "
+"============================================================================="
 set nocompatible
 set encoding=utf-8
 
 let mapleader="\<Space>"
-
-" Airline settings
-let g:airline_theme="term"
-let g:airline_powerline_fonts = 1
 
 " EasyMotion Settings
 let g:EasyMotion_smartcase = 1
@@ -141,39 +136,12 @@ nmap <silent> <special> <leader>rt :TagbarToggle<return>
 
 " map <leader>f :Ack<space>
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-" Plugins
-call vundle#begin()
-Plugin 'gmarik/vundle'
-
-Plugin 'mileszs/ack.vim'
-Plugin 'ervandew/supertab'
-Plugin 'bling/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'majutsushi/tagbar'
-Plugin 'ap/vim-css-color'
-Plugin 'tpope/vim-surround'
-Plugin 'scrooloose/nerdtree'
-Plugin 'tristen/vim-sparkup'
-Plugin 'derekwyatt/vim-scala'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'lokaltog/vim-easymotion'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'vim-scripts/closetag.vim'
-Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'tomasr/molokai'
-Plugin 'altercation/vim-colors-solarized'
-
-call vundle#end()
-
 filetype off
 filetype plugin indent on
 
 syntax on
 set background=dark
-colorscheme solarized
+colorscheme default
 
 command W w !sudo tee %
 "nmap <leader>w :w<CR>
@@ -191,3 +159,30 @@ nmap <leader>a :tab split<CR>:Ack ""<Left>
 
 " Immediately search for the word under the cursor in a new tab.
 nmap <leader>A :tab split<CR>:Ack "\W<C-r><C-w>\W"<CR>
+
+" Plugins
+call plug#begin()
+" Plugin 'gmarik/vundle'
+Plug 'mileszs/ack.vim'
+" Plugin 'ervandew/supertab'
+" Plugin 'bling/vim-airline'
+" Plugin 'vim-airline/vim-airline-themes'
+" Plugin 'majutsushi/tagbar'
+" Plugin 'ap/vim-css-color'
+" Plugin 'tpope/vim-surround'
+Plug 'preservim/nerdtree'
+Plug 'sheerun/vim-polyglot'
+Plug 'dense-analysis/ale'
+" Plugin 'tristen/vim-sparkup'
+" Plugin 'derekwyatt/vim-scala'
+" Plugin 'airblade/vim-gitgutter'
+" Plugin 'lokaltog/vim-easymotion'
+" Plugin 'scrooloose/nerdcommenter'
+" Plugin 'vim-scripts/closetag.vim'
+" Plugin 'nathanaelkane/vim-indent-guides'
+" Plugin 'terryma/vim-multiple-cursors'
+" Plugin 'bronson/vim-trailing-whitespace'
+" Plugin 'tomasr/molokai'
+" Plugin 'altercation/vim-colors-solarized'
+call plug#end()
+

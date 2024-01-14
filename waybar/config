@@ -1,0 +1,71 @@
+{
+  "gtk-layer-shell": false,
+  "modules-left": [
+    "hyprland/workspaces"
+  ],
+  "modules-right": [
+    "cpu", 
+    "battery",
+    "network",
+    "clock"
+  ],
+  "cpu": {
+    "interval": 10,
+    "format": "  {icon0}{icon1}{icon2}{icon3} {usage:>2}%",
+    "format-icons": [
+      "▁",
+      "▂",
+      "▃",
+      "▄",
+      "▅",
+      "▆",
+      "▇",
+      "█" 
+    ],
+    "tooltip": false
+  },
+  "battery": {
+    "format": "{icon}   {capacity}% {time}",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "format-time": "{H}h{M}m",
+    "format-charging": " {icon}   {capacity}% ({time})",
+    "format-full": "{icon}   Full",
+    "interval": 30,
+    "states": {
+      "warning": 25,
+      "critical": 10
+    },
+    "tooltip": false
+  },
+  "clock": {
+    "timezone": "Europe/Prague",
+    "format": "   {:%H:%M:%S}",
+    "format-alt": "   {:%H:%M %a %Y-%m-%d}",
+    "interval": 1
+  },
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "format-icons": {
+      "urgent": "",
+      "active": "",
+      "default": ""
+    },
+    "sort-by-number": true
+  },
+  "network": {
+    "tooltip": false,
+    "format-wifi": "   {essid} ({signalStrength}%)",
+    "format-ethernet": "&#8239;{ifname}: {ipaddr}/{cidr}",
+    "format-linked": "&#8239;{ifname} (No IP)",
+    "format-disconnected": "✈&#8239;Disconnected",
+    "format-alt": "{ifname}: {ipaddr}/{cidr}"
+  }
+}
+

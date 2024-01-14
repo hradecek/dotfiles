@@ -7,3 +7,10 @@ Plugins
  - BAT https://github.com/sharkdp/bat
  - FZF https://github.com/junegunn/fzf
 
+### Completions
+ - https://docs.npmjs.com/cli/v7/commands/npm-completion
+
+## TODO:
+ - install script
+   - vim
+     - mkdir .vimswap, .vimundo
