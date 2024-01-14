@@ -4,7 +4,8 @@
     "hyprland/workspaces"
   ],
   "modules-right": [
-    "cpu", 
+    "cpu",
+    "custom/pacman",
     "battery",
     "network",
     "clock"
@@ -23,6 +24,16 @@
       "█" 
     ],
     "tooltip": false
+  },
+  "custom/pacman": {
+    "format": "{icon} {}",
+    "return-type": "json",
+    "format-icons": {
+      "pending-updates": " ",
+      "updated": ""
+    },
+    "
+    "exec": "waybar-updates"
   },
   "battery": {
     "format": "{icon}   {capacity}% {time}",
