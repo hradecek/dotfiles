@@ -32,7 +32,6 @@
       "pending-updates": " ",
       "updated": ""
     },
-    "
     "exec": "waybar-updates"
   },
   "battery": {
