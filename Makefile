@@ -10,7 +10,7 @@ GITCLONE=/usr/bin/git clone -q
 CONFIG_HOME=$(HOME)/.config
 
 # Alacritty
-ALACRITTY_DOTFILES=$(PWD)/alacritty
+ALACRITTY_DOTFILES=$(PWD)/terminal/alacritty
 ALACRITTY_HOME=$(CONFIG_HOME)/alacritty
 
 # Waybar
@@ -33,9 +33,7 @@ all: vim
 
 alacritty:
 	@echo 'Installing Alacritty (terminal)'
-	$(SYMLINK) '$(ALACRITTY_DOTFILES)' '$(ALACRITY_HOME)'
-	# $(SYMLINK) '$(ALACRITTY_DOTFILES)/colors.toml' '$(ALACRITTY_HOME)/colors.toml'
-	# $(SYMLINK) '$(ALACRITTY_DOTFILES)/alacritty.toml' '$(ALACRITTY_HOME)/alacritty.toml'
+	$(SYMLINK) '$(ALACRITTY_DOTFILES)' '$(ALACRITTY_HOME)'
 
 alacritty-clean:
 	@echo 'Removing Alacritty'
