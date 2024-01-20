@@ -17,6 +17,10 @@ ALACRITTY_HOME=$(CONFIG_HOME)/alacritty
 WAYBAR_DOTFILES=$(PWD)/waybar
 WAYBAR_HOME=$(CONFIG_HOME)/waybar
 
+# NeoVim
+NVIM_DOTFILES=$(PWD)/nvim
+NVIM_HOME=$(CONFIG_HOME)/nvim
+
 # mpd & ncmpcpp
 MPC=mpc
 MPD_CONF=mpd/mpd.conf
@@ -29,8 +33,6 @@ VIMSWAP='$(HOME)/.vimswap'
 VUNDLE='$(HOME)/.vim/bundle/Vundle.vim'
 SOLARIZED='$(HOME)/.vim/bundle/vim-colors-solarized'
 
-all: vim
-
 alacritty:
 	@echo 'Installing Alacritty (terminal)'
 	$(SYMLINK) '$(ALACRITTY_DOTFILES)' '$(ALACRITTY_HOME)'
@@ -38,6 +40,14 @@ alacritty:
 alacritty-clean:
 	@echo 'Removing Alacritty'
 	rm -rf '$(ALACRITTY_HOME)'
+
+nvim:
+	@echo 'Installing NeoVim'
+	$(SYMLINK) '$(NVIM_DOTFILES)' '$(NVIM_HOME)'
+
+nvim-clean:
+	@echo 'Removing NeoVim'
+	rm -rf '$(NVIM_HOME)'
 
 zsh:
 	@echo 'Installing ZSH'
@@ -76,4 +86,4 @@ vim:
 	$(SYMLINK) '$(PWD)/vimrc' '$(HOME)/.vimrc'
 	vim +PluginInstall +qall
 
-.PHONY: alacritty waybar
+.PHONY: alacritty nvim waybar
