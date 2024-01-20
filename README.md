@@ -15,13 +15,12 @@
 
 **Editors:**
 
-- NeoVim
+- [NeoVim/LazyVim](./nvim/README.md)
 
 ---
 **VCSs:**
 
 - [Git](./git/gitconfig)
-
 
 ## TODO
 
