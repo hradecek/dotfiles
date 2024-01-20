@@ -1,16 +1,28 @@
 # Dotfiles
 
-## ZSH
-Plugins
- - https://github.com/zsh-users/zsh-syntax-highlighting
- - https://github.com/zsh-users/zsh-autosuggestions
- - BAT https://github.com/sharkdp/bat
- - FZF https://github.com/junegunn/fzf
+**WM:** [Hyprland](./hypr)\
+**Bars:**
 
-### Completions
- - https://docs.npmjs.com/cli/v7/commands/npm-completion
+- [Waybar](./waybar/)
 
-## TODO:
- - install script
-   - vim
-     - mkdir .vimswap, .vimundo
+---
+
+**Shell:** [ZSH](./shell/zsh/README.md)\
+**Prompt:** [Spaceship](./shell/spaceship/README.md)\
+**Terminal emulator:** [Alacritty](./terminal/alacritty/README.md)
+
+---
+
+**Editors:**
+
+- NeoVim
+
+---
+**VCSs:**
+
+- [Git](./git/gitconfig)
+
+
+## TODO
+
+- install script
