@@ -1,6 +1,6 @@
 # https://spaceship-prompt.sh/sections/time
 SPACESHIP_DIR_PREFIX=
-#
+
 # https://spaceship-prompt.sh/sections/exec_time
 SPACESHIP_EXEC_TIME_SHOW=false
 
