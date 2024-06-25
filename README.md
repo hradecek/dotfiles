@@ -1,6 +1,6 @@
 # ~/.* dotfiles 📂
 <div align="center">
-  <img src="https://archlinux.org/static/logos/archlinux-logo-dark-90dpi.ebdee92a15b3.png" alt="Arch Linux Logo" width=50>
+  <img src="https://archlinux.org/static/logos/archlinux-logo-dark-90dpi.ebdee92a15b3.png" alt="Arch Linux Logo" width=100>
 </div>
 
 **WM:** [Hyprland](./hypr)\
