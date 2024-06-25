@@ -8,10 +8,14 @@ SYMLINK=ln -s
 FCCACHE=fc-cache -vf
 GITCLONE=/usr/bin/git clone -q
 CONFIG_HOME=$(HOME)/.config
+SUDO=sudo -k
 
 # Alacritty
 ALACRITTY_DOTFILES=$(PWD)/terminal/alacritty
 ALACRITTY_HOME=$(CONFIG_HOME)/alacritty
+
+# Anacron
+ANACRON_INSTALLER=$(PWD)/jobs/anacron/install.sh
 
 # Waybar
 WAYBAR_DOTFILES=$(PWD)/waybar
@@ -32,6 +36,10 @@ VIMRC='$(HOME)/.vimrc'
 VIMSWAP='$(HOME)/.vimswap'
 VUNDLE='$(HOME)/.vim/bundle/Vundle.vim'
 SOLARIZED='$(HOME)/.vim/bundle/vim-colors-solarized'
+
+anacron:
+	@echo 'Installing Anacrontab (ROOT required)'
+	$(SUDO) sh '$(ANACRON_INSTALLER)'
 
 alacritty:
 	@echo 'Installing Alacritty (terminal)'
@@ -86,4 +94,4 @@ vim:
 	$(SYMLINK) '$(PWD)/vimrc' '$(HOME)/.vimrc'
 	vim +PluginInstall +qall
 
-.PHONY: alacritty nvim waybar
+.PHONY: anacron alacritty jobs nvim waybar
