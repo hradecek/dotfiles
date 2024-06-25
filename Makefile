@@ -31,6 +31,10 @@ MPD_CONF=mpd/mpd.conf
 NCMPCPP_CONFIG=ncmpcpp/config
 NCMPCPP_BINDINGS=ncmpcpp/bindings
 
+# swaylock
+SWAYLOCK=$(PWD)/swaylock
+SWAYLOCK_ASSETS_DST=$(HOME)/Pictures/swaylock
+
 # vim configurations
 VIMRC='$(HOME)/.vimrc'
 VIMSWAP='$(HOME)/.vimswap'
@@ -94,4 +98,9 @@ vim:
 	$(SYMLINK) '$(PWD)/vimrc' '$(HOME)/.vimrc'
 	vim +PluginInstall +qall
 
-.PHONY: anacron alacritty jobs nvim waybar
+swaylock:
+	@echo 'Installing swaylock assets'
+	rm -rf '$(SWAYLOCK_ASSETS_DST)'
+	$(SYMLINK) '$(SWAYLOCK)/assets' '$(SWAYLOCK_ASSETS_DST)'
+
+.PHONY: anacron alacritty jobs nvim waybar swaylock
