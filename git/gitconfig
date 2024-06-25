@@ -1,6 +1,7 @@
 [user]
 	email = ivohradek@gmail.com
 	name = hradecek
+	signingkey = B01C27E81627F24B8EC3E482C61B2FF22AB84D96
 [author]
 	email = ivohradek@gmail.com
 	name = hradecek
@@ -8,22 +9,28 @@
 	editor = nvim
 	autocrlf = input
 	trustctime = false
+[init]
+	defaultBranch = main
 [color]
 	ui = auto
-[diff]
-	tool = vimdiff
 [difftool]
 	prompt = false
-[merge]
-	tool = meld
 [mergetool]
 	trustExitCode = true
 [credential]
 	helper = cache --timeout=3600
 [alias]
+	st = status
+	br = branch
+	ci = commit
 	up = pull --rebase
 	prev = checkout HEAD^1
 	next = "!sh -c 'git log --reverse --pretty=%H master | awk \"/$(git rev-parse HEAD)/{getline;print}\" | xargs git checkout'"
+	tagcommit = rev-list -n 1
 	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
 	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
-	tagcommit = rev-list -n 1
+	graph = log --all --decorate --oneline --graph
+[commit]
+	gpgSign = true
+[tag]
+	gpgSign = true
