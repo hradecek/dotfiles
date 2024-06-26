@@ -17,6 +17,10 @@ ALACRITTY_HOME=$(CONFIG_HOME)/alacritty
 # Anacron
 ANACRON_INSTALLER=$(PWD)/jobs/anacron/install.sh
 
+# LY-DM
+LY_CONFIG=/etc/ly/config.ini
+LY_CONFIG_DOT=$(PWD)/dm/ly/config.ini
+
 # Waybar
 WAYBAR_DOTFILES=$(PWD)/waybar
 WAYBAR_HOME=$(CONFIG_HOME)/waybar
@@ -52,6 +56,10 @@ alacritty:
 alacritty-clean:
 	@echo 'Removing Alacritty'
 	rm -rf '$(ALACRITTY_HOME)'
+
+ly:
+	@echo 'Installing LY-DM (ROOT required)'
+	$(SUDO) $(SYMLINK) $(LY_CONFIG_DOT) $(LY_CONFIG)
 
 nvim:
 	@echo 'Installing NeoVim'
@@ -103,4 +111,4 @@ swaylock:
 	rm -rf '$(SWAYLOCK_ASSETS_DST)'
 	$(SYMLINK) '$(SWAYLOCK)/assets' '$(SWAYLOCK_ASSETS_DST)'
 
-.PHONY: anacron alacritty jobs nvim waybar swaylock
+.PHONY: anacron alacritty ly jobs nvim waybar swaylock
