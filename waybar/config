@@ -1,16 +1,21 @@
 {
   "gtk-layer-shell": false,
   "modules-left": [
+    "hyprland/window"
+  ],
+  "modules-center": [
     "hyprland/workspaces"
   ],
   "modules-right": [
-    "cpu",
     "custom/pacman",
-    "battery",
+    "cpu",
     "network",
+    "pulseaudio",
+    "battery",
     "clock"
   ],
   "cpu": {
+    "min-length": 14,
     "interval": 10,
     "format": "  {icon0}{icon1}{icon2}{icon3} {usage:>2}%",
     "format-icons": [
@@ -60,22 +65,41 @@
     "interval": 1
   },
   "hyprland/workspaces": {
-    "format": "{icon}",
+    "format": "{}",
     "on-click": "activate",
+    "active-only": false,
     "format-icons": {
       "urgent": "",
       "active": "",
       "default": ""
     },
-    "sort-by-number": true
+    "sort-by": "number",
+    "persistent-workspaces": {
+        "*": 3
+    }
   },
   "network": {
+    "min-length": 15,
     "tooltip": false,
     "format-wifi": "   {essid} ({signalStrength}%)",
     "format-ethernet": "&#8239;{ifname}: {ipaddr}/{cidr}",
     "format-linked": "&#8239;{ifname} (No IP)",
-    "format-disconnected": "✈&#8239;Disconnected",
+    "format-disconnected": "󰀝 &#8239;Disconnected",
     "format-alt": "{ifname}: {ipaddr}/{cidr}"
+  },
+  "pulseaudio": {
+    "format": "{volume}% {icon}",
+    "format-bluetooth": "{volume}% {icon}󰂯",
+    "format-muted": "{volume}% 󰸈",
+    "format-icons": {
+      "default": ["󰕿", "󰖀", "󰕾"]
+    },
+    "scroll-step": 2,
+    "on-click": "alacritty -e alsamixer"
+  },
+  "hyprland/window": {
+    "format": "{}",
+    "separate-outputs": true
   }
 }
 
