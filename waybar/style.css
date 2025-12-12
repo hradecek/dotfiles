@@ -1,95 +1,65 @@
-@define-color critical   #ff0000;
-@define-color warning    #f3f809;
-@define-color fgcolor    #ffffff;
-@define-color alert      #df3320;
-@define-color background #002D38;
-@define-color foreground #839495;
-
-@define-color black   #00141a;
-@define-color red     #dc312e;
-@define-color green   #859900;
-@define-color yellow  #b38600;
-@define-color blue    #278bd3;
-@define-color magenta #d33682;
-@define-color cyan    #2aa298;
-@define-color white   #ede7d4;
-
 * {
-  font-family: "monoki nerd font", "Font Awesome 5 Free", sans-serif;
-  font-size: 16px;
+    border: none;
+    border-radius: 0;
+    font-family: monospace;
+    font-size: 13px;
+    min-height: 0;
 }
 
 window#waybar {
-  color: @foreground;
-  background-color: @background;
+    background: #00141a;
+    color: #839495;
+}
+
+#tags button {
+    padding: 0 10px;
+    background: transparent;
+    color: #002d38;
+    border-bottom: 2px solid transparent;
+}
+
+#tags button.focused {
+    color: #839495;
+    border-bottom: 2px solid #47adf5;
+}
+
+#tags button.occupied {
+    color: #2d4f67;
 }
 
 #clock,
 #battery,
-#cpu,
+#network,
 #pulseaudio,
-#custom-pacman,
-#network {
-  color: @background;
-  background-color: @blue;
-
-  padding: 0px 6px 0px 6px;
-  margin: 5px 3px 5px 3px;
-
-  border-radius: 5px;
+#tray {
+    padding: 0 10px;
 }
 
-#workspaces {
-    color: @blue;
-
-    padding: 0px 1px;
-    margin: 2px 1px 3px 1px;
-
-    border: 0px;
-    border-radius: 15px;
-
-    font-weight: bold;
-    font-style: normal;
-    font-size: 16px;
+#battery.charging {
+    color: #b7fa00;
 }
 
-#workspaces button {
-    color: @blue;
-
-    padding: 4px 3px 0px 3px;
-    margin: 3px 3px;
-
-    border: 0px;
-    border-radius: 15px;
-
-    transition: all 0.3s ease-in-out;
+#battery.warning {
+    color: #ffbf00;
 }
 
-#workspaces button.active {
-    color: @background;
-    background: @yellow;
-
-    border-radius: 15px;
-
-    min-width: 30px;
-
-    transition: all 0.3s ease-in-out;
+#battery.critical {
+    color: #f65351;
 }
 
-#workspaces button:hover {
-    color: @black;
-    background: @blue;
-
-    border-radius: 15px;
-
-    box-shadow: none;
-    text-shadow: none;
+#network.disconnected {
+    color: #f65351;
 }
 
-#window {
-    color: @white;
+#cpu {
+    padding: 0 10px;
 }
 
-window#waybar.empty #window {
-    background: transparent;
+#cpu.warning {
+    color: #ffbf00;
 }
+
+#cpu.critical {
+    color: #f65351;
+}
+

@@ -1,37 +1,26 @@
 {
-  "gtk-layer-shell": false,
-  "modules-left": [
-    "hyprland/window"
-  ],
-  "modules-center": [
-    "hyprland/workspaces"
-  ],
-  "modules-right": [
-    "custom/pacman",
-    "cpu",
-    "network",
-    "pulseaudio",
-    "battery",
-    "clock"
-  ],
-  "cpu": {
-    "min-length": 14,
-    "interval": 10,
-    "format": "  {icon0}{icon1}{icon2}{icon3} {usage:>2}%",
-    "format-icons": [
-      "▁",
-      "▂",
-      "▃",
-      "▄",
-      "▅",
-      "▆",
-      "▇",
-      "█" 
+    "layer": "top",
+    "position": "top",
+    "height": 30,
+    "modules-left": [
+      "river/tags"
     ],
-    "tooltip": false
-  },
+    "modules-center": [
+      "clock"
+    ],
+    "modules-right": [
+    "custom/pacman",
+      "cpu",
+      "network",
+      "pulseaudio",
+      "battery",
+      "tray"
+    ],
+    "river/tags": {
+        "num-tags": 9
+    },
   "custom/pacman": {
-    "format": "{icon} {}",
+    "format": "{icon} {text}",
     "return-type": "json",
     "format-icons": {
       "pending-updates": " ",
@@ -39,67 +28,82 @@
     },
     "exec": "waybar-updates"
   },
-  "battery": {
-    "format": "{icon}   {capacity}% {time}",
-    "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      ""
-    ],
-    "format-time": "{H}h{M}m",
-    "format-charging": " {icon}   {capacity}% ({time})",
-    "format-full": "{icon}   Full",
-    "interval": 30,
-    "states": {
-      "warning": 25,
-      "critical": 10
+    "cpu": {
+        "interval": 2,
+        "format": "  {icon0}{icon1}{icon2}{icon3} {usage:>2}%",
+        "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+        "format-alt": "  {avg_frequency}GHz",
+        "tooltip-format": "CPU: {usage}%\n{load}",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
     },
-    "tooltip": false
-  },
-  "clock": {
-    "timezone": "Europe/Prague",
-    "format": "   {:%H:%M:%S}",
-    "format-alt": "   {:%H:%M %a %Y-%m-%d}",
-    "interval": 1
-  },
-  "hyprland/workspaces": {
-    "format": "{}",
-    "on-click": "activate",
-    "active-only": false,
-    "format-icons": {
-      "urgent": "",
-      "active": "",
-      "default": ""
+    "clock": {
+      "timezone": "Europe/Prague",
+        "format": "  {:%H:%M}",
+        "format-alt": "  {:%A, %B %d, %Y (%R)}",
+        "tooltip-format": "<tt>{calendar}</tt>",
+        "locale": "en_GB.UTF-8",
+        "calendar": {
+            "mode": "month",
+            "mode-mon-col": 4,
+            "weeks-pos": "left",
+            "on-scroll": 1,
+            "format": {
+                "months": "<span color='#ffead3'><b>{}</b></span>",
+                "days": "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
+                "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+                "today": "<span color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        },
+        "actions": {
+          "on-click-right": "mode",
+          "on-scroll-up": "tz_up",
+          "on-scroll-down": "tz_down",
+          "on-scroll-up": "shift_up",
+          "on-scroll-down": "shift_down"
+
+        }
     },
-    "sort-by": "number",
-    "persistent-workspaces": {
-        "*": 3
+    "battery": {
+      "states": {
+        "warning": 30,
+        "critical": 15
+      },
+      "format": "{icon} {capacity}%",
+      "format-charging": "󰂄 {capacity}%",
+      "format-icons": [
+        "󰂃",
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󰁹"
+      ]
+    },
+    "network": {
+      "format-wifi": "   {essid}",
+      "format-ethernet": "󰈀  {ifname}: {ipaddr}/{cidr}",
+      "format-linked": "{ifname} (No IP)",
+      "format-disconnected": "󰖪 Disconnected",
+      "format-alt": "{ifname}: {ipaddr}/{cidr} [{signalStrength}%]",
+      "tooltip-format": "{ifname}: {ipaddr}"
+    },
+    "pulseaudio": {
+      "format": "{icon} {volume}%",
+      "format-muted": "󰸈 {volume}%",
+      "format-icons": {
+        "default": ["󰕿", "󰖀", "󰕾"]
+      },
+      "scroll-step": 2,
+      "on-click": "alacritty -e alsamixer"
     }
-  },
-  "network": {
-    "min-length": 15,
-    "tooltip": false,
-    "format-wifi": "   {essid} ({signalStrength}%)",
-    "format-ethernet": "&#8239;{ifname}: {ipaddr}/{cidr}",
-    "format-linked": "&#8239;{ifname} (No IP)",
-    "format-disconnected": "󰀝 &#8239;Disconnected",
-    "format-alt": "{ifname}: {ipaddr}/{cidr}"
-  },
-  "pulseaudio": {
-    "format": "{volume}% {icon}",
-    "format-bluetooth": "{volume}% {icon}󰂯",
-    "format-muted": "{volume}% 󰸈",
-    "format-icons": {
-      "default": ["󰕿", "󰖀", "󰕾"]
-    },
-    "scroll-step": 2,
-    "on-click": "alacritty -e alsamixer"
-  },
-  "hyprland/window": {
-    "format": "{}",
-    "separate-outputs": true
-  }
 }
 
