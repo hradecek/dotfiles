@@ -1,29 +1,35 @@
 {
-    "layer": "top",
-    "position": "top",
-    "height": 30,
-    "modules-left": [
-      "river/tags"
-    ],
-    "modules-center": [
-      "clock"
-    ],
-    "modules-right": [
-      "custom/pacman",
-      "idle_inhibitor",
-      "cpu",
-      "memory",
-      "temperature",
-      "disk",
-      "network",
-      "pulseaudio",
-      "backlight",
-      "battery",
-      "tray"
-    ],
-    "river/tags": {
-        "num-tags": 9
-    },
+  "layer": "top",
+  "position": "top",
+  "height": 28,
+  "spacing": 8,
+  "margin-top": 2,
+  "margin-left": 2,
+  "margin-right": 2,
+  "modules-left": [
+    "river/tags",
+  "river/window"
+  ],
+  "modules-center": [
+    "clock"
+  ],
+  "modules-right": [
+    "custom/pacman",
+    "idle_inhibitor",
+    "cpu",
+    "memory",
+    "temperature",
+    "disk",
+    "network",
+    "pulseaudio",
+    "backlight",
+    "battery",
+    "tray"
+  ],
+  "river/tags": {
+    "num-tags": 9,
+    "tag-labels": ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  },
   "custom/pacman": {
     "format": "{icon} {text}",
     "return-type": "json",
@@ -33,51 +39,57 @@
     },
     "exec": "waybar-updates"
   },
-    "cpu": {
-        "interval": 2,
-        "format": "  {icon0}{icon1}{icon2}{icon3} {usage:>2}%",
-        "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
-        "format-alt": "  {avg_frequency}GHz",
-        "tooltip-format": "CPU: {usage}%\n{load}",
-        "states": {
-            "warning": 70,
-            "critical": 90
-        }
+  "river/window": {
+    "max-length": 50,
+    "tooltip": false
+  },
+  "cpu": {
+    "interval": 2,
+    "format": "  {icon0}{icon1}{icon2}{icon3} {usage:>2}%",
+    "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+    "format-alt": "  {avg_frequency}GHz",
+    "tooltip-format": "CPU: {usage}%\n{load}",
+    "states": {
+      "warning": 70,
+      "critical": 90
+    }
+  },
+  "clock": {
+    "timezone": "Europe/Prague",
+    "format": "  {:%H:%M}",
+    "format-alt": "  {:%A, %B %d, %Y (%R)}",
+    "tooltip-format": "<tt><big>{calendar}</big></tt>",
+    "locale": "en_GB.UTF-8",
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 4,
+      "weeks-pos": "left",
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#fdf6e2'><b>{}</b></span>",
+        "days": "<span color='#839495'><b>{}</b></span>",
+        "weeks": "<span color='#2beede'><b>W{}</b></span>",
+        "weekdays": "<span color='#ffbf00'><b>{}</b></span>",
+        "today": "<span color='#f65351'><b><u>{}</u></b></span>"
+      }
     },
-    "clock": {
-      "timezone": "Europe/Prague",
-        "format": "  {:%H:%M}",
-        "format-alt": "  {:%A, %B %d, %Y (%R)}",
-        "tooltip-format": "<tt>{calendar}</tt>",
-        "locale": "en_GB.UTF-8",
-        "calendar": {
-            "mode": "month",
-            "mode-mon-col": 4,
-            "weeks-pos": "left",
-            "on-scroll": 1,
-            "format": {
-                "months": "<span color='#fdf6e2'><b>{}</b></span>",
-                "days": "<span color='#839495'><b>{}</b></span>",
-                "weeks": "<span color='#2beede'><b>W{}</b></span>",
-                "weekdays": "<span color='#ffbf00'><b>{}</b></span>",
-                "today": "<span color='#f65351'><b><u>{}</u></b></span>"
-            }
-        },
-        "actions": {
-          "on-click-right": "mode",
-          "on-scroll-up": "shift_up",
-          "on-scroll-down": "shift_down"
-        }
+    "actions": {
+      "on-click-right": "mode",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    }
+  },
+  "battery": {
+    "states": {
+      "good": 80,
+      "warning": 30,
+      "critical": 15
     },
-    "battery": {
-      "states": {
-        "warning": 30,
-        "critical": 15
-      },
-      "format": "{icon} {capacity}%",
-      "format-charging": "󰂄 {capacity}%",
-      "format-icons": [
-        "󰂃",
+    "tooltip-format": "{timeTo}, {capacity}%",
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-icons": [
+      "󰂃",
       "󰁺",
       "󰁻",
       "󰁼",
@@ -88,62 +100,66 @@
       "󰂁",
       "󰂂",
       "󰁹"
-      ]
+    ]
+  },
+  "network": {
+    "format-wifi": "   {essid}",
+    "format-ethernet": "󰈀  {ifname}: {ipaddr}/{cidr}",
+    "format-linked": "{ifname} (No IP)",
+    "format-disconnected": "󰖪 Disconnected",
+    "format-alt": "{ifname}: {ipaddr}/{cidr} [{signalStrength}%]",
+    "tooltip-format": "{ifname}: {ipaddr}"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰸈 {volume}%",
+    "format-icons": {
+      "default": ["󰕿", "󰖀", "󰕾"]
     },
-    "network": {
-      "format-wifi": "   {essid}",
-      "format-ethernet": "󰈀  {ifname}: {ipaddr}/{cidr}",
-      "format-linked": "{ifname} (No IP)",
-      "format-disconnected": "󰖪 Disconnected",
-      "format-alt": "{ifname}: {ipaddr}/{cidr} [{signalStrength}%]",
-      "tooltip-format": "{ifname}: {ipaddr}"
-    },
-    "pulseaudio": {
-      "format": "{icon} {volume}%",
-      "format-muted": "󰸈 {volume}%",
-      "format-icons": {
-        "default": ["󰕿", "󰖀", "󰕾"]
-      },
-      "scroll-step": 2,
-      "on-click": "alacritty -e alsamixer"
-    },
-    "memory": {
-        "interval": 5,
-        "format": "  {}%",
-        "format-alt": "  {used:0.1f}G/{total:0.1f}G",
-        "tooltip-format": "RAM: {used:0.1f}G/{total:0.1f}G ({percentage}%)\nSwap: {swapUsed:0.1f}G/{swapTotal:0.1f}G",
-        "states": {
-            "warning": 70,
-            "critical": 90
-        }
-    },
-    "temperature": {
-        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-        "format": " {temperatureC}°C",
-        "format-critical": " {temperatureC}°C",
-        "critical-threshold": 80,
-        "tooltip-format": "Temperature: {temperatureC}°C"
-    },
-    "disk": {
-        "interval": 30,
-        "format": "  {percentage_used}%",
-        "format-alt": "  {used}/{total}",
-        "path": "/",
-        "tooltip-format": "Disk: {used} used of {total} ({percentage_used}%)"
-    },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "󰅶",
-            "deactivated": "󰾪"
-        },
-        "tooltip-format-activated": "Idle inhibitor: activated",
-        "tooltip-format-deactivated": "Idle inhibitor: deactivated"
-    },
-    "backlight": {
-        "format": "{icon} {percent}%",
-        "format-icons": ["󰃞", "󰃟", "󰃠"],
-        "tooltip-format": "Brightness: {percent}%"
+    "scroll-step": 2,
+    "on-click": "alacritty -e alsamixer"
+  },
+  "memory": {
+    "interval": 5,
+    "format": "{}%",
+    "format-alt": "{used:0.1f}G/{total:0.1f}G",
+    "tooltip-format": "RAM: {used:0.1f}G/{total:0.1f}G ({percentage}%)\nSwap: {swapUsed:0.1f}G/{swapTotal:0.1f}G",
+    "states": {
+      "warning": 70,
+      "critical": 90
     }
+  },
+  "temperature": {
+    "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+    "format": "{temperatureC}°C",
+    "format-critical": "{temperatureC}°C",
+    "critical-threshold": 80,
+    "tooltip-format": "Temperature: {temperatureC}°C"
+  },
+  "disk": {
+    "interval": 30,
+    "format": "{percentage_used}%",
+    "format-alt": "{used}/{total}",
+    "path": "/",
+    "tooltip-format": "Disk: {used} used of {total} ({percentage_used}%)"
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "󰅶",
+      "deactivated": "󰾪"
+    },
+    "tooltip-format-activated": "Idle inhibitor: activated",
+    "tooltip-format-deactivated": "Idle inhibitor: deactivated"
+  },
+  "backlight": {
+    "format": "{icon} {percent}%",
+    "format-icons": ["󰃞", "󰃟", "󰃠"],
+    "tooltip-format": "Brightness: {percent}%"
+  },
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8
+  }
 }
 
