@@ -4,6 +4,7 @@
 # @file:   $HOME/.confg/alacritty/alacritty.yml                                #
 # @author: hradecek <ivohradek@gmail.com>                                      #
 #==============================================================================#
+[general]
 import = [
   "~/.config/alacritty/colors.toml"
 ]
