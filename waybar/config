@@ -9,10 +9,15 @@
       "clock"
     ],
     "modules-right": [
-    "custom/pacman",
+      "custom/pacman",
+      "idle_inhibitor",
       "cpu",
+      "memory",
+      "temperature",
+      "disk",
       "network",
       "pulseaudio",
+      "backlight",
       "battery",
       "tray"
     ],
@@ -51,20 +56,17 @@
             "weeks-pos": "left",
             "on-scroll": 1,
             "format": {
-                "months": "<span color='#ffead3'><b>{}</b></span>",
-                "days": "<span color='#ecc6d9'><b>{}</b></span>",
-                "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
-                "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
-                "today": "<span color='#ff6699'><b><u>{}</u></b></span>"
+                "months": "<span color='#fdf6e2'><b>{}</b></span>",
+                "days": "<span color='#839495'><b>{}</b></span>",
+                "weeks": "<span color='#2beede'><b>W{}</b></span>",
+                "weekdays": "<span color='#ffbf00'><b>{}</b></span>",
+                "today": "<span color='#f65351'><b><u>{}</u></b></span>"
             }
         },
         "actions": {
           "on-click-right": "mode",
-          "on-scroll-up": "tz_up",
-          "on-scroll-down": "tz_down",
           "on-scroll-up": "shift_up",
           "on-scroll-down": "shift_down"
-
         }
     },
     "battery": {
@@ -104,6 +106,44 @@
       },
       "scroll-step": 2,
       "on-click": "alacritty -e alsamixer"
+    },
+    "memory": {
+        "interval": 5,
+        "format": "  {}%",
+        "format-alt": "  {used:0.1f}G/{total:0.1f}G",
+        "tooltip-format": "RAM: {used:0.1f}G/{total:0.1f}G ({percentage}%)\nSwap: {swapUsed:0.1f}G/{swapTotal:0.1f}G",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+    "temperature": {
+        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "format": " {temperatureC}°C",
+        "format-critical": " {temperatureC}°C",
+        "critical-threshold": 80,
+        "tooltip-format": "Temperature: {temperatureC}°C"
+    },
+    "disk": {
+        "interval": 30,
+        "format": "  {percentage_used}%",
+        "format-alt": "  {used}/{total}",
+        "path": "/",
+        "tooltip-format": "Disk: {used} used of {total} ({percentage_used}%)"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "󰅶",
+            "deactivated": "󰾪"
+        },
+        "tooltip-format-activated": "Idle inhibitor: activated",
+        "tooltip-format-deactivated": "Idle inhibitor: deactivated"
+    },
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "format-icons": ["󰃞", "󰃟", "󰃠"],
+        "tooltip-format": "Brightness: {percent}%"
     }
 }
 

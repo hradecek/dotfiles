@@ -14,7 +14,7 @@ window#waybar {
 #tags button {
     padding: 0 10px;
     background: transparent;
-    color: #002d38;
+    color: #5a7f8f;
     border-bottom: 2px solid transparent;
 }
 
@@ -24,7 +24,7 @@ window#waybar {
 }
 
 #tags button.occupied {
-    color: #2d4f67;
+    color: #4a7085;
 }
 
 #clock,
