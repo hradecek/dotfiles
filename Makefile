@@ -21,6 +21,10 @@ ANACRON_INSTALLER=$(PWD)/jobs/anacron/install.sh
 LY_CONFIG=/etc/ly/config.ini
 LY_CONFIG_DOT=$(PWD)/dm/ly/config.ini
 
+# Fuzzel
+FUZZEL_DOTFILES=$(PWD)/fuzzel
+FUZZEL_HOME=$(CONFIG_HOME)/fuzzel
+
 # Waybar
 WAYBAR_DOTFILES=$(PWD)/waybar
 WAYBAR_HOME=$(CONFIG_HOME)/waybar
@@ -56,6 +60,14 @@ alacritty:
 alacritty-clean:
 	@echo 'Removing Alacritty'
 	rm -rf '$(ALACRITTY_HOME)'
+
+fuzzel:
+	@echo 'Installing Fuzzel'
+	$(SYMLINK) '$(FUZZEL_DOTFILES)' '$(FUZZEL_HOME)'
+
+fuzzel-clean:
+	@echo 'Removing Fuzzel'
+	rm -rf '$(FUZZEL_HOME)'
 
 ly:
 	@echo 'Installing LY-DM (ROOT required)'
@@ -111,4 +123,4 @@ swaylock:
 	rm -rf '$(SWAYLOCK_ASSETS_DST)'
 	$(SYMLINK) '$(SWAYLOCK)/assets' '$(SWAYLOCK_ASSETS_DST)'
 
-.PHONY: anacron alacritty ly jobs nvim waybar swaylock
+.PHONY: anacron alacritty fuzzel ly jobs nvim waybar swaylock
