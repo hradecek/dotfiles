@@ -165,9 +165,9 @@ riverctl map passthrough Super F11 enter-mode normal
 #
 for mode in normal locked; do
     # Audio controls
-    riverctl map $mode None XF86AudioRaiseVolume spawn 'pamixer -i 5'
-    riverctl map $mode None XF86AudioLowerVolume spawn 'pamixer -d 5'
-    riverctl map $mode None XF86AudioMute spawn 'pamixer --toggle-mute'
+    riverctl map $mode None XF86AudioRaiseVolume spawn 'amixer set Master 5%+'
+    riverctl map $mode None XF86AudioLowerVolume spawn 'amixer set Master 5%-'
+    riverctl map $mode None XF86AudioMute spawn 'amixer set Master toggle'
 
     # Media player controls
     riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause'
@@ -191,6 +191,10 @@ riverctl border-color-unfocused 0x586e75
 #================================ BEHAVIOR ====================================
 riverctl set-repeat 50 300
 riverctl focus-follows-cursor 'normal'
+
+# Mouse pointer acceleration
+riverctl input pointer-7847-102-2.4G_Mouse pointer-accel -0.75
+riverctl input pointer-1739-30383-DELL08AF:00_06CB:76AF_Touchpad pointer-accel -0.2
 
 #================================= RULES ======================================
 riverctl rule-add -app-id 'float*' -title 'foo' float
