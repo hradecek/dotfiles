@@ -1,0 +1,37 @@
+/* Dark-green theme overrides for GTK3 (Adwaita).
+ * Retints Adwaita's named colors toward the desktop palette:
+ *   base #0d1410 / surface #16201a / border #2a3a30
+ *   text #d6e8dc / muted #8ba896 / resting green #5fa876 / active green #8fe0a8
+ * Reserved: amber #d4a85f (warnings), red #d65c5c (errors). */
+
+@define-color theme_bg_color        #16201a;
+@define-color theme_base_color      #0d1410;
+@define-color theme_fg_color        #d6e8dc;
+@define-color theme_text_color      #d6e8dc;
+
+@define-color theme_selected_bg_color #5fa876;
+@define-color theme_selected_fg_color #0d1410;
+
+@define-color insensitive_bg_color  #131c16;
+@define-color insensitive_fg_color  #8ba896;
+@define-color insensitive_base_color #0d1410;
+
+@define-color borders               #2a3a30;
+@define-color unfocused_borders     #2a3a30;
+
+@define-color theme_unfocused_bg_color   #16201a;
+@define-color theme_unfocused_base_color #0d1410;
+@define-color theme_unfocused_fg_color   #8ba896;
+@define-color theme_unfocused_text_color #d6e8dc;
+@define-color theme_unfocused_selected_bg_color #2a3a30;
+
+@define-color warning_color         #d4a85f;
+@define-color error_color           #d65c5c;
+@define-color success_color         #5fa876;
+
+@define-color accent_color          #8fe0a8;
+@define-color accent_bg_color       #5fa876;
+@define-color accent_fg_color       #0d1410;
+
+/* Links and other standalone accents -> active green for contrast on dark. */
+*:link, *:visited { color: #8fe0a8; }
