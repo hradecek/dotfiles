@@ -106,11 +106,12 @@ window#waybar {
     border-bottom-color: #5fa876;
 }
 
-/* Charging - amber (transient, attention-worthy per palette) */
+/* Charging - resting green (a good, ongoing state, not an alert).
+   Amber is reserved for warnings/low-battery below. */
 #battery.charging,
 #battery.plugged {
-    color: #d4a85f;
-    border-bottom-color: #d4a85f;
+    color: #5fa876;
+    border-bottom-color: #5fa876;
 }
 
 /* Warnings - amber */
