@@ -196,10 +196,12 @@ riverctl rule-add -app-id 'float*' -title 'foo' float
 riverctl rule-add -app-id "bar" csd
 
 #============================== LAYOUT MANAGER ================================
-# Modest, fixed gaps for breathing room. Note: rivertile has no "smart gaps" —
-# a single tiled window still gets this padding (no collapse-to-zero).
+# Gaps: screen-edge inset = outer-padding + view-padding, between-window gap =
+# 2x view-padding. Keep the edge inset (2px) aligned with waybar's 2px margin;
+# view-padding alone gives a subtle 4px between adjacent windows.
+# Note: rivertile has no "smart gaps" (single window still gets the padding).
 riverctl default-layout rivertile
-rivertile -view-padding 4 -outer-padding 4 &
+rivertile -view-padding 2 -outer-padding 0 &
 
 #============================ SYSTEMD INTEGRATION =============================
 dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE &
