@@ -180,8 +180,8 @@ done
 
 #============================== APPEARANCE ====================================
 riverctl background-color 0x0d1410
-riverctl border-color-focused 0x44a022
-riverctl border-color-unfocused 0x337418
+riverctl border-color-focused 0x8fe0a8
+riverctl border-color-unfocused 0x2a3a30
 
 #================================ BEHAVIOR ====================================
 riverctl set-repeat 50 300
@@ -196,8 +196,10 @@ riverctl rule-add -app-id 'float*' -title 'foo' float
 riverctl rule-add -app-id "bar" csd
 
 #============================== LAYOUT MANAGER ================================
+# Modest, fixed gaps for breathing room. Note: rivertile has no "smart gaps" —
+# a single tiled window still gets this padding (no collapse-to-zero).
 riverctl default-layout rivertile
-rivertile -view-padding 2 -outer-padding 2 &
+rivertile -view-padding 4 -outer-padding 4 &
 
 #============================ SYSTEMD INTEGRATION =============================
 dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE &
