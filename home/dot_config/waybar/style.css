@@ -6,14 +6,19 @@
     min-height: 0;
 }
 
+/* Palette: base #0d1410 / surface #16201a / border #2a3a30
+   muted #8ba896 / primary #d6e8dc / resting green #5fa876 / active green #8fe0a8
+   amber #d4a85f (alerts/charging/urgent) / red #d65c5c (critical/destructive)
+   Hierarchy: ~90% muted; bright tones reserved for active/alerting modules. */
+
 window#waybar {
     background: transparent;
-    color: #f0f0f0;
+    color: #d6e8dc;
 }
 
 /* Left section - Workspaces */
 #tags {
-    background: #202020;
+    background: #16201a;
     padding: 0 4px;
     margin: 0 4px 0 0;
 }
@@ -21,50 +26,50 @@ window#waybar {
 #tags button {
     padding: 0 12px;
     background: transparent;
-    color: #5a5a5a;
+    color: #4a5d52;                 /* empty tag - recedes */
     border-bottom: 2px solid transparent;
     transition: all 0.3s ease;
 }
 
 #tags button.occupied {
-    color: #c8c8c8;
+    color: #5fa876;                 /* inactive marker - resting green */
 }
 
 #tags button.focused {
-    color: #56c92b;
-    border-bottom: 2px solid #44a022;
-    background: linear-gradient(180deg, rgba(86, 201, 43, 0.12) 0%, transparent 100%);
+    color: #8fe0a8;                 /* active workspace - active green */
+    border-bottom: 2px solid #8fe0a8;
+    background: linear-gradient(180deg, rgba(143, 224, 168, 0.12) 0%, transparent 100%);
 }
 
 #tags button:hover {
-    background: rgba(86, 201, 43, 0.06);
+    background: rgba(143, 224, 168, 0.06);
 }
 
 #window {
-    background: #202020;
+    background: #16201a;
     padding: 0 16px;
     margin: 0 4px;
-    color: #f0f0f0;
+    color: #d6e8dc;                 /* focused window title - primary text */
     font-weight: 500;
 }
 
-/* Center - Clock (single green accent) */
+/* Center - Clock (signature green; it changes, so it earns colour) */
 #clock {
-    background: linear-gradient(135deg, #337418 0%, #202020 100%);
+    background: linear-gradient(135deg, #1d2a22 0%, #16201a 100%);
     padding: 0 20px;
     margin: 0;
-    color: #56c92b;
+    color: #5fa876;
     font-weight: bold;
     font-size: 14px;
-    box-shadow: inset 0 -2px 0 0 #44a022;
+    box-shadow: inset 0 -2px 0 0 #5fa876;
 }
 
 #clock:hover {
-    background: linear-gradient(135deg, #3d8a1c 0%, #2a2a2a 100%);
+    background: linear-gradient(135deg, #24352b 0%, #16201a 100%);
 }
 
 /* Right section - System info.
-   Calm light-gray on the surface tier; color carries meaning, not decoration. */
+   Calm muted-green on the surface tier; colour carries meaning, not decoration. */
 #custom-pacman,
 #idle_inhibitor,
 #cpu,
@@ -78,25 +83,34 @@ window#waybar {
 #custom-notification,
 #tray,
 #custom-power {
-    background: #202020;
+    background: #16201a;
     padding: 0 12px;
     margin: 0 2px;
     border-bottom: 2px solid transparent;
-    color: #c8c8c8;
+    color: #8ba896;                 /* passive readout - muted text */
     transition: all 0.3s ease;
 }
 
-/* Updates available - mild attention */
+/* Subtle grouping: a little extra space at each logical group boundary */
+#network {              margin-left: 8px; }   /* connectivity group */
+#custom-notification {  margin-left: 8px; }   /* tray / system group */
+
+/* Updates available - amber attention */
 #custom-pacman {
-    color: #d6b13d;
+    color: #d4a85f;
 }
 
-/* Active / positive states - green */
-#idle_inhibitor.activated,
+/* Idle inhibitor engaged - active green (a state you turned on) */
+#idle_inhibitor.activated {
+    color: #8fe0a8;
+    border-bottom-color: #5fa876;
+}
+
+/* Charging - amber (transient, attention-worthy per palette) */
 #battery.charging,
 #battery.plugged {
-    color: #56c92b;
-    border-bottom-color: #44a022;
+    color: #d4a85f;
+    border-bottom-color: #d4a85f;
 }
 
 /* Warnings - amber */
@@ -104,8 +118,8 @@ window#waybar {
 #memory.warning,
 #disk.warning,
 #battery.warning {
-    color: #d6b13d;
-    border-bottom-color: #d6b13d;
+    color: #d4a85f;
+    border-bottom-color: #d4a85f;
 }
 
 /* Critical / errors - red */
@@ -121,15 +135,15 @@ window#waybar {
 
 /* Muted - dimmed */
 #pulseaudio.muted {
-    color: #5a5a5a;
+    color: #4a5d52;
 }
 
 /* Notification indicator (mako DND) */
 #custom-notification.dnd {
-    color: #5a5a5a;
+    color: #4a5d52;
 }
 
-/* Power button */
+/* Power button - destructive, stays red */
 #custom-power {
     color: #d65c5c;
 }
@@ -145,7 +159,7 @@ window#waybar {
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
-    background: rgba(214, 92, 92, 0.12);
+    background: rgba(212, 168, 95, 0.14);   /* urgent - amber wash */
 }
 
 /* Uniform hover */
@@ -160,17 +174,17 @@ window#waybar {
 #backlight:hover,
 #battery:hover,
 #custom-notification:hover {
-    background: #2d2d2d;
+    background: #1d2a22;
 }
 
 /* Tooltip styling */
 tooltip {
-    background: #0f0f0f;
-    border: 2px solid #337418;
-    color: #f0f0f0;
+    background: #0d1410;
+    border: 2px solid #2a3a30;
+    color: #d6e8dc;
 }
 
 tooltip label {
-    color: #f0f0f0;
+    color: #d6e8dc;
     padding: 4px;
 }
