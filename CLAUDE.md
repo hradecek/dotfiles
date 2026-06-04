@@ -51,6 +51,7 @@ Both nvim and Alacritty read from `~/.config` on every OS: on Windows the `run_o
 | `home/dot_config/nvim/` | LazyVim config (plugins in `lua/plugins/`, settings in `lua/config/`) | cross-OS |
 | `home/dot_config/alacritty/` | Alacritty config (`alacritty.toml` + `colors.toml`, relative import) | cross-OS |
 | `home/dot_gitconfig.tmpl` | Git config; credential helper templated per OS | cross-OS |
+| `home/.chezmoitemplates/powershell-profile.ps1` → `home/Documents/{PowerShell,WindowsPowerShell}/Microsoft.PowerShell_profile.ps1.tmpl` | PowerShell profile mirroring the git shell aliases (`gst`, `gco`, …) | Windows-only |
 | `home/dot_config/{river,waybar,fuzzel,mako,swaylock}/` | Wayland desktop stack | Linux-only |
 | `home/dot_zshrc`, `home/dot_dircolors`, `home/dot_spaceshiprc.zsh` | Shell entrypoints | Linux-only |
 | `shell/` | Runtime libs sourced by `dot_zshrc` (aliases, `zsh/history.zsh`, spaceship theme, `bash/`) — **not** chezmoi-managed | Linux |

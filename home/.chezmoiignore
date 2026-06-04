@@ -13,4 +13,5 @@ Pictures/swaylock
 {{/* Windows-only bootstrap script: skip everywhere except Windows */}}
 {{- if ne .chezmoi.os "windows" }}
 set-windows-xdg.ps1
+Documents
 {{- end }}
