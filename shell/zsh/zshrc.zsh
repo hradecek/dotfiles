@@ -35,6 +35,11 @@ setopt PROMPT_SUBST
 export EDITOR='nvim'
 export JAVA_HOME=/usr/lib/jvm/default
 
+# Directory & file listing colors (shared dircolors -> LS_COLORS)
+if command -v dircolors >/dev/null; then
+    eval "$(dircolors -b "${BASE_SHELL_DIR}/bash/dircolors")"
+fi
+
 bindkey "^P" up-line-or-search
 bindkey "^N" down-line-or-search
 bindkey "^A" vi-beginning-of-line
@@ -55,3 +60,6 @@ fi
 zplug load
 
 export PATH="$HOME/.local/bin:$PATH"
+
+# opencode
+export PATH=/home/hradecek/.opencode/bin:$PATH

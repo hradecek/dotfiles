@@ -8,12 +8,12 @@
 
 window#waybar {
     background: transparent;
-    color: #839495;
+    color: #f0f0f0;
 }
 
-/* Left section - Workspaces */
+/* Left section - Workspaces (surface tier sits above the transparent bar) */
 #tags {
-    background: #00141a;
+    background: #202020;
     padding: 0 4px;
     margin: 0 4px 0 0;
     border-radius: 18px;
@@ -22,52 +22,53 @@ window#waybar {
 #tags button {
     padding: 0 12px;
     background: transparent;
-    color: #5a7f8f;
+    color: #5a5a5a;
     border-bottom: 2px solid transparent;
     transition: all 0.3s ease;
 }
 
-#tags button.focused {
-    color: #47adf5;
-    border-bottom: 2px solid #47adf5;
-    background: linear-gradient(180deg, rgba(71, 173, 245, 0.1) 0%, transparent 100%);
-    border-radius: 18px;
+#tags button.occupied {
+    color: #c8c8c8;
 }
 
-#tags button.occupied {
-    color: #2aa298;
+#tags button.focused {
+    color: #56c92b;
+    border-bottom: 2px solid #44a022;
+    background: linear-gradient(180deg, rgba(86, 201, 43, 0.12) 0%, transparent 100%);
+    border-radius: 18px;
 }
 
 #tags button:hover {
-    background: rgba(71, 173, 245, 0.05);
+    background: rgba(86, 201, 43, 0.06);
 }
 
 #window {
-    background: #00141a;
+    background: #202020;
     padding: 0 16px;
     margin: 0 4px;
     border-radius: 18px;
-    color: #839495;
+    color: #f0f0f0;
     font-weight: 500;
 }
 
-/* Center - Clock */
+/* Center - Clock (single green accent) */
 #clock {
-    background: linear-gradient(135deg, #002d38 0%, #00141a 100%);
+    background: linear-gradient(135deg, #337418 0%, #202020 100%);
     padding: 0 20px;
     margin: 0;
     border-radius: 18px;
-    color: #2beede;
+    color: #56c92b;
     font-weight: bold;
     font-size: 14px;
-    box-shadow: inset 0 -2px 0 0 #2aa298;
+    box-shadow: inset 0 -2px 0 0 #44a022;
 }
 
 #clock:hover {
-    background: linear-gradient(135deg, #003a48 0%, #001a24 100%);
+    background: linear-gradient(135deg, #3d8a1c 0%, #2a2a2a 100%);
 }
 
-/* Right section - System info */
+/* Right section - System info.
+   Calm light-gray on the surface tier; color carries meaning, not decoration. */
 #custom-pacman,
 #idle_inhibitor,
 #cpu,
@@ -79,205 +80,86 @@ window#waybar {
 #backlight,
 #battery,
 #tray {
-    background: #00141a;
+    background: #202020;
     padding: 0 12px;
     margin: 0 2px;
     border-radius: 18px;
     border-bottom: 2px solid transparent;
+    color: #c8c8c8;
     transition: all 0.3s ease;
 }
 
-/* Updates */
+/* Updates available - mild attention */
 #custom-pacman {
-    color: #ffbf00;
-    border-bottom-color: #ffbf00;
+    color: #d6b13d;
 }
 
-#custom-pacman:hover {
-    background: rgba(255, 191, 0, 0.1);
+/* Active / positive states - green */
+#idle_inhibitor.activated,
+#battery.charging,
+#battery.plugged {
+    color: #56c92b;
+    border-bottom-color: #44a022;
 }
 
-/* Idle inhibitor */
-#idle_inhibitor {
-    color: #859900;
-}
-
-#idle_inhibitor.activated {
-    color: #b7fa00;
-    background: rgba(183, 250, 0, 0.1);
-    border-bottom-color: #b7fa00;
-}
-
-/* CPU */
-#cpu {
-    color: #278bd3;
-    border-bottom-color: #278bd3;
-}
-
-#cpu.warning {
-    color: #ffbf00;
-    border-bottom-color: #ffbf00;
-}
-
-#cpu.critical {
-    color: #f65351;
-    border-bottom-color: #f65351;
-    animation: blink 1s ease-in-out infinite;
-}
-
-/* Memory */
-#memory {
-    color: #2aa298;
-    border-bottom-color: #2aa298;
-}
-
-#memory.warning {
-    color: #ffbf00;
-    border-bottom-color: #ffbf00;
-}
-
-#memory.critical {
-    color: #f65351;
-    border-bottom-color: #f65351;
-    animation: blink 1s ease-in-out infinite;
-}
-
-/* Temperature */
-#temperature {
-    color: #859900;
-    border-bottom-color: #859900;
-}
-
-#temperature.critical {
-    color: #f65351;
-    border-bottom-color: #f65351;
-    animation: blink 1s ease-in-out infinite;
-}
-
-/* Disk */
-#disk {
-    color: #d33682;
-    border-bottom-color: #d33682;
-}
-
-#disk.warning {
-    color: #ffbf00;
-    border-bottom-color: #ffbf00;
-}
-
-#disk.critical {
-    color: #f65351;
-    border-bottom-color: #f65351;
-}
-
-/* Network */
-#network {
-    color: #47adf5;
-    border-bottom-color: #47adf5;
-}
-
-#network.disconnected {
-    color: #f65351;
-    border-bottom-color: #f65351;
-}
-
-#network:hover {
-    background: rgba(71, 173, 245, 0.1);
-}
-
-/* Audio */
-#pulseaudio {
-    color: #f254a1;
-    border-bottom-color: #f254a1;
-}
-
-#pulseaudio.muted {
-    color: #5a7f8f;
-    border-bottom-color: transparent;
-}
-
-#pulseaudio:hover {
-    background: rgba(242, 84, 161, 0.1);
-}
-
-/* Brightness */
-#backlight {
-    color: #ffa066;
-    border-bottom-color: #ffa066;
-}
-
-/* Battery */
-#battery {
-    color: #859900;
-    border-bottom-color: #859900;
-}
-
-#battery.charging, #battery.plugged {
-    color: #b7fa00;
-    border-bottom-color: #b7fa00;
-    background: rgba(183, 250, 0, 0.1);
-}
-
-#battery.good {
-    color: #859900;
-    border-bottom-color: #859900;
-}
-
+/* Warnings - amber */
+#cpu.warning,
+#memory.warning,
+#disk.warning,
 #battery.warning {
-    color: #ffbf00;
-    border-bottom-color: #ffbf00;
+    color: #d6b13d;
+    border-bottom-color: #d6b13d;
 }
 
+/* Critical / errors - red */
+#cpu.critical,
+#memory.critical,
+#temperature.critical,
+#disk.critical,
+#network.disconnected,
 #battery.critical:not(.charging) {
-    color: #f65351;
-    border-bottom-color: #f65351;
-    background: rgba(246, 83, 81, 0.1);
-    animation: blink 1s ease-in-out infinite;
+    color: #d65c5c;
+    border-bottom-color: #d65c5c;
+}
+
+/* Muted - dimmed */
+#pulseaudio.muted {
+    color: #5a5a5a;
 }
 
 /* Tray */
-#tray {
-    border-bottom-color: #839495;
-}
-
 #tray > .passive {
     -gtk-icon-effect: dim;
 }
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
-    background: rgba(246, 83, 81, 0.1);
+    background: rgba(214, 92, 92, 0.12);
 }
 
-/* Animations */
-/*@keyframes blink {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.5;
-    }
-}*/
-
-/* Hover effects */
+/* Uniform hover */
+#custom-pacman:hover,
+#idle_inhibitor:hover,
 #cpu:hover,
 #memory:hover,
 #temperature:hover,
 #disk:hover,
-#battery:hover,
-#backlight:hover {
-    background: rgba(131, 148, 149, 0.1);
+#network:hover,
+#pulseaudio:hover,
+#backlight:hover,
+#battery:hover {
+    background: #2d2d2d;
 }
 
 /* Tooltip styling */
 tooltip {
-    background: #00141a;
-    border: 2px solid #2aa298;
+    background: #0f0f0f;
+    border: 2px solid #337418;
     border-radius: 18px;
-    color: #839495;
+    color: #f0f0f0;
 }
 
 tooltip label {
-    color: #839495;
+    color: #f0f0f0;
     padding: 4px;
 }

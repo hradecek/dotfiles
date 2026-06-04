@@ -41,16 +41,10 @@ if command -v wlr-randr >/dev/null; then
 fi
 
 #============================== AUTOSTART =====================================
-# Random wallpaper per display
-if [ -d ~/Pictures/wallpapers ] && command -v swaybg >/dev/null && command -v wlr-randr >/dev/null; then
-    OUTPUTS=$(wlr-randr | awk '/^[A-Za-z]/ {name=$1} /Enabled: yes/ {if (!seen[name]++) print name}')
-
-    for OUTPUT in $OUTPUTS; do
-        WALLPAPER=$(find ~/Pictures/wallpapers -type f \( -name "*.jpg" -o -name "*.png" \) 2>/dev/null | shuf -n 1)
-        if [ -n "$WALLPAPER" ]; then
-            swaybg -o "$OUTPUT" -i "$WALLPAPER" -m fill &
-        fi
-    done
+# Wallpaper (same image on every display)
+if command -v swaybg >/dev/null; then
+    WALLPAPER=~/Pictures/wallpapers/archlinux4.jpg
+    [ -f "$WALLPAPER" ] && swaybg -o '*' -i "$WALLPAPER" -m fill &
 fi
 
 # Status bar
@@ -70,7 +64,7 @@ fi
 #
 riverctl map normal Super+Shift Return spawn alacritty
 riverctl map normal Super D spawn fuzzel
-riverctl map normal Super L spawn 'swaylock -f -c 000000'
+riverctl map normal Super L spawn 'swaylock -f -c 0f0f0f'
 riverctl map normal Super+Shift S spawn 'grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%s).png'
 riverctl map normal None Print spawn 'XDG_CURRENT_DESKTOP=sway flameshot gui'
 
@@ -185,9 +179,9 @@ for mode in normal locked; do
 done
 
 #============================== APPEARANCE ====================================
-riverctl background-color 0x002b36
-riverctl border-color-focused 0x93a1a1
-riverctl border-color-unfocused 0x586e75
+riverctl background-color 0x0f0f0f
+riverctl border-color-focused 0x44a022
+riverctl border-color-unfocused 0x337418
 
 #================================ BEHAVIOR ====================================
 riverctl set-repeat 50 300

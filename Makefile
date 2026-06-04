@@ -29,6 +29,10 @@ FUZZEL_HOME=$(CONFIG_HOME)/fuzzel
 WAYBAR_DOTFILES=$(PWD)/waybar
 WAYBAR_HOME=$(CONFIG_HOME)/waybar
 
+# Mako
+MAKO_DOTFILES=$(PWD)/mako
+MAKO_HOME=$(CONFIG_HOME)/mako
+
 # NeoVim
 NVIM_DOTFILES=$(PWD)/nvim
 NVIM_HOME=$(CONFIG_HOME)/nvim
@@ -81,7 +85,15 @@ nvim-clean:
 	@echo 'Removing NeoVim'
 	rm -rf '$(NVIM_HOME)'
 
-zsh:
+dircolors:
+	@echo 'Installing dircolors'
+	$(SYMLINK) '$(PWD)/shell/bash/dircolors' '$(HOME)/.dircolors'
+
+dircolors-clean:
+	@echo 'Removing dircolors'
+	rm -f '$(HOME)/.dircolors'
+
+zsh: dircolors
 	@echo 'Installing ZSH'
 	$(SYMLINK) '$(PWD)/shell/zsh/zshrc.zsh' '$(HOME)/.zshrc'
 
@@ -96,6 +108,14 @@ waybar:
 waybar-clean:
 	@echo 'Removing Waybar'
 	rm -rf '$(WAYBAR_HOME)'
+
+mako:
+	@echo 'Installing Mako'
+	$(SYMLINK) '$(MAKO_DOTFILES)' '$(MAKO_HOME)'
+
+mako-clean:
+	@echo 'Removing Mako'
+	rm -rf '$(MAKO_HOME)'
 
 mpd:
 	mkdir '$(CONFIG_HOME)/mpd'
@@ -123,4 +143,4 @@ swaylock:
 	rm -rf '$(SWAYLOCK_ASSETS_DST)'
 	$(SYMLINK) '$(SWAYLOCK)/assets' '$(SWAYLOCK_ASSETS_DST)'
 
-.PHONY: anacron alacritty fuzzel ly jobs nvim waybar swaylock
+.PHONY: anacron alacritty fuzzel ly jobs nvim waybar swaylock dircolors dircolors-clean mako mako-clean

@@ -15,14 +15,16 @@ make alacritty      # Terminal emulator -> ~/.config/alacritty
 make nvim           # NeoVim/LazyVim -> ~/.config/nvim
 make fuzzel         # Application launcher -> ~/.config/fuzzel
 make waybar         # Status bar -> ~/.config/waybar
-make zsh            # ZSH config -> ~/.zshrc
+make mako           # Notification daemon -> ~/.config/mako
+make zsh            # ZSH config -> ~/.zshrc (also installs dircolors)
+make dircolors      # ls/dir color theme -> ~/.dircolors
 make spaceship-prompt  # Spaceship prompt (requires zsh)
 make swaylock       # Lock screen assets
 make ly             # LY display manager (requires sudo)
 make anacron        # Anacron jobs (requires sudo)
 ```
 
-Remove configurations with `make <target>-clean` (available for: alacritty, nvim, fuzzel, waybar).
+Remove configurations with `make <target>-clean` (available for: alacritty, nvim, fuzzel, waybar, mako, dircolors).
 
 ## Architecture
 
@@ -34,6 +36,7 @@ Remove configurations with `make <target>-clean` (available for: alacritty, nvim
 | `terminal/alacritty/` | Alacritty terminal config (TOML format with separate colors.toml) |
 | `river/` | River WM init script |
 | `waybar/` | Waybar config and CSS styling |
+| `mako/` | Mako notification daemon config |
 | `fuzzel/` | Fuzzel launcher config |
 | `git/` | Git configuration |
 | `swaylock/` | Lock screen assets |

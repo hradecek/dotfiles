@@ -1,0 +1,44 @@
+#==============================================================================#
+#                                    MAKO                                      #
+#                                                                              #
+# @file:   $HOME/.config/mako/config                                           #
+# @author: hradecek <ivohradek@gmail.com>                                      #
+#==============================================================================#
+# colors2 theme: neutral surface (#202020) with a green accent (#56c92b),
+# matching alacritty / waybar / fuzzel / river.
+
+font=mononoki nerd font 11
+
+# Surface tier, light foreground, green accent border (matches waybar pills)
+background-color=#202020
+text-color=#f0f0f0
+border-color=#44a022
+progress-color=over #337418
+
+border-size=2
+border-radius=12
+padding=12
+margin=10
+width=360
+height=120
+icons=1
+max-icon-size=48
+
+anchor=top-right
+layer=overlay
+default-timeout=5000
+
+# Low priority (e.g. routine info): dimmed, no green pull
+[urgency=low]
+border-color=#5a5a5a
+text-color=#c8c8c8
+
+# Normal (e.g. "updates available"): green accent
+[urgency=normal]
+border-color=#44a022
+
+# Critical: red, and it stays until dismissed
+[urgency=critical]
+border-color=#d65c5c
+text-color=#f0f0f0
+default-timeout=0
