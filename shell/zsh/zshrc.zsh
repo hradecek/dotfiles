@@ -8,6 +8,14 @@
 BASE_DIR=${HOME}/dotfiles
 BASE_SHELL_DIR=${BASE_DIR}/shell
 
+# SSH — use the gcr-ssh-agent (gnome-keyring) socket and supply the key's
+# passphrase from the auto-unlocked login keyring, so it never prompts.
+# Store the passphrase once with:
+#   secret-tool store --label='ssh id_ed25519' ssh-key id_ed25519
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/gcr/ssh"
+export SSH_ASKPASS="${BASE_SHELL_DIR}/ssh/askpass-keyring.sh"
+export SSH_ASKPASS_REQUIRE=prefer
+
 source ~/.zplug/init.zsh
 
 load_aliases() {
@@ -46,3 +54,4 @@ if ! zplug check --verbose; then
 fi
 zplug load
 
+export PATH="$HOME/.local/bin:$PATH"
