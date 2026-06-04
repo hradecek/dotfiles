@@ -16,7 +16,7 @@ border-color=#44a022
 progress-color=over #337418
 
 border-size=2
-border-radius=12
+border-radius=0
 padding=12
 margin=10
 width=360

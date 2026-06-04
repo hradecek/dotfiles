@@ -6,9 +6,10 @@
   "margin-top": 2,
   "margin-left": 2,
   "margin-right": 2,
+  "reload_style_on_change": true,
   "modules-left": [
     "river/tags",
-  "river/window"
+    "river/window"
   ],
   "modules-center": [
     "clock"
@@ -16,16 +17,29 @@
   "modules-right": [
     "custom/pacman",
     "idle_inhibitor",
-    "cpu",
-    "memory",
-    "temperature",
-    "disk",
+    "group/hardware",
     "network",
     "pulseaudio",
     "backlight",
     "battery",
-    "tray"
+    "custom/notification",
+    "tray",
+    "custom/power"
   ],
+  "group/hardware": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "hw-child",
+      "transition-left-to-right": false
+    },
+    "modules": [
+      "cpu",
+      "memory",
+      "temperature",
+      "disk"
+    ]
+  },
   "river/tags": {
     "num-tags": 9,
     "tag-labels": ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
@@ -34,10 +48,23 @@
     "format": "{icon} {text}",
     "return-type": "json",
     "format-icons": {
-      "pending-updates": " ",
-      "updated": ""
+      "pending-updates": " ",
+      "updated": ""
     },
     "exec": "waybar-updates"
+  },
+  "custom/notification": {
+    "exec": "~/.config/waybar/notification.sh",
+    "return-type": "json",
+    "interval": 5,
+    "tooltip": true,
+    "on-click": "makoctl mode -t do-not-disturb",
+    "on-click-right": "makoctl dismiss --all"
+  },
+  "custom/power": {
+    "format": "󰐥",
+    "tooltip": false,
+    "on-click": "~/.config/waybar/power-menu.sh"
   },
   "river/window": {
     "max-length": 50,
@@ -108,7 +135,8 @@
     "format-linked": "{ifname} (No IP)",
     "format-disconnected": "󰖪 Disconnected",
     "format-alt": "{ifname}: {ipaddr}/{cidr} [{signalStrength}%]",
-    "tooltip-format": "{ifname}: {ipaddr}"
+    "tooltip-format": "{ifname}: {ipaddr}",
+    "on-click": "nm-connection-editor"
   },
   "pulseaudio": {
     "format": "{icon} {volume}%",
@@ -117,7 +145,8 @@
       "default": ["󰕿", "󰖀", "󰕾"]
     },
     "scroll-step": 2,
-    "on-click": "alacritty -e alsamixer"
+    "on-click": "alacritty -e alsamixer",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
   },
   "memory": {
     "interval": 5,
@@ -130,11 +159,13 @@
     }
   },
   "temperature": {
-    "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+    "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
+    "input-filename": "temp1_input",
+    "interval": 5,
     "format": "{temperatureC}°C",
     "format-critical": "{temperatureC}°C",
-    "critical-threshold": 80,
-    "tooltip-format": "Temperature: {temperatureC}°C"
+    "critical-threshold": 90,
+    "tooltip-format": "CPU package: {temperatureC}°C"
   },
   "disk": {
     "interval": 30,
@@ -162,4 +193,3 @@
     "spacing": 8
   }
 }
-

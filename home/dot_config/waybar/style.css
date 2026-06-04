@@ -11,12 +11,11 @@ window#waybar {
     color: #f0f0f0;
 }
 
-/* Left section - Workspaces (surface tier sits above the transparent bar) */
+/* Left section - Workspaces */
 #tags {
     background: #202020;
     padding: 0 4px;
     margin: 0 4px 0 0;
-    border-radius: 18px;
 }
 
 #tags button {
@@ -35,7 +34,6 @@ window#waybar {
     color: #56c92b;
     border-bottom: 2px solid #44a022;
     background: linear-gradient(180deg, rgba(86, 201, 43, 0.12) 0%, transparent 100%);
-    border-radius: 18px;
 }
 
 #tags button:hover {
@@ -46,7 +44,6 @@ window#waybar {
     background: #202020;
     padding: 0 16px;
     margin: 0 4px;
-    border-radius: 18px;
     color: #f0f0f0;
     font-weight: 500;
 }
@@ -56,7 +53,6 @@ window#waybar {
     background: linear-gradient(135deg, #337418 0%, #202020 100%);
     padding: 0 20px;
     margin: 0;
-    border-radius: 18px;
     color: #56c92b;
     font-weight: bold;
     font-size: 14px;
@@ -79,11 +75,12 @@ window#waybar {
 #pulseaudio,
 #backlight,
 #battery,
-#tray {
+#custom-notification,
+#tray,
+#custom-power {
     background: #202020;
     padding: 0 12px;
     margin: 0 2px;
-    border-radius: 18px;
     border-bottom: 2px solid transparent;
     color: #c8c8c8;
     transition: all 0.3s ease;
@@ -127,6 +124,20 @@ window#waybar {
     color: #5a5a5a;
 }
 
+/* Notification indicator (mako DND) */
+#custom-notification.dnd {
+    color: #5a5a5a;
+}
+
+/* Power button */
+#custom-power {
+    color: #d65c5c;
+}
+
+#custom-power:hover {
+    background: rgba(214, 92, 92, 0.18);
+}
+
 /* Tray */
 #tray > .passive {
     -gtk-icon-effect: dim;
@@ -147,7 +158,8 @@ window#waybar {
 #network:hover,
 #pulseaudio:hover,
 #backlight:hover,
-#battery:hover {
+#battery:hover,
+#custom-notification:hover {
     background: #2d2d2d;
 }
 
@@ -155,7 +167,6 @@ window#waybar {
 tooltip {
     background: #0f0f0f;
     border: 2px solid #337418;
-    border-radius: 18px;
     color: #f0f0f0;
 }
 
