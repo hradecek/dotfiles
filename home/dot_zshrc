@@ -35,9 +35,9 @@ setopt PROMPT_SUBST
 export EDITOR='nvim'
 export JAVA_HOME=/usr/lib/jvm/default
 
-# Directory & file listing colors (shared dircolors -> LS_COLORS)
-if command -v dircolors >/dev/null; then
-    eval "$(dircolors -b "${BASE_SHELL_DIR}/bash/dircolors")"
+# Directory & file listing colors (managed dircolors -> LS_COLORS)
+if command -v dircolors >/dev/null && [ -f ~/.dircolors ]; then
+    eval "$(dircolors -b ~/.dircolors)"
 fi
 
 bindkey "^P" up-line-or-search

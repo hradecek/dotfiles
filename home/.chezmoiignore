@@ -1,0 +1,16 @@
+{{/* Linux-only configs: skip everywhere except Linux */}}
+{{- if ne .chezmoi.os "linux" }}
+.config/river
+.config/waybar
+.config/fuzzel
+.config/mako
+.config/swaylock
+.dircolors
+.zshrc
+.spaceshiprc.zsh
+Pictures/swaylock
+{{- end }}
+{{/* Windows-only bootstrap script: skip everywhere except Windows */}}
+{{- if ne .chezmoi.os "windows" }}
+set-windows-xdg.ps1
+{{- end }}

@@ -18,7 +18,11 @@
 [mergetool]
 	trustExitCode = true
 [credential]
+{{- if eq .chezmoi.os "windows" }}
+	helper = manager
+{{- else }}
 	helper = cache --timeout=3600
+{{- end }}
 [alias]
 	st = status
 	br = branch

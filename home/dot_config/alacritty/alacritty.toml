@@ -6,7 +6,7 @@
 #==============================================================================#
 [general]
 import = [
-  "~/.config/alacritty/colors.toml"
+  "colors.toml"
 ]
 
 [env]
