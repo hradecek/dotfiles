@@ -64,7 +64,7 @@ fi
 #
 riverctl map normal Super+Shift Return spawn alacritty
 riverctl map normal Super D spawn fuzzel
-riverctl map normal Super L spawn 'swaylock -f -c 0f0f0f'
+riverctl map normal Super L spawn 'swaylock -f -c 0d1410'
 riverctl map normal Super+Shift S spawn 'grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%s).png'
 riverctl map normal None Print spawn 'XDG_CURRENT_DESKTOP=sway flameshot gui'
 
@@ -179,7 +179,7 @@ for mode in normal locked; do
 done
 
 #============================== APPEARANCE ====================================
-riverctl background-color 0x0f0f0f
+riverctl background-color 0x0d1410
 riverctl border-color-focused 0x44a022
 riverctl border-color-unfocused 0x337418
 
