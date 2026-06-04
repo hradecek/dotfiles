@@ -21,6 +21,7 @@ window#waybar {
     background: #16201a;
     padding: 0 4px;
     margin: 0 4px 0 0;
+    border-radius: 4px;
 }
 
 #tags button {
@@ -28,6 +29,7 @@ window#waybar {
     background: transparent;
     color: #4a5d52;                 /* empty tag - recedes */
     border-bottom: 2px solid transparent;
+    border-radius: 3px;             /* keep focused/hover fill inside the pill */
     transition: all 0.3s ease;
 }
 
@@ -51,6 +53,7 @@ window#waybar {
     margin: 0 4px;
     color: #d6e8dc;                 /* focused window title - primary text */
     font-weight: 500;
+    border-radius: 4px;
 }
 
 /* Center - Clock (signature green; it changes, so it earns colour) */
@@ -62,6 +65,7 @@ window#waybar {
     font-weight: bold;
     font-size: 14px;
     box-shadow: inset 0 -2px 0 0 #5fa876;
+    border-radius: 4px;
 }
 
 #clock:hover {
@@ -88,6 +92,7 @@ window#waybar {
     margin: 0 2px;
     border-bottom: 2px solid transparent;
     color: #8ba896;                 /* passive readout - muted text */
+    border-radius: 4px;
     transition: all 0.3s ease;
 }
 
