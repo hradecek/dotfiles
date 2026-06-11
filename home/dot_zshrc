@@ -52,12 +52,15 @@ source ${BASE_SHELL_DIR}/zsh/history.zsh
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-syntax-highlighting"
 zplug "zsh-users/zsh-completions"
-zplug "spaceship-prompt/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
 
 if ! zplug check --verbose; then
     zplug install
 fi
 zplug load
+
+# Prompt — Starship (shared cross-OS config at ~/.config/starship.toml).
+# Replaces the former spaceship-prompt zplug theme so Linux and Windows match.
+command -v starship >/dev/null && eval "$(starship init zsh)"
 
 export PATH="$HOME/.local/bin:$PATH"
 

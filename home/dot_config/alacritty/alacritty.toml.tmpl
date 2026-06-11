@@ -8,6 +8,10 @@
 import = [
   "colors.toml"
 ]
+{{- if eq .chezmoi.os "windows" }}
+# Open new windows in the projects directory.
+working_directory = 'C:\projects'
+{{- end }}
 
 [env]
 TERM = "alacritty"

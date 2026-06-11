@@ -9,7 +9,6 @@
 .config/gtk-4.0
 .dircolors
 .zshrc
-.spaceshiprc.zsh
 Pictures/swaylock
 install-packages.sh
 {{- end }}

@@ -36,3 +36,11 @@ function ggs    { gg --stat @args }
 #  these are the ones with a clean PowerShell equivalent.)
 function ll     { Get-ChildItem @args }
 function la     { Get-ChildItem -Force @args }
+
+# --- prompt: Starship ---
+# Same engine + shared ~/.config/starship.toml as Linux zsh, so the prompt
+# matches across OSes. Guarded so the profile still loads if starship is
+# missing (install: winget install Starship.Starship).
+if (Get-Command starship -ErrorAction SilentlyContinue) {
+    Invoke-Expression (& starship init powershell)
+}

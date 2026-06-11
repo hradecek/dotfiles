@@ -37,6 +37,7 @@ packages:
     - ttf-nerd-fonts-symbols-mono # icon glyph fallback
     # --- Shell / SSH keyring ---
     - zsh                         # login shell
+    - starship                    # cross-shell prompt (Windows: winget Starship.Starship)
     - git                         # VCS
     - neovim                      # editor (LazyVim)
     - libsecret                   # secret-tool (ssh askpass helper)
