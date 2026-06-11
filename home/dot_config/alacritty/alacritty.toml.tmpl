@@ -23,4 +23,14 @@ size = 12
 [font.normal]
 family = "mononoki nerd font"
 style = "Regular"
+{{- if eq .chezmoi.os "windows" }}
 
+# Windows: launch PowerShell 7 instead of the default Windows PowerShell 5.1.
+# Use the MSI install's fixed path — NOT the WindowsApps App Execution Alias
+# (a 0-byte reparse stub Alacritty can't spawn) and NOT the versioned Store
+# path under WindowsApps (changes on every PS update). Install with the MSI
+# from github.com/PowerShell/PowerShell so this path stays stable.
+[terminal.shell]
+program = 'C:\Program Files\PowerShell\7\pwsh.exe'
+args = ["-NoLogo"]
+{{- end }}

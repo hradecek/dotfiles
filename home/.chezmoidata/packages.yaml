@@ -53,3 +53,10 @@ packages:
   aur:
     - waybar-updates              # pacman update count module for waybar
     - ristate                     # river-status reader for prev/next tag cycling
+
+  # Nerd Fonts installed on WINDOWS by run_onchange_install-fonts.ps1 (per-user,
+  # no admin). Each name is a nerd-fonts release archive basename, downloaded
+  # from github.com/ryanoasis/nerd-fonts/releases/latest/download/<name>.zip.
+  # The Linux equivalents come from the pacman list above (ttf-mononoki-nerd).
+  nerdfonts:
+    - Mononoki                    # primary UI/terminal font (Alacritty font.family)

@@ -1,0 +1,67 @@
+#==============================================================================#
+#                            INSTALL FONTS (WINDOWS)                           #
+#                                                                              #
+# Installs the Nerd Fonts declared in home/.chezmoidata/packages.yaml          #
+# (.packages.nerdfonts). chezmoi re-runs this whenever the rendered content    #
+# changes — i.e. when the font list is edited — so additions install on the    #
+# next `chezmoi apply`. Windows-only (gated in .chezmoiignore).                #
+#                                                                              #
+# Per-user install: no admin needed. Copies TTFs to the user Fonts dir and     #
+# registers them under HKCU. Idempotent — re-copying the same files is a       #
+# harmless no-op. The Linux equivalent is ttf-mononoki-nerd via pacman.        #
+#                                                                              #
+# @author: hradecek <ivohradek@gmail.com>                                      #
+#==============================================================================#
+$ErrorActionPreference = 'Stop'
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+# Nerd Fonts release archive basenames (rendered from packages.yaml).
+$fonts = @(
+{{- range .packages.nerdfonts }}
+    '{{ . }}'
+{{- end }}
+)
+if ($fonts.Count -eq 0) { return }
+
+$base    = 'https://github.com/ryanoasis/nerd-fonts/releases/latest/download'
+$fontDir = Join-Path $env:LOCALAPPDATA 'Microsoft\Windows\Fonts'
+$reg     = 'HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts'
+New-Item -ItemType Directory -Force -Path $fontDir | Out-Null
+New-Item -Path $reg -Force | Out-Null
+
+foreach ($font in $fonts) {
+    $tmp = Join-Path ([System.IO.Path]::GetTempPath()) "nf_$font"
+    $zip = "$tmp.zip"
+    try {
+        Write-Host ":: installing Nerd Font: $font"
+        Invoke-WebRequest -Uri "$base/$font.zip" -OutFile $zip -UseBasicParsing
+        if (Test-Path $tmp) { Remove-Item $tmp -Recurse -Force }
+        Expand-Archive -Path $zip -DestinationPath $tmp -Force
+
+        foreach ($ttf in Get-ChildItem (Join-Path $tmp '*.ttf')) {
+            $dest = Join-Path $fontDir $ttf.Name
+            # Skip already-installed faces (like pacman --needed); also avoids
+            # overwriting a file currently memory-mapped by a running terminal.
+            if (Test-Path $dest) { continue }
+            Copy-Item $ttf.FullName $dest
+            # Unique value name per face; Windows reads real names from the file.
+            Set-ItemProperty -Path $reg -Name "$($ttf.BaseName) (TrueType)" -Value $dest
+        }
+    } catch {
+        Write-Warning "failed to install font '$font': $($_.Exception.Message)"
+    } finally {
+        Remove-Item $zip, $tmp -Recurse -Force -ErrorAction SilentlyContinue
+    }
+}
+
+# Notify running apps that the font set changed.
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public class FontApi {
+    [DllImport("user32.dll")]
+    public static extern int SendMessageTimeout(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam, uint flags, uint timeout, out IntPtr result);
+}
+"@
+[IntPtr]$r = [IntPtr]::Zero
+[void][FontApi]::SendMessageTimeout([IntPtr]0xffff, 0x001D, [IntPtr]::Zero, [IntPtr]::Zero, 0, 1000, [ref]$r)
