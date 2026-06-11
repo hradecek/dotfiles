@@ -31,11 +31,42 @@ function gll    { git log --graph --pretty=oneline --abbrev-commit @args }
 function gg     { git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative @args }
 function ggs    { gg --stat @args }
 
-# --- portable listing helpers ---
-# (general.aliases.sh is mostly GNU-coreutils-specific and does not port;
-#  these are the ones with a clean PowerShell equivalent.)
+# --- portable listing helpers (mirror shell/aliases/general.aliases.sh) ---
+# (the GNU-coreutils-only flags don't port; Get-ChildItem is always "long",
+#  so the -l variants collapse onto it. -Force shows hidden = ls -A.)
+function l      { Get-ChildItem @args }
 function ll     { Get-ChildItem @args }
+function lh     { Get-ChildItem @args }
 function la     { Get-ChildItem -Force @args }
+function lah    { Get-ChildItem -Force @args }
+function lla    { Get-ChildItem -Force @args }
+
+# --- navigation / process search ---
+function cd..   { Set-Location .. }
+function psgrep { Get-Process | Where-Object { $_.ProcessName -match $args[0] } }
+
+# --- PSReadLine: mirror the zsh keybindings + history behaviour ---
+# zsh bindkey ^P/^N (history-prefix search) + ^A/^E (line start/end), and
+# history.zsh (large, de-duplicated history). Guarded for the host/older 5.1.
+if (Get-Module -ListAvailable PSReadLine) {
+    try {
+        Import-Module PSReadLine
+        Set-PSReadLineKeyHandler -Key 'Ctrl+p' -Function HistorySearchBackward
+        Set-PSReadLineKeyHandler -Key 'Ctrl+n' -Function HistorySearchForward
+        Set-PSReadLineKeyHandler -Key 'Ctrl+a' -Function BeginningOfLine
+        Set-PSReadLineKeyHandler -Key 'Ctrl+e' -Function EndOfLine
+        Set-PSReadLineOption -HistoryNoDuplicates
+        Set-PSReadLineOption -MaximumHistoryCount 1000000
+        Set-PSReadLineOption -HistorySearchCursorMovesToEnd
+        # Inline history prediction needs PSReadLine 2.1+ (PowerShell 7).
+        if ((Get-Module PSReadLine).Version -ge [version]'2.1.0') {
+            Set-PSReadLineOption -PredictionSource History
+        }
+    } catch { }
+}
+
+# --- file-type icons + colours in listings (≈ Linux dircolors/LS_COLORS) ---
+if (Get-Module -ListAvailable Terminal-Icons) { Import-Module Terminal-Icons }
 
 # --- prompt: Starship ---
 # Same engine + shared ~/.config/starship.toml as Linux zsh, so the prompt

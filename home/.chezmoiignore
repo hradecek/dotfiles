@@ -16,6 +16,7 @@ install-packages.sh
 {{- if ne .chezmoi.os "windows" }}
 set-windows-xdg.ps1
 install-fonts.ps1
+install-psmodules.ps1
 Documents
 AppData
 {{- end }}

@@ -1,0 +1,39 @@
+#==============================================================================#
+#                       INSTALL POWERSHELL MODULES (WINDOWS)                   #
+#                                                                              #
+# Installs the PowerShell modules declared in packages.yaml (.packages         #
+# .psmodules) into PowerShell 7 — the shell Alacritty launches and whose       #
+# profile imports them. chezmoi re-runs this whenever the list changes.        #
+# Windows-only (gated in .chezmoiignore). Idempotent: skips installed modules. #
+#                                                                              #
+# @author: hradecek <ivohradek@gmail.com>                                      #
+#==============================================================================#
+$ErrorActionPreference = 'Stop'
+
+$modules = @(
+{{- range .packages.psmodules }}
+    '{{ . }}'
+{{- end }}
+)
+if ($modules.Count -eq 0) { return }
+
+# Target PowerShell 7 specifically so the module lands on pwsh's module path
+# (chezmoi may run this under Windows PowerShell 5.1, whose path pwsh ignores).
+$pwsh = (Get-Command pwsh -ErrorAction SilentlyContinue).Source
+
+foreach ($m in $modules) {
+    try {
+        if ($pwsh) {
+            & $pwsh -NoProfile -Command "if (Get-Module -ListAvailable -Name '$m') { exit 0 } exit 1"
+            if ($LASTEXITCODE -eq 0) { continue }
+        } elseif (Get-Module -ListAvailable -Name $m) { continue }
+
+        Write-Host ":: installing PowerShell module: $m"
+        $cmd = "[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12; " +
+               "Install-Module -Name '$m' -Scope CurrentUser -Force -AllowClobber"
+        if ($pwsh) { & $pwsh -NoProfile -Command $cmd }
+        else       { Install-Module -Name $m -Scope CurrentUser -Force -AllowClobber }
+    } catch {
+        Write-Warning "failed to install module '$m': $($_.Exception.Message)"
+    }
+}

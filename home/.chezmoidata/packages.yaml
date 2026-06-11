@@ -61,3 +61,8 @@ packages:
   # The Linux equivalents come from the pacman list above (ttf-mononoki-nerd).
   nerdfonts:
     - Mononoki                    # primary UI/terminal font (Alacritty font.family)
+
+  # PowerShell modules installed on WINDOWS by run_onchange_install-psmodules.ps1
+  # (into PowerShell 7, the shell Alacritty launches). Imported by the profile.
+  psmodules:
+    - Terminal-Icons              # file-type icons + colors in listings (~ LS_COLORS)
