@@ -1,0 +1,8 @@
+# Windows shim. Alacritty on Windows reads %APPDATA%\alacritty\alacritty.toml
+# and does NOT honor XDG_CONFIG_HOME, so it never finds ~/.config\alacritty on
+# its own. This file just imports the real, cross-OS config kept under
+# ~/.config\alacritty (which Linux reads directly), keeping one source of truth.
+# The imported config's relative `import = ["colors.toml"]` resolves next to it
+# in ~/.config\alacritty, so colors come along automatically.
+[general]
+import = ['{{ .chezmoi.homeDir | replace "/" "\\" }}\.config\alacritty\alacritty.toml']

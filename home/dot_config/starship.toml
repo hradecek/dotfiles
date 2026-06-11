@@ -5,6 +5,10 @@
 
 add_newline = true
 
+# Raise the directory-scan timeout (default 30ms) so the prompt does not warn
+# when started in a large directory (e.g. Windows System32).
+scan_timeout = 50
+
 format = """
 $time$directory$git_branch$git_status$java
 $character"""

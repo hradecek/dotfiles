@@ -6,14 +6,28 @@
 # changes — i.e. when the font list is edited — so additions install on the    #
 # next `chezmoi apply`. Windows-only (gated in .chezmoiignore).                #
 #                                                                              #
-# Per-user install: no admin needed. Copies TTFs to the user Fonts dir and     #
-# registers them under HKCU. Idempotent — re-copying the same files is a       #
-# harmless no-op. The Linux equivalent is ttf-mononoki-nerd via pacman.        #
+# Per-user install: no admin needed. Copies TTFs to the user Fonts dir,        #
+# registers them under HKCU (so they survive a logon), and loads them into the #
+# current session with AddFontResource (so no logoff is needed). Idempotent.   #
+# The Linux equivalent is ttf-mononoki-nerd via pacman.                        #
 #                                                                              #
 # @author: hradecek <ivohradek@gmail.com>                                      #
 #==============================================================================#
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+# Win32 font APIs: AddFontResource loads a font into the running session;
+# SendMessageTimeout(WM_FONTCHANGE) tells already-running apps to re-scan.
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public class FontApi {
+    [DllImport("gdi32.dll", CharSet = CharSet.Unicode)]
+    public static extern int AddFontResource(string lpFileName);
+    [DllImport("user32.dll")]
+    public static extern int SendMessageTimeout(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam, uint flags, uint timeout, out IntPtr result);
+}
+"@
 
 # Nerd Fonts release archive basenames (rendered from packages.yaml).
 $fonts = @(
@@ -40,12 +54,13 @@ foreach ($font in $fonts) {
 
         foreach ($ttf in Get-ChildItem (Join-Path $tmp '*.ttf')) {
             $dest = Join-Path $fontDir $ttf.Name
-            # Skip already-installed faces (like pacman --needed); also avoids
-            # overwriting a file currently memory-mapped by a running terminal.
-            if (Test-Path $dest) { continue }
-            Copy-Item $ttf.FullName $dest
+            # Copy only if missing — avoids overwriting a file currently
+            # memory-mapped by a running terminal (which fails). But ALWAYS
+            # register + load below, since the file may exist yet be unregistered.
+            if (-not (Test-Path $dest)) { Copy-Item $ttf.FullName $dest }
             # Unique value name per face; Windows reads real names from the file.
             Set-ItemProperty -Path $reg -Name "$($ttf.BaseName) (TrueType)" -Value $dest
+            [void][FontApi]::AddFontResource($dest)
         }
     } catch {
         Write-Warning "failed to install font '$font': $($_.Exception.Message)"
@@ -54,14 +69,6 @@ foreach ($font in $fonts) {
     }
 }
 
-# Notify running apps that the font set changed.
-Add-Type @"
-using System;
-using System.Runtime.InteropServices;
-public class FontApi {
-    [DllImport("user32.dll")]
-    public static extern int SendMessageTimeout(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam, uint flags, uint timeout, out IntPtr result);
-}
-"@
+# Notify already-running apps that the font set changed.
 [IntPtr]$r = [IntPtr]::Zero
 [void][FontApi]::SendMessageTimeout([IntPtr]0xffff, 0x001D, [IntPtr]::Zero, [IntPtr]::Zero, 0, 1000, [ref]$r)

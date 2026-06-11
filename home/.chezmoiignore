@@ -17,4 +17,5 @@ install-packages.sh
 set-windows-xdg.ps1
 install-fonts.ps1
 Documents
+AppData
 {{- end }}
