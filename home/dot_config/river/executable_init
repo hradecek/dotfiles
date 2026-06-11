@@ -58,6 +58,11 @@ if command -v mako >/dev/null && ! pgrep -x mako >/dev/null; then
     mako &
 fi
 
+# Focused-tag watcher (feeds tags.sh for Control+Alt H/L prev/next tag cycling)
+if command -v ristate >/dev/null && command -v jq >/dev/null; then
+    "$HOME/.config/river/tag-watch.sh" &
+fi
+
 #=============================== KEY BINDINGS =================================
 #
 # Application shortcuts
@@ -147,6 +152,10 @@ done
 all_tags=$(((1 << 32) - 1))
 riverctl map normal Super 0 set-focused-tags $all_tags
 riverctl map normal Super+Shift 0 set-view-tags $all_tags
+
+# Cycle focused tag (previous / next workspace) with wrap-around
+riverctl map normal Control+Alt H spawn "$HOME/.config/river/tags.sh prev"
+riverctl map normal Control+Alt L spawn "$HOME/.config/river/tags.sh next"
 
 #
 # Passthrough mode (for nested compositors)

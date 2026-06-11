@@ -48,7 +48,7 @@
     "format": "{icon} {text}",
     "return-type": "json",
     "format-icons": {
-      "pending-updates": " ",
+      "pending-updates": "󰚰",
       "updated": ""
     },
     "exec": "waybar-updates"

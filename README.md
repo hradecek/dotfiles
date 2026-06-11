@@ -20,6 +20,12 @@ chezmoi apply         # write configs into place
 > chezmoi writes real files and won't clobber existing **symlinks** — if migrating from the
 > old Make setup, remove the old `~/.config/*` and `~/.*` symlinks before the first `apply`.
 
+On Linux, `apply` also installs any missing system packages declared in
+[`home/.chezmoidata/packages.yaml`](./home/.chezmoidata/packages.yaml) — a `run_onchange`
+script that re-runs only when that list changes and is a no-op once everything is present.
+Prerequisites it can't bootstrap itself: `chezmoi`, `yay` (for the AUR packages), and `zplug`
+(`git clone https://github.com/zplug/zplug ~/.zplug`).
+
 ### Linux: one-time system setup
 
 Root-level pieces chezmoi doesn't manage (LY display manager, anacron):
@@ -42,6 +48,7 @@ the Wayland stack is skipped automatically via `.chezmoiignore`. Install the
 ## Layout
 
 - `home/` — chezmoi source (`.chezmoiroot` points here). See `CLAUDE.md` for naming conventions.
+  Includes `.chezmoidata/packages.yaml` (the package manifest) and `run_onchange_install-packages.sh.tmpl`.
 - `shell/` — runtime libs sourced by `~/.zshrc` (aliases, history, themes).
 - `bootstrap/` — one-time Linux system installers.
 - `dm/`, `jobs/`, `swaylock/assets/` — Linux system configs / assets.

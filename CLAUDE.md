@@ -38,6 +38,8 @@ sh ~/dotfiles/bootstrap/linux-system.sh
 - `symlink_` creates a symlink (e.g. `Pictures/symlink_swaylock` → repo `swaylock/assets`)
 - `dot_` prefix is required to deploy a dotfile (e.g. nvim's `dot_neoconf.json`)
 - `run_once_*.ps1` = one-time script (Windows XDG setup; ignored elsewhere)
+- `run_onchange_*` = script re-run whenever its rendered content changes (e.g. `install-packages.sh.tmpl`)
+- `home/.chezmoidata/*.yaml` = template data available to all `.tmpl` files (e.g. the package manifest)
 - `home/.chezmoiignore` drops the Linux-only Wayland stack when `.chezmoi.os != linux`
 
 ## Cross-OS strategy
@@ -58,10 +60,12 @@ Both nvim and Alacritty read from `~/.config` on every OS: on Windows the `run_o
 | `swaylock/assets/` | Lock-screen images (symlinked to `~/Pictures/swaylock`) | Linux |
 | `dm/ly/`, `jobs/anacron/` | System-level configs installed via `bootstrap/linux-system.sh` | Linux |
 | `bootstrap/` | One-time root-level Linux installers | Linux |
+| `home/.chezmoidata/packages.yaml` + `home/run_onchange_install-packages.sh.tmpl` | Package manifest; `apply` installs missing pacman/AUR packages, re-running only when the list changes | Linux |
 
 ## Key Patterns
 
 - `dot_zshrc` keeps `BASE_SHELL_DIR=${HOME}/dotfiles/shell` and sources the runtime libs at startup — so the repo must stay cloned at `~/dotfiles` on Linux.
 - NeoVim uses the LazyVim distribution — add plugins as Lua files in `home/dot_config/nvim/lua/plugins/`.
 - Shell aliases are centralized in `shell/aliases/`.
+- System package dependencies live in `home/.chezmoidata/packages.yaml`. Keep it in sync when a config starts depending on a new binary; `chezmoi apply` installs missing ones on Linux. `chezmoi`/`yay`/`zplug` are prerequisites it can't bootstrap.
 - Color theme is "colors2" (neutral grays + green accent `#56c92b`, calmer `#44a022` borders) across Alacritty, Waybar, Fuzzel, River, and mako.

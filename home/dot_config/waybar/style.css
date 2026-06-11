@@ -11,24 +11,29 @@
    amber #d4a85f (alerts/charging/urgent) / red #d65c5c (critical/destructive)
    Hierarchy: ~90% muted; bright tones reserved for active/alerting modules. */
 
+/* Single continuous bar: the surface lives here, not on each module.
+   The whole floating bar is one rounded pill; modules sit flush on it
+   and only paint a background on hover / active state. */
 window#waybar {
-    background: transparent;
+    background: #16201a;
     color: #d6e8dc;
+    border-radius: 6px;
 }
 
-/* Left section - Workspaces */
+/* Left section - Workspaces (flat on the bar, no own pill) */
 #tags {
-    background: #16201a;
+    background: transparent;
     padding: 0 4px;
-    margin: 0 4px 0 0;
-    border-radius: 4px;
+    margin: 0;
 }
 
 #tags button {
     padding: 0 12px;
     background: transparent;
     color: #4a5d52;                 /* empty tag - recedes */
-    border-bottom: 2px solid transparent;
+    border: none;
+    box-shadow: none;               /* kill GTK's default hover/focus highlight line */
+    outline: none;
     border-radius: 3px;             /* keep focused/hover fill inside the pill */
     transition: all 0.3s ease;
 }
@@ -39,8 +44,7 @@ window#waybar {
 
 #tags button.focused {
     color: #8fe0a8;                 /* active workspace - active green */
-    border-bottom: 2px solid #8fe0a8;
-    background: linear-gradient(180deg, rgba(143, 224, 168, 0.12) 0%, transparent 100%);
+    background: rgba(143, 224, 168, 0.12);   /* clean rounded fill, no underline */
 }
 
 #tags button:hover {
@@ -48,28 +52,29 @@ window#waybar {
 }
 
 #window {
-    background: #16201a;
-    padding: 0 16px;
-    margin: 0 4px;
+    background: transparent;
+    padding: 0 16px 0 18px;
+    margin-left: 10px;              /* divider seam from the workspaces */
+    border-left: 1px solid #2a3a30;
     color: #d6e8dc;                 /* focused window title - primary text */
     font-weight: 500;
-    border-radius: 4px;
 }
 
-/* Center - Clock (signature green; it changes, so it earns colour) */
+/* Center - Clock (signature green; it changes, so it earns colour).
+   No box, no underline: just clean green text, flat on the bar. */
 #clock {
-    background: linear-gradient(135deg, #1d2a22 0%, #16201a 100%);
+    background: transparent;
     padding: 0 20px;
     margin: 0;
     color: #5fa876;
     font-weight: bold;
     font-size: 14px;
-    box-shadow: inset 0 -2px 0 0 #5fa876;
-    border-radius: 4px;
+    border-left: 1px solid #2a3a30;    /* bracketed by dividers, both sides */
+    border-right: 1px solid #2a3a30;
 }
 
 #clock:hover {
-    background: linear-gradient(135deg, #24352b 0%, #16201a 100%);
+    background: #1d2a22;
 }
 
 /* Right section - System info.
@@ -87,18 +92,30 @@ window#waybar {
 #custom-notification,
 #tray,
 #custom-power {
-    background: #16201a;
+    background: transparent;
     padding: 0 12px;
-    margin: 0 2px;
+    margin: 0;
     border-bottom: 2px solid transparent;
     color: #8ba896;                 /* passive readout - muted text */
-    border-radius: 4px;
+    border-radius: 4px;             /* keeps hover / active fills rounded */
     transition: all 0.3s ease;
 }
 
-/* Subtle grouping: a little extra space at each logical group boundary */
-#network {              margin-left: 8px; }   /* connectivity group */
-#custom-notification {  margin-left: 8px; }   /* tray / system group */
+/* Section dividers: a 1px full-height rule at each logical group seam,
+   in the border tone so it reads as structure, not content. */
+#network {                       /* connectivity / peripherals group */
+    margin-left: 10px;
+    padding-left: 16px;
+    border-left: 1px solid #2a3a30;
+}
+
+/* The tray/system seam is drawn on battery's trailing edge rather than the
+   notification's leading edge, so the single-glyph bell stays centered. */
+#battery {
+    margin-right: 10px;
+    padding-right: 16px;
+    border-right: 1px solid #2a3a30;
+}
 
 /* Updates available - amber attention */
 #custom-pacman {

@@ -1,0 +1,51 @@
+#!/bin/sh
+#==============================================================================#
+#                            INSTALL PACKAGES                                  #
+#                                                                              #
+# Installs the packages declared in home/.chezmoidata/packages.yaml. chezmoi   #
+# re-runs this script whenever the rendered content changes (i.e. when the     #
+# package list is edited), so additions install on the next `chezmoi apply`.   #
+#                                                                              #
+# Idempotent: only missing packages are installed; it is a silent no-op when   #
+# everything is already present. Never removes packages.                       #
+#                                                                              #
+# @author: hradecek <ivohradek@gmail.com>                                      #
+#==============================================================================#
+set -eu
+
+# Arch-only; harmless no-op elsewhere (also skipped via .chezmoiignore).
+command -v pacman >/dev/null 2>&1 || exit 0
+
+PACMAN_PKGS="{{ .packages.pacman | join " " }}"
+AUR_PKGS="{{ .packages.aur | join " " }}"
+
+# Collect names not already installed (exact-match query).
+missing() {
+    for pkg in $1; do
+        pacman -Qq "$pkg" >/dev/null 2>&1 || printf '%s ' "$pkg"
+    done
+}
+
+missing_native=$(missing "$PACMAN_PKGS")
+missing_aur=$(missing "$AUR_PKGS")
+
+if [ -z "$missing_native" ] && [ -z "$missing_aur" ]; then
+    exit 0
+fi
+
+if [ -n "$missing_native" ]; then
+    echo ":: installing native packages:$missing_native"
+    # shellcheck disable=SC2086
+    sudo pacman -S --needed $missing_native
+fi
+
+if [ -n "$missing_aur" ]; then
+    if command -v yay >/dev/null 2>&1; then
+        echo ":: installing AUR packages:$missing_aur"
+        # shellcheck disable=SC2086
+        yay -S --needed $missing_aur
+    else
+        echo ":: yay not found — skipping AUR packages:$missing_aur" >&2
+        echo "   install yay, then re-run: chezmoi apply" >&2
+    fi
+fi

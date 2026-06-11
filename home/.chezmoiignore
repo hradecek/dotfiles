@@ -11,6 +11,7 @@
 .zshrc
 .spaceshiprc.zsh
 Pictures/swaylock
+install-packages.sh
 {{- end }}
 {{/* Windows-only bootstrap script: skip everywhere except Windows */}}
 {{- if ne .chezmoi.os "windows" }}

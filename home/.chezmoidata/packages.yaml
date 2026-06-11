@@ -1,0 +1,55 @@
+# Package manifest — source of truth for the system packages this dotfiles
+# repo depends on. Consumed by run_onchange_install-packages.sh.tmpl, which
+# installs anything missing on `chezmoi apply` (Linux only, idempotent).
+#
+# Keep this list in sync with what the configs actually reference. Edit a list
+# here and the next `chezmoi apply` installs the additions automatically.
+#
+# Prerequisites NOT installed from here (chicken-and-egg — needed first):
+#   - chezmoi   the bootstrapper itself (installed to ~/.local/bin)
+#   - yay       AUR helper, required for the `aur` list below
+#   - zplug     zsh plugin manager, git-cloned to ~/.zplug (see README)
+
+packages:
+  # Installed with: pacman -S --needed
+  pacman:
+    # --- Wayland desktop (River session) ---
+    - river                       # Wayland compositor (riverctl, rivertile)
+    - waybar                      # status bar
+    - fuzzel                      # application launcher (Super+D)
+    - mako                        # notification daemon (makoctl)
+    - swaylock                    # screen locker (Super+L)
+    - swaybg                      # wallpaper
+    - wlr-randr                   # output/scaling config in river/init
+    - grim                        # screenshots
+    - slurp                       # region selection for grim
+    - flameshot                   # screenshot GUI (Print key)
+    - jq                          # parses ristate JSON in river/tag-watch.sh
+    # --- Audio / media / hardware keys ---
+    - alsa-utils                  # amixer, alsamixer (volume keys)
+    - wireplumber                 # wpctl (PipeWire session manager)
+    - playerctl                   # media play/pause/next keys
+    - brightnessctl               # brightness keys
+    # --- Network ---
+    - nm-connection-editor        # waybar network on-click
+    # --- Fonts (UI + waybar glyphs) ---
+    - ttf-mononoki-nerd           # primary UI/terminal font
+    - ttf-nerd-fonts-symbols-mono # icon glyph fallback
+    # --- Shell / SSH keyring ---
+    - zsh                         # login shell
+    - git                         # VCS
+    - neovim                      # editor (LazyVim)
+    - libsecret                   # secret-tool (ssh askpass helper)
+    - gnome-keyring               # auto-unlocked login keyring
+    - gcr-4                       # gcr-ssh-agent (SSH_AUTH_SOCK)
+    # --- Dev toolchain ---
+    - maven                       # mvn aliases
+    - jdk21-openjdk               # JAVA_HOME=/usr/lib/jvm/default
+    # --- System ---
+    - ly                          # TUI display manager (also see bootstrap/)
+    - cronie                      # anacron (zplug-update job in jobs/anacron)
+
+  # Installed with: yay -S --needed   (requires yay; see prerequisites above)
+  aur:
+    - waybar-updates              # pacman update count module for waybar
+    - ristate                     # river-status reader for prev/next tag cycling
