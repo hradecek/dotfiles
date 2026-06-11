@@ -20,7 +20,7 @@
 |  |  |  |
 |---|---|---|
 | 🪟 **WM** · [River](./home/dot_config/river/) | 📊 **Bar** · [Waybar](./home/dot_config/waybar/) | 🚀 **Launcher** · [Fuzzel](./home/dot_config/fuzzel/) |
-| 🔔 **Notifications** · [mako](./home/dot_config/mako/) | 🐚 **Shell** · [ZSH](./shell/zsh/README.md) | ✨ **Prompt** · [Spaceship](./shell/spaceship/README.md) |
+| 🔔 **Notifications** · [mako](./home/dot_config/mako/) | 🐚 **Shell** · [ZSH](./shell/zsh/README.md) / PowerShell | ✨ **Prompt** · [Starship](./home/dot_config/starship.toml) |
 | 🖥️ **Terminal** · [Alacritty](./home/dot_config/alacritty/) | 📝 **Editor** · [NeoVim / LazyVim](./home/dot_config/nvim/README.md) | 🌿 **VCS** · [Git](./home/dot_gitconfig.tmpl) |
 
 ---
@@ -60,14 +60,31 @@ sh ~/dotfiles/bootstrap/linux-system.sh
 
 ### 🪟 Windows
 
+Prerequisites `winget` can't be relied on to place correctly — install these first:
+
+- **PowerShell 7 — the MSI build, not the Store/MSIX one.** `winget install Microsoft.PowerShell`
+  keeps managing the Store build (a WindowsApps alias Alacritty can't launch); grab the MSI from
+  [PowerShell releases](https://github.com/PowerShell/PowerShell/releases) → stable
+  `C:\Program Files\PowerShell\7\pwsh.exe`.
+- **Starship** · `winget install Starship.Starship`
+
 ```powershell
-chezmoi init --apply <repo-url>
+git clone <repo-url> C:\projects\dotfiles
+mkdir $env:USERPROFILE\.config\chezmoi -Force
+'sourceDir = "C:/projects/dotfiles"' | Set-Content $env:USERPROFILE\.config\chezmoi\chezmoi.toml
+chezmoi diff          # 👀 preview
+chezmoi apply         # ✍️  write configs + run Windows scripts
 ```
 
-The `run_once` script sets `XDG_CONFIG_HOME` so Neovim and Alacritty read from `~/.config`
-(relog afterward). Only the cross-platform configs (Alacritty, Neovim, Git) are applied;
-the Wayland stack is skipped automatically via `.chezmoiignore`. Install the
-*mononoki nerd font* separately.
+`apply` deploys only the cross-platform configs (Alacritty, Neovim, Git, the PowerShell profile);
+the Wayland stack is skipped via `.chezmoiignore`. The Windows `run_once`/`run_onchange` scripts
+also set `XDG_CONFIG_HOME=%USERPROFILE%\.config` (Neovim reads it — **relog once**) and install the
+Nerd Fonts from `packages.yaml` per-user (**registered**, not just copied, or Windows won't see them).
+
+> [!NOTE]
+> **Alacritty on Windows ignores `XDG_CONFIG_HOME`** — it only reads `%APPDATA%\alacritty`. A
+> generated shim there imports the real `~/.config\alacritty` config (single source of truth), and
+> launches **PowerShell 7** in `C:\projects` with the same **Starship** prompt and git aliases as zsh.
 
 ---
 
