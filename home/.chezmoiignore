@@ -19,4 +19,5 @@ install-fonts.ps1
 install-psmodules.ps1
 Documents
 AppData
+.glzr
 {{- end }}
