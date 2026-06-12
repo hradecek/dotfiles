@@ -1,7 +1,10 @@
-# GlazeWM — Windows tiling WM, mirroring the River setup as closely as possible.
-# Modifier is the Windows/Super key (lwin) to match River's `Super` bindings.
-# Note: a few Win combos are reserved by Windows and can't be overridden
-# (e.g. Win+L always locks — which also matches River's Super+L = lock intent).
+# GlazeWM — Windows tiling WM, mirroring the River setup.
+# Unified cross-OS scheme:  Alt = window manager  ·  Super/Win = launcher.
+# The WM modifier is Alt (not Super): Windows reserves most Win+<key> combos
+# (Win+L lock, Win+V clipboard, Win+R, Win+1-9, ...) and this work-managed
+# machine's locked-down policy hive blocks NoWinKeys, so Super can't be freed.
+# Alt has no such collisions. The launcher stays on Super+D (GlazeWM's hook
+# grabs Win+D before "Show Desktop"), matching River's Super+D → Fuzzel.
 # Colors are the "colors2" theme: focused border #8fe0a8, unfocused #2a3a30.
 
 general:
@@ -79,91 +82,91 @@ workspaces:
 keybindings:
   # --- apps / system (River: Super+Shift+Return, Super+Shift+R/E) ---
   - commands: ['shell-exec alacritty']
-    bindings: ['lwin+shift+enter']
+    bindings: ['alt+shift+enter']
   - commands: ['wm-reload-config']
-    bindings: ['lwin+shift+r']
+    bindings: ['alt+shift+r']
   - commands: ['wm-exit']
-    bindings: ['lwin+shift+e']
-  # Launcher (River Super+D → fuzzel). GlazeWM intercepts Win+D *before* the
-  # Windows "Show Desktop" shortcut, then shows Flow Launcher. Direct exe path
-  # (no cmd wrapper) so there's no console flash; templated to stay portable.
+    bindings: ['alt+shift+e']
+  # Launcher on Super+D (the one Super binding we keep): GlazeWM intercepts
+  # Win+D *before* the Windows "Show Desktop" shortcut, then shows Flow Launcher.
+  # Mirrors River's Super+D → fuzzel. Direct exe path (no cmd flash), templated.
   - commands: ['shell-exec {{ .chezmoi.homeDir | replace "/" "\\" }}\AppData\Local\FlowLauncher\Flow.Launcher.exe']
     bindings: ['lwin+d']
 
   # --- window management (River: Super Q/Space/F) ---
   - commands: ['close']
-    bindings: ['lwin+q']
+    bindings: ['alt+q']
   - commands: ['toggle-floating --centered']
-    bindings: ['lwin+space']
+    bindings: ['alt+space']
   - commands: ['toggle-fullscreen']
-    bindings: ['lwin+f']
+    bindings: ['alt+f']
   # GlazeWM is BSP (no River "main pane"), so Super+Return zoom has no direct
   # equivalent; toggle the split direction instead (i3-style).
   - commands: ['toggle-tiling-direction']
-    bindings: ['lwin+v']
+    bindings: ['alt+v']
 
   # --- directional focus (hjkl; GlazeWM is directional, unlike River's next/prev) ---
   - commands: ['focus --direction left']
-    bindings: ['lwin+h']
+    bindings: ['alt+h']
   - commands: ['focus --direction down']
-    bindings: ['lwin+j']
+    bindings: ['alt+j']
   - commands: ['focus --direction up']
-    bindings: ['lwin+k']
+    bindings: ['alt+k']
   - commands: ['focus --direction right']
-    bindings: ['lwin+l']
+    bindings: ['alt+l']
 
   # --- move window (River: Super+Shift J/K swap) ---
   - commands: ['move --direction left']
-    bindings: ['lwin+shift+h']
+    bindings: ['alt+shift+h']
   - commands: ['move --direction down']
-    bindings: ['lwin+shift+j']
+    bindings: ['alt+shift+j']
   - commands: ['move --direction up']
-    bindings: ['lwin+shift+k']
+    bindings: ['alt+shift+k']
   - commands: ['move --direction right']
-    bindings: ['lwin+shift+l']
+    bindings: ['alt+shift+l']
 
   # --- resize (River used Super+Alt+Shift hjkl; here via a binding mode) ---
   - commands: ['wm-enable-binding-mode --name resize']
-    bindings: ['lwin+r']
+    bindings: ['alt+r']
 
   # --- workspaces (River tags: Super 1-9 focus, Super+Shift 1-9 move) ---
   - commands: ['focus --workspace 1']
-    bindings: ['lwin+1']
+    bindings: ['alt+1']
   - commands: ['focus --workspace 2']
-    bindings: ['lwin+2']
+    bindings: ['alt+2']
   - commands: ['focus --workspace 3']
-    bindings: ['lwin+3']
+    bindings: ['alt+3']
   - commands: ['focus --workspace 4']
-    bindings: ['lwin+4']
+    bindings: ['alt+4']
   - commands: ['focus --workspace 5']
-    bindings: ['lwin+5']
+    bindings: ['alt+5']
   - commands: ['focus --workspace 6']
-    bindings: ['lwin+6']
+    bindings: ['alt+6']
   - commands: ['focus --workspace 7']
-    bindings: ['lwin+7']
+    bindings: ['alt+7']
   - commands: ['focus --workspace 8']
-    bindings: ['lwin+8']
+    bindings: ['alt+8']
   - commands: ['focus --workspace 9']
-    bindings: ['lwin+9']
+    bindings: ['alt+9']
   # Move focused window to a workspace without following (≈ River set-view-tags).
   - commands: ['move --workspace 1']
-    bindings: ['lwin+shift+1']
+    bindings: ['alt+shift+1']
   - commands: ['move --workspace 2']
-    bindings: ['lwin+shift+2']
+    bindings: ['alt+shift+2']
   - commands: ['move --workspace 3']
-    bindings: ['lwin+shift+3']
+    bindings: ['alt+shift+3']
   - commands: ['move --workspace 4']
-    bindings: ['lwin+shift+4']
+    bindings: ['alt+shift+4']
   - commands: ['move --workspace 5']
-    bindings: ['lwin+shift+5']
+    bindings: ['alt+shift+5']
   - commands: ['move --workspace 6']
-    bindings: ['lwin+shift+6']
+    bindings: ['alt+shift+6']
   - commands: ['move --workspace 7']
-    bindings: ['lwin+shift+7']
+    bindings: ['alt+shift+7']
   - commands: ['move --workspace 8']
-    bindings: ['lwin+shift+8']
+    bindings: ['alt+shift+8']
   - commands: ['move --workspace 9']
-    bindings: ['lwin+shift+9']
+    bindings: ['alt+shift+9']
 
 binding_modes:
   - name: 'resize'
