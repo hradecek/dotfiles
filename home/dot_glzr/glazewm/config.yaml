@@ -5,9 +5,9 @@
 # Colors are the "colors2" theme: focused border #8fe0a8, unfocused #2a3a30.
 
 general:
-  # Zebar is the bar (the Waybar analog), bundled with GlazeWM.
-  startup_commands: ['shell-exec zebar']
-  shutdown_commands: ['shell-exec taskkill /IM zebar.exe /F']
+  # Using the default Windows taskbar instead of Zebar — no bar to launch.
+  startup_commands: []
+  shutdown_commands: []
   config_reload_commands: []
   # River: `focus-follows-cursor 'normal'`.
   focus_follows_cursor: true
@@ -20,11 +20,11 @@ general:
 
 gaps:
   scale_with_dpi: true
-  # River used tight gaps (view-padding 2 ≈ 4px between windows). Top is larger
-  # to leave room for the Zebar bar.
+  # River-style tight gaps (view-padding 2 ≈ 4px). GlazeWM auto-avoids the
+  # Windows taskbar's work area, so no extra top gap is needed.
   inner_gap: '4px'
   outer_gap:
-    top: '40px'
+    top: '4px'
     right: '4px'
     bottom: '4px'
     left: '4px'
@@ -76,12 +76,6 @@ workspaces:
   - name: '8'
   - name: '9'
 
-window_rules:
-  # Re-apply managed state after certain apps finish launching.
-  - commands: ['ignore']
-    match:
-      - window_process: { equals: 'zebar' }
-
 keybindings:
   # --- apps / system (River: Super+Shift+Return, Super+Shift+R/E) ---
   - commands: ['shell-exec alacritty']
@@ -90,10 +84,11 @@ keybindings:
     bindings: ['lwin+shift+r']
   - commands: ['wm-exit']
     bindings: ['lwin+shift+e']
-  # Launcher (River Super+D → fuzzel). No launcher wired yet — see notes; e.g.
-  # install Flow Launcher / PowerToys Run and give it the Win+D / Alt+Space hotkey.
-  # - commands: ['shell-exec ...']
-  #   bindings: ['lwin+d']
+  # Launcher (River Super+D → fuzzel). GlazeWM intercepts Win+D *before* the
+  # Windows "Show Desktop" shortcut, then shows Flow Launcher (re-running the
+  # exe brings up its search box). cmd /c start guarantees %VAR% expansion.
+  - commands: ['shell-exec cmd /c start "" "%LOCALAPPDATA%\FlowLauncher\Flow.Launcher.exe"']
+    bindings: ['lwin+d']
 
   # --- window management (River: Super Q/Space/F) ---
   - commands: ['close']
