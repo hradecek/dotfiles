@@ -20,5 +20,6 @@ install-psmodules.ps1
 windows-startup.ps1
 Documents
 AppData
-.glzr
+komorebi.json
+.config/whkdrc
 {{- end }}

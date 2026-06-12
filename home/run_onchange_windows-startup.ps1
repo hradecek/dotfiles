@@ -1,30 +1,38 @@
 #==============================================================================#
 #                          WINDOWS STARTUP APPS                                #
 #                                                                              #
-# Registers the desktop apps that should launch at logon under the per-user    #
-# Run key (no admin). chezmoi re-runs this when the content changes.           #
-# Windows-only (gated in .chezmoiignore). Idempotent — overwrites same values. #
+# Sets up logon autostart for the desktop apps. chezmoi re-runs this when the  #
+# content changes. Windows-only (gated in .chezmoiignore). Idempotent.         #
 #                                                                              #
-# Skips any app that isn't installed yet (install via winget, then re-apply):  #
-#   glzr-io.glazewm  ·  Flow-Launcher.Flow-Launcher                            #
+# komorebi + whkd use komorebi's own startup shortcut (shell:startup), which   #
+# fires after the shell is ready — a plain HKCU Run entry launches a tiling    #
+# WM too early and it bails. Flow Launcher uses an HKCU Run entry.             #
+#                                                                              #
+#   winget: LGUG2Z.komorebi  ·  Flow-Launcher.Flow-Launcher                    #
 #                                                                              #
 # @author: hradecek <ivohradek@gmail.com>                                      #
 #==============================================================================#
 $ErrorActionPreference = 'Stop'
 $run = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run'
 
-$apps = [ordered]@{
-    'GlazeWM'      = "$env:ProgramFiles\glzr.io\GlazeWM\glazewm.exe"
-    'FlowLauncher' = "$env:LOCALAPPDATA\FlowLauncher\Flow.Launcher.exe"
+# komorebi + whkd via komorebi's blessed autostart (creates komorebi.lnk in
+# shell:startup that runs `komorebic start --whkd`).
+$komorebic = "$env:ProgramFiles\komorebi\bin\komorebic.exe"
+if (Test-Path $komorebic) {
+    & $komorebic enable-autostart --whkd
+    Write-Host ":: komorebi + whkd autostart enabled"
+} else {
+    Write-Warning "skip komorebi autostart — komorebic not found (winget install LGUG2Z.komorebi)"
 }
 
-foreach ($name in $apps.Keys) {
-    $path = $apps[$name]
-    if (Test-Path $path) {
-        # Quote the path so spaces (e.g. "Program Files") are handled.
-        Set-ItemProperty -Path $run -Name $name -Value "`"$path`""
-        Write-Host ":: startup enabled: $name"
-    } else {
-        Write-Warning "skip '$name' — not installed at $path"
-    }
+# Flow Launcher at logon (stable stub path, not the versioned app-* path).
+$flow = "$env:LOCALAPPDATA\FlowLauncher\Flow.Launcher.exe"
+if (Test-Path $flow) {
+    Set-ItemProperty -Path $run -Name 'FlowLauncher' -Value "`"$flow`""
+    Write-Host ":: startup enabled: FlowLauncher"
+} else {
+    Write-Warning "skip Flow Launcher — not installed at $flow"
 }
+
+# Clean up the old GlazeWM Run entry (we switched WMs to komorebi).
+Remove-ItemProperty -Path $run -Name 'GlazeWM' -ErrorAction SilentlyContinue

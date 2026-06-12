@@ -1,0 +1,66 @@
+.shell powershell
+
+# whkd hotkeys for komorebi (Windows). Modifier = Alt (window manager),
+# Super/Win = launcher — matching the cross-OS scheme (River uses Super on
+# Linux; Windows reserves Super, so Alt drives the WM here).
+
+# --- apps ---
+alt + return            : alacritty                          # terminal (River: Super+Shift+Return)
+win + d                 : Start-Process "$Env:LOCALAPPDATA\FlowLauncher\Flow.Launcher.exe"  # launcher (River: Super+D)
+
+# --- whkd / komorebi control ---
+alt + shift + o         : komorebic reload-configuration
+alt + o                 : taskkill /f /im whkd.exe; Start-Process whkd -WindowStyle hidden
+alt + shift + r         : komorebic retile
+alt + p                 : komorebic toggle-pause
+
+# --- manage windows ---
+alt + q                 : komorebic close
+alt + m                 : komorebic minimize
+alt + space             : komorebic toggle-float
+alt + f                 : komorebic toggle-monocle
+
+# --- focus (hjkl) ---
+alt + h                 : komorebic focus left
+alt + j                 : komorebic focus down
+alt + k                 : komorebic focus up
+alt + l                 : komorebic focus right
+
+# --- move (Shift + hjkl) ---
+alt + shift + h         : komorebic move left
+alt + shift + j         : komorebic move down
+alt + shift + k         : komorebic move up
+alt + shift + l         : komorebic move right
+alt + shift + return    : komorebic promote
+
+# --- resize ---
+alt + oem_plus          : komorebic resize-axis horizontal increase
+alt + oem_minus         : komorebic resize-axis horizontal decrease
+alt + shift + oem_plus  : komorebic resize-axis vertical increase
+alt + shift + oem_minus : komorebic resize-axis vertical decrease
+
+# --- layouts ---
+alt + x                 : komorebic flip-layout horizontal
+alt + y                 : komorebic flip-layout vertical
+
+# --- focus workspace (Alt + 1-9) ---
+alt + 1                 : komorebic focus-workspace 0
+alt + 2                 : komorebic focus-workspace 1
+alt + 3                 : komorebic focus-workspace 2
+alt + 4                 : komorebic focus-workspace 3
+alt + 5                 : komorebic focus-workspace 4
+alt + 6                 : komorebic focus-workspace 5
+alt + 7                 : komorebic focus-workspace 6
+alt + 8                 : komorebic focus-workspace 7
+alt + 9                 : komorebic focus-workspace 8
+
+# --- move to workspace (Alt + Shift + 1-9) ---
+alt + shift + 1         : komorebic move-to-workspace 0
+alt + shift + 2         : komorebic move-to-workspace 1
+alt + shift + 3         : komorebic move-to-workspace 2
+alt + shift + 4         : komorebic move-to-workspace 3
+alt + shift + 5         : komorebic move-to-workspace 4
+alt + shift + 6         : komorebic move-to-workspace 5
+alt + shift + 7         : komorebic move-to-workspace 6
+alt + shift + 8         : komorebic move-to-workspace 7
+alt + shift + 9         : komorebic move-to-workspace 8
