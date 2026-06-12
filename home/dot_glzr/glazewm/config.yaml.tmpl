@@ -85,9 +85,9 @@ keybindings:
   - commands: ['wm-exit']
     bindings: ['lwin+shift+e']
   # Launcher (River Super+D → fuzzel). GlazeWM intercepts Win+D *before* the
-  # Windows "Show Desktop" shortcut, then shows Flow Launcher (re-running the
-  # exe brings up its search box). cmd /c start guarantees %VAR% expansion.
-  - commands: ['shell-exec cmd /c start "" "%LOCALAPPDATA%\FlowLauncher\Flow.Launcher.exe"']
+  # Windows "Show Desktop" shortcut, then shows Flow Launcher. Direct exe path
+  # (no cmd wrapper) so there's no console flash; templated to stay portable.
+  - commands: ['shell-exec {{ .chezmoi.homeDir | replace "/" "\\" }}\AppData\Local\FlowLauncher\Flow.Launcher.exe']
     bindings: ['lwin+d']
 
   # --- window management (River: Super Q/Space/F) ---
