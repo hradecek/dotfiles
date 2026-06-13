@@ -5,8 +5,9 @@
 # Linux; Windows reserves Super, so Alt drives the WM here).
 
 # --- apps ---
+# Launcher = native Windows Start menu (tap the Win key). The WM modifier is
+# Alt, so the Win key stays free for Start.
 alt + return            : alacritty                          # terminal (River: Super+Shift+Return)
-win + d                 : Start-Process "$Env:LOCALAPPDATA\FlowLauncher\Flow.Launcher.exe"  # launcher (River: Super+D)
 
 # --- whkd / komorebi control ---
 alt + shift + o         : komorebic reload-configuration

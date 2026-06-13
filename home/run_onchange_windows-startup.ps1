@@ -25,14 +25,9 @@ if (Test-Path $komorebic) {
     Write-Warning "skip komorebi autostart — komorebic not found (winget install LGUG2Z.komorebi)"
 }
 
-# Flow Launcher at logon (stable stub path, not the versioned app-* path).
-$flow = "$env:LOCALAPPDATA\FlowLauncher\Flow.Launcher.exe"
-if (Test-Path $flow) {
-    Set-ItemProperty -Path $run -Name 'FlowLauncher' -Value "`"$flow`""
-    Write-Host ":: startup enabled: FlowLauncher"
-} else {
-    Write-Warning "skip Flow Launcher — not installed at $flow"
-}
-
-# Clean up the old GlazeWM Run entry (we switched WMs to komorebi).
-Remove-ItemProperty -Path $run -Name 'GlazeWM' -ErrorAction SilentlyContinue
+# Clean up Run entries from earlier setups. The launcher is now the native
+# Windows Start menu (tap the Win key) — no third-party launcher — and komorebi
+# autostarts via its shell:startup shortcut above.
+Remove-ItemProperty -Path $run -Name 'GlazeWM'      -ErrorAction SilentlyContinue
+Remove-ItemProperty -Path $run -Name 'FlowLauncher' -ErrorAction SilentlyContinue
+Remove-ItemProperty -Path $run -Name 'Flow.Launcher' -ErrorAction SilentlyContinue
