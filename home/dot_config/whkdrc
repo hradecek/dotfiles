@@ -7,12 +7,12 @@
 # --- apps ---
 # Launcher = native Windows Start menu (tap the Win key). The WM modifier is
 # Alt, so the Win key stays free for Start.
-alt + return            : alacritty                          # terminal (River: Super+Shift+Return)
+alt + shift + return    : alacritty                          # terminal (River: Super+Shift+Return)
 
 # --- whkd / komorebi control ---
-alt + shift + o         : komorebic reload-configuration
+alt + shift + r         : komorebic reload-configuration      # reload (River: Super+Shift+R)
 alt + o                 : taskkill /f /im whkd.exe; Start-Process whkd -WindowStyle hidden
-alt + shift + r         : komorebic retile
+alt + shift + o         : komorebic retile
 alt + p                 : komorebic toggle-pause
 
 # --- manage windows ---
@@ -32,7 +32,7 @@ alt + shift + h         : komorebic move left
 alt + shift + j         : komorebic move down
 alt + shift + k         : komorebic move up
 alt + shift + l         : komorebic move right
-alt + shift + return    : komorebic promote
+alt + return            : komorebic promote                  # promote/zoom (River: Super+Return)
 
 # --- resize ---
 alt + oem_plus          : komorebic resize-axis horizontal increase
