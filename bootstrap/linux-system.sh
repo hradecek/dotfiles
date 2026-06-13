@@ -22,4 +22,13 @@ if [ -f "${REPO}/jobs/anacron/install.sh" ]; then
     sudo sh "${REPO}/jobs/anacron/install.sh"
 fi
 
+# keyd: lone Super-tap -> F13 launcher (River binds F13 to fuzzel). See keyd/.
+if [ -f "${REPO}/keyd/default.conf" ]; then
+    echo "Linking keyd config to /etc/keyd/default.conf (requires sudo)..."
+    sudo mkdir -p /etc/keyd
+    sudo ln -sf "${REPO}/keyd/default.conf" /etc/keyd/default.conf
+    sudo systemctl enable --now keyd 2>/dev/null || true
+    sudo keyd reload 2>/dev/null || true
+fi
+
 echo "Linux system bootstrap complete."

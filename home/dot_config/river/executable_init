@@ -5,7 +5,9 @@
 # @file:   $HOME/.config/river/init                                            #
 # @author: hradecek <ivohradek@gmail.com>                                      #
 #==============================================================================#
-# Note: the "Super" modifier is also known as Logo, GUI, Windows, Mod4, etc.
+# WM modifier is Alt (Mod1), matching the Windows/komorebi setup. The Super/Win
+# key is reserved for the launcher: keyd turns a lone Super tap into F13 (held
+# Super still works as a modifier, e.g. the Super+Alt floating-window binds).
 
 #================================== CLEANUP ===================================
 # Clean up previous instances on reload
@@ -58,7 +60,7 @@ if command -v mako >/dev/null && ! pgrep -x mako >/dev/null; then
     mako &
 fi
 
-# Focused-tag watcher (feeds tags.sh for Control+Alt H/L prev/next tag cycling)
+# Focused-tag watcher (feeds tags.sh for Control+Super H/L prev/next tag cycling)
 if command -v ristate >/dev/null && command -v jq >/dev/null; then
     "$HOME/.config/river/tag-watch.sh" &
 fi
@@ -67,51 +69,53 @@ fi
 #
 # Application shortcuts
 #
-riverctl map normal Super+Shift Return spawn alacritty
-riverctl map normal Super D spawn fuzzel
-riverctl map normal Super L spawn 'swaylock -f -c 0d1410'
-riverctl map normal Super+Shift S spawn 'grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%s).png'
+riverctl map normal Alt+Shift Return spawn alacritty
+# Launcher: tap the Super/Win key (keyd maps a lone Super tap -> F13; held Super
+# still works as a modifier). Mirrors Windows, where tapping Win opens Start.
+riverctl map normal None F13 spawn fuzzel
+riverctl map normal Alt L spawn 'swaylock -f -c 0d1410'
+riverctl map normal Alt+Shift S spawn 'grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%s).png'
 riverctl map normal None Print spawn 'XDG_CURRENT_DESKTOP=sway flameshot gui'
 
 #
 # System control
 #
-riverctl map normal Super+Shift R spawn "pkill -x waybar; pkill -x waybar-updates; exec ~/.config/river/init"
-riverctl map normal Super+Shift E exit
+riverctl map normal Alt+Shift R spawn "pkill -x waybar; pkill -x waybar-updates; exec ~/.config/river/init"
+riverctl map normal Alt+Shift E exit
 
 #
 # Window management
 #
-riverctl map normal Super Q close
-riverctl map normal Super Return zoom
-riverctl map normal Super Space toggle-float
-riverctl map normal Super F toggle-fullscreen
+riverctl map normal Alt Q close
+riverctl map normal Alt Return zoom
+riverctl map normal Alt Space toggle-float
+riverctl map normal Alt F toggle-fullscreen
 
 #
 # Focus and layout navigation
 #
-riverctl map normal Super J focus-view next
-riverctl map normal Super K focus-view previous
-riverctl map normal Super+Shift J swap next
-riverctl map normal Super+Shift K swap previous
+riverctl map normal Alt J focus-view next
+riverctl map normal Alt K focus-view previous
+riverctl map normal Alt+Shift J swap next
+riverctl map normal Alt+Shift K swap previous
 
-riverctl map normal Super Period focus-output next
-riverctl map normal Super Comma focus-output previous
-riverctl map normal Super+Shift Period send-to-output next
-riverctl map normal Super+Shift Comma send-to-output previous
+riverctl map normal Alt Period focus-output next
+riverctl map normal Alt Comma focus-output previous
+riverctl map normal Alt+Shift Period send-to-output next
+riverctl map normal Alt+Shift Comma send-to-output previous
 
 #
 # Layout control
 #
-riverctl map normal Super Minus send-layout-cmd rivertile "main-ratio -0.05"
-riverctl map normal Super Equal send-layout-cmd rivertile "main-ratio +0.05"
-riverctl map normal Super+Shift Minus send-layout-cmd rivertile "main-count -1"
-riverctl map normal Super+Shift Equal send-layout-cmd rivertile "main-count +1"
+riverctl map normal Alt Minus send-layout-cmd rivertile "main-ratio -0.05"
+riverctl map normal Alt Equal send-layout-cmd rivertile "main-ratio +0.05"
+riverctl map normal Alt+Shift Minus send-layout-cmd rivertile "main-count -1"
+riverctl map normal Alt+Shift Equal send-layout-cmd rivertile "main-count +1"
 
-riverctl map normal Super Up    send-layout-cmd rivertile "main-location top"
-riverctl map normal Super Right send-layout-cmd rivertile "main-location right"
-riverctl map normal Super Down  send-layout-cmd rivertile "main-location bottom"
-riverctl map normal Super Left  send-layout-cmd rivertile "main-location left"
+riverctl map normal Alt Up    send-layout-cmd rivertile "main-location top"
+riverctl map normal Alt Right send-layout-cmd rivertile "main-location right"
+riverctl map normal Alt Down  send-layout-cmd rivertile "main-location bottom"
+riverctl map normal Alt Left  send-layout-cmd rivertile "main-location left"
 
 #
 # Floating window controls
@@ -134,35 +138,35 @@ riverctl map normal Super+Alt+Shift L resize horizontal 100
 #
 # Mouse bindings
 #
-riverctl map-pointer normal Super BTN_LEFT move-view
-riverctl map-pointer normal Super BTN_RIGHT resize-view
-riverctl map-pointer normal Super BTN_MIDDLE toggle-float
+riverctl map-pointer normal Alt BTN_LEFT move-view
+riverctl map-pointer normal Alt BTN_RIGHT resize-view
+riverctl map-pointer normal Alt BTN_MIDDLE toggle-float
 
 #
 # Tag (workspace) management
 #
 for i in $(seq 1 9); do
     tags=$((1 << ($i - 1)))
-    riverctl map normal Super $i set-focused-tags $tags
-    riverctl map normal Super+Shift $i set-view-tags $tags
-    riverctl map normal Super+Control $i toggle-focused-tags $tags
-    riverctl map normal Super+Shift+Control $i toggle-view-tags $tags
+    riverctl map normal Alt $i set-focused-tags $tags
+    riverctl map normal Alt+Shift $i set-view-tags $tags
+    riverctl map normal Alt+Control $i toggle-focused-tags $tags
+    riverctl map normal Alt+Shift+Control $i toggle-view-tags $tags
 done
 
 all_tags=$(((1 << 32) - 1))
-riverctl map normal Super 0 set-focused-tags $all_tags
-riverctl map normal Super+Shift 0 set-view-tags $all_tags
+riverctl map normal Alt 0 set-focused-tags $all_tags
+riverctl map normal Alt+Shift 0 set-view-tags $all_tags
 
 # Cycle focused tag (previous / next workspace) with wrap-around
-riverctl map normal Control+Alt H spawn "$HOME/.config/river/tags.sh prev"
-riverctl map normal Control+Alt L spawn "$HOME/.config/river/tags.sh next"
+riverctl map normal Control+Super H spawn "$HOME/.config/river/tags.sh prev"
+riverctl map normal Control+Super L spawn "$HOME/.config/river/tags.sh next"
 
 #
 # Passthrough mode (for nested compositors)
 #
 riverctl declare-mode passthrough
-riverctl map normal Super F11 enter-mode passthrough
-riverctl map passthrough Super F11 enter-mode normal
+riverctl map normal Alt F11 enter-mode passthrough
+riverctl map passthrough Alt F11 enter-mode normal
 
 #
 # Media keys (normal and locked mode)

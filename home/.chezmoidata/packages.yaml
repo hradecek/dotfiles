@@ -38,6 +38,7 @@ packages:
     # --- Shell / SSH keyring ---
     - zsh                         # login shell
     - starship                    # cross-shell prompt (Windows: winget Starship.Starship)
+    - keyd                        # lone Super-tap -> F13 launcher (see keyd/, bootstrap)
     - git                         # VCS
     - neovim                      # editor (LazyVim)
     - libsecret                   # secret-tool (ssh askpass helper)
