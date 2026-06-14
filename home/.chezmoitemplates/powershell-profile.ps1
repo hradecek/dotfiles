@@ -55,6 +55,8 @@ if (Get-Module -ListAvailable PSReadLine) {
         Set-PSReadLineKeyHandler -Key 'Ctrl+n' -Function HistorySearchForward
         Set-PSReadLineKeyHandler -Key 'Ctrl+a' -Function BeginningOfLine
         Set-PSReadLineKeyHandler -Key 'Ctrl+e' -Function EndOfLine
+        # Ctrl+D like bash/zsh: delete char under cursor, or exit if line empty.
+        Set-PSReadLineKeyHandler -Key 'Ctrl+d' -Function DeleteCharOrExit
         Set-PSReadLineOption -HistoryNoDuplicates
         Set-PSReadLineOption -MaximumHistoryCount 1000000
         Set-PSReadLineOption -HistorySearchCursorMovesToEnd
