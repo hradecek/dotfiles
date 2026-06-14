@@ -5,7 +5,7 @@
   "default_workspace_padding": 2,
   "default_container_padding": 2,
   "border": true,
-  "border_width": 4,
+  "border_width": 2,
   "border_offset": 0,
   "border_colours": {
     "single": "#56c92b",
