@@ -5,12 +5,12 @@
   "default_workspace_padding": 2,
   "default_container_padding": 2,
   "border": true,
-  "border_width": 2,
-  "border_offset": -1,
+  "border_width": 4,
+  "border_offset": 0,
   "border_colours": {
-    "single": "#8fe0a8",
+    "single": "#56c92b",
     "stack": "#44a022",
-    "monocle": "#8fe0a8",
+    "monocle": "#56c92b",
     "unfocused": "#2a3a30"
   },
   "monitors": [
