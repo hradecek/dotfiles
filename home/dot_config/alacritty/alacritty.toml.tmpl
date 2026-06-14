@@ -20,6 +20,10 @@ LC_CTYPE = "en_US.UTF-8"
 
 [window]
 title = "Terminal"
+# No title bar / min-max-close buttons. Both WMs tile (komorebi on Windows,
+# River on Linux) and draw their own focus border, so the OS decorations are
+# just wasted space. "None" = no titlebar and no borders.
+decorations = "None"
 
 [font]
 size = 12
