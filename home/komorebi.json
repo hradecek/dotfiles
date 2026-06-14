@@ -8,9 +8,9 @@
   "border_width": 2,
   "border_offset": 0,
   "border_colours": {
-    "single": "#56c92b",
+    "single": "#8fe0a8",
     "stack": "#44a022",
-    "monocle": "#56c92b",
+    "monocle": "#8fe0a8",
     "unfocused": "#2a3a30"
   },
   "monitors": [
