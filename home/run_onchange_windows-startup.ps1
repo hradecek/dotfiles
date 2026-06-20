@@ -19,8 +19,8 @@ $run = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run'
 # shell:startup that runs `komorebic start --whkd`).
 $komorebic = "$env:ProgramFiles\komorebi\bin\komorebic.exe"
 if (Test-Path $komorebic) {
-    & $komorebic enable-autostart --whkd
-    Write-Host ":: komorebi + whkd autostart enabled"
+    & $komorebic enable-autostart --whkd --bar
+    Write-Host ":: komorebi + whkd + bar autostart enabled"
 } else {
     Write-Warning "skip komorebi autostart — komorebic not found (winget install LGUG2Z.komorebi)"
 }

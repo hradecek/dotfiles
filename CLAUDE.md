@@ -59,12 +59,14 @@ Windows prerequisites not auto-installed: **PowerShell 7 (MSI build**, not Store
 | `home/dot_gitconfig.tmpl` | Git config; credential helper templated per OS | cross-OS |
 | `home/.chezmoitemplates/powershell-profile.ps1` → `home/Documents/{PowerShell,WindowsPowerShell}/Microsoft.PowerShell_profile.ps1.tmpl` | PowerShell profile: git aliases (`gst`, `gco`, …) + `starship init` | Windows-only |
 | `home/run_once_set-windows-xdg.ps1`, `home/run_onchange_install-fonts.ps1.tmpl` | Windows setup: set `XDG_CONFIG_HOME`; install + register Nerd Fonts per-user | Windows-only |
+| `home/komorebi.json`, `home/komorebi.bar.json`, `home/dot_config/whkdrc` | komorebi tiling WM + status bar (Mononoki, green accent) + whkd hotkeys. WM modifier = `Alt`, tap `Win` = Start. Autostart (`--whkd --bar`) via `run_onchange_windows-startup.ps1` | Windows-only |
+| `home/run_onchange_windows-tweaks.ps1` | Per-user (HKCU) desktop tweaks: Explorer dev defaults, dark mode, centered/auto-hidden taskbar, declutter, fast key-repeat | Windows-only |
 | `home/dot_config/{river,waybar,fuzzel,mako,swaylock}/` | Wayland desktop stack | Linux-only |
 | `home/dot_zshrc`, `home/dot_dircolors` | Shell entrypoints | Linux-only |
 | `shell/` | Runtime libs sourced by `dot_zshrc` (aliases, `zsh/history.zsh`, `bash/`) — **not** chezmoi-managed | Linux |
 | `swaylock/assets/` | Lock-screen images (symlinked to `~/Pictures/swaylock`) | Linux |
-| `dm/ly/`, `jobs/anacron/` | System-level configs installed via `bootstrap/linux-system.sh` | Linux |
-| `bootstrap/` | One-time root-level Linux installers | Linux |
+| `dm/ly/`, `jobs/anacron/`, `keyd/` | System-level configs installed via `bootstrap/linux-system.sh` (keyd: lone Super-tap → F13 → fuzzel) | Linux |
+| `bootstrap/` | One-time root/admin installers: `linux-system.sh`; `windows-system.ps1` (admin: Caps Lock → Esc scancode map) | Linux + Windows |
 | `home/.chezmoidata/packages.yaml` | Package manifest: `pacman`/`aur` (Linux, via `run_onchange_install-packages.sh.tmpl`) + `nerdfonts` (Windows, via `run_onchange_install-fonts.ps1.tmpl`) | both |
 
 ## Key Patterns

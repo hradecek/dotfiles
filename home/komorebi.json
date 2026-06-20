@@ -13,6 +13,21 @@
     "monocle": "#8fe0a8",
     "unfocused": "#2a3a30"
   },
+  "focus_follows_mouse": "Komorebi",
+  "mouse_follows_focus": false,
+  "animation": {
+    "enabled": true,
+    "duration": 200,
+    "fps": 60,
+    "style": "EaseInOutQuad"
+  },
+  "floating_applications": [
+    { "kind": "Exe", "id": "Taskmgr.exe", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "SnippingTool.exe", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "ScreenClippingHost.exe", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "Calculator.exe", "matching_strategy": "Equals" },
+    { "kind": "Title", "id": "Picture-in-Picture", "matching_strategy": "Contains" }
+  ],
   "monitors": [
     {
       "workspaces": [
