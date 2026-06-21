@@ -71,11 +71,14 @@ fi
 #
 riverctl map normal Alt+Shift Return spawn alacritty
 # Launcher: tap the Super/Win key (keyd maps a lone Super tap -> F13; held Super
-# still works as a modifier). Mirrors Windows, where tapping Win opens Start.
+# still works as a modifier). Mirrors Windows, where tapping Win toggles Start.
 # NB: bind XF86Tools, not F13 — xkb's inet(evdev) symbols resolve the F13
 # keycode (kernel 183) to the keysym XF86Tools, so a `None F13` bind never
 # matches. Verified with `wev`: tapping Super yields sym XF86Tools.
-riverctl map normal None XF86Tools spawn fuzzel
+# Toggle (open/close like Win's Start): a second tap while fuzzel is open is
+# grabbed by fuzzel itself, which binds XF86Tools -> cancel (see fuzzel.ini);
+# if River sees the tap instead, this `pkill || fuzzel` closes the open one.
+riverctl map normal None XF86Tools spawn 'pkill -x fuzzel || fuzzel'
 # Lock on Super+L to mirror Windows' native Win+L (keyd only rewrites a *lone*
 # Super tap to F13; held Super+L passes through as a normal modifier combo).
 riverctl map normal Super L spawn 'swaylock -f -c 0d1410'
