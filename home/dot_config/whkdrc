@@ -7,10 +7,13 @@
 # --- apps ---
 # Launcher = native Windows Start menu (tap the Win key). The WM modifier is
 # Alt, so the Win key stays free for Start.
-alt + shift + return    : alacritty                          # terminal (River: Super+Shift+Return)
+# Lock = native Windows Win+L (whkd can't intercept it; mirrors River's Super+L).
+alt + shift + return    : alacritty                          # terminal
+alt + shift + s         : Start-Process ms-screenclip:        # screenshot (River: Alt+Shift+S grim)
 
 # --- whkd / komorebi control ---
-alt + shift + r         : komorebic reload-configuration      # reload (River: Super+Shift+R)
+alt + shift + r         : komorebic reload-configuration      # reload WM
+alt + shift + e         : komorebic stop                      # quit tiler (River: Alt+Shift+E exits session)
 alt + o                 : taskkill /f /im whkd.exe; Start-Process whkd -WindowStyle hidden
 alt + shift + o         : komorebic retile
 alt + p                 : komorebic toggle-pause
@@ -32,7 +35,7 @@ alt + shift + h         : komorebic move left
 alt + shift + j         : komorebic move down
 alt + shift + k         : komorebic move up
 alt + shift + l         : komorebic move right
-alt + return            : komorebic promote                  # promote/zoom (River: Super+Return)
+alt + return            : komorebic promote                  # promote/zoom
 
 # --- resize ---
 alt + oem_plus          : komorebic resize-axis horizontal increase
@@ -43,6 +46,12 @@ alt + shift + oem_minus : komorebic resize-axis vertical decrease
 # --- layouts ---
 alt + x                 : komorebic flip-layout horizontal
 alt + y                 : komorebic flip-layout vertical
+
+# --- monitors (River: Alt+,/. focus-output, Alt+Shift+,/. send-to-output) ---
+alt + oem_period        : komorebic cycle-monitor next
+alt + oem_comma         : komorebic cycle-monitor previous
+alt + shift + oem_period : komorebic cycle-move-to-monitor next
+alt + shift + oem_comma  : komorebic cycle-move-to-monitor previous
 
 # --- focus workspace (Alt + 1-9) ---
 alt + 1                 : komorebic focus-workspace 0

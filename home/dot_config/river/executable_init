@@ -73,7 +73,9 @@ riverctl map normal Alt+Shift Return spawn alacritty
 # Launcher: tap the Super/Win key (keyd maps a lone Super tap -> F13; held Super
 # still works as a modifier). Mirrors Windows, where tapping Win opens Start.
 riverctl map normal None F13 spawn fuzzel
-riverctl map normal Alt L spawn 'swaylock -f -c 0d1410'
+# Lock on Super+L to mirror Windows' native Win+L (keyd only rewrites a *lone*
+# Super tap to F13; held Super+L passes through as a normal modifier combo).
+riverctl map normal Super L spawn 'swaylock -f -c 0d1410'
 riverctl map normal Alt+Shift S spawn 'grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%s).png'
 riverctl map normal None Print spawn 'XDG_CURRENT_DESKTOP=sway flameshot gui'
 
@@ -94,10 +96,17 @@ riverctl map normal Alt F toggle-fullscreen
 #
 # Focus and layout navigation
 #
+# Full HJKL to match komorebi/Windows. rivertile focus is stack-ordered (not
+# truly directional), so H/K = previous and J/L = next: H/L still feel like
+# left/right because H (left) moves toward the main view, L (right) into the stack.
+riverctl map normal Alt H focus-view previous
 riverctl map normal Alt J focus-view next
 riverctl map normal Alt K focus-view previous
+riverctl map normal Alt L focus-view next
+riverctl map normal Alt+Shift H swap previous
 riverctl map normal Alt+Shift J swap next
 riverctl map normal Alt+Shift K swap previous
+riverctl map normal Alt+Shift L swap next
 
 riverctl map normal Alt Period focus-output next
 riverctl map normal Alt Comma focus-output previous
