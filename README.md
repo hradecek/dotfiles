@@ -9,6 +9,14 @@
 ![Wayland](https://img.shields.io/badge/Wayland-FFBC00?style=for-the-badge&logo=wayland&logoColor=black)
 ![managed with chezmoi](https://img.shields.io/badge/managed_with-chezmoi-44a022?style=for-the-badge)
 
+<br>
+
+<img src="./.github/desktop.jpg" alt="Clean River desktop — Arch wallpaper and themed Waybar" width="850">
+
+<sub>⬆️ clean desktop · ⬇️ tiled session</sub>
+
+<img src="./.github/preview.png" alt="River / Wayland desktop — fastfetch, lazygit and btop on a themed Waybar" width="850">
+
 <sub>🎨 Themed **colors2** — neutral grays + a green accent (`#56c92b`), calmer borders (`#44a022`) — unified across Alacritty, Waybar, Fuzzel, River & mako.</sub>
 
 </div>
