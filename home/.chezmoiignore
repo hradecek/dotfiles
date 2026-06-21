@@ -21,5 +21,7 @@ windows-startup.ps1
 Documents
 AppData
 komorebi.json
+komorebi.bar.json
+windows-tweaks.ps1
 .config/whkdrc
 {{- end }}

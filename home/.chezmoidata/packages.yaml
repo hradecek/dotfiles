@@ -14,7 +14,12 @@ packages:
   # Installed with: pacman -S --needed
   pacman:
     # --- Wayland desktop (River session) ---
-    - river                       # Wayland compositor (riverctl, rivertile)
+    # PIN to 0.3.x: river 0.4.0 was a rewrite that REMOVED riverctl/rivertile,
+    # breaking this whole config (the init script + tag-watch). Keep
+    # `IgnorePkg = river` in /etc/pacman.conf until the config is migrated to the
+    # 0.4 protocol-client model. On a fresh box, after the first install, downgrade
+    # with the cached 0.3.13 pkg or the Arch archive, then pin.
+    - river                       # Wayland compositor (riverctl, rivertile) — PINNED 0.3.x
     - waybar                      # status bar
     - fuzzel                      # application launcher (Super+D)
     - mako                        # notification daemon (makoctl)

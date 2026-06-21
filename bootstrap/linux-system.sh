@@ -14,6 +14,11 @@ REPO="${HOME}/dotfiles"
 if [ -f "${REPO}/dm/ly/config.ini" ]; then
     echo "Linking LY config to /etc/ly/config.ini (requires sudo)..."
     sudo ln -sf "${REPO}/dm/ly/config.ini" /etc/ly/config.ini
+    # The unit is templated per-TTY (ly@.service) and Conflicts with getty@tty2,
+    # so enable the tty2 instance. No --now: starting it from inside a running
+    # session would switch to the login screen; it comes up on next boot.
+    echo "Enabling ly@tty2 display manager (requires sudo)..."
+    sudo systemctl enable ly@tty2.service 2>/dev/null || true
 fi
 
 # Anacron scheduled jobs
