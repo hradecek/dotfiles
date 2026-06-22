@@ -32,4 +32,4 @@ $map = [byte[]](
 $path = 'HKLM:\SYSTEM\CurrentControlSet\Control\Keyboard Layout'
 Set-ItemProperty -Path $path -Name 'Scancode Map' -Value $map -Type Binary
 Write-Host ':: Caps Lock -> Esc scancode map written. REBOOT to apply.'
-Write-Host '   (To revert: Remove-ItemProperty -Path "' + $path + '" -Name "Scancode Map"; reboot.)'
+Write-Host "   (To revert: Remove-ItemProperty -Path '$path' -Name 'Scancode Map'; reboot.)"

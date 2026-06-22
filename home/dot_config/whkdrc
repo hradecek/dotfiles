@@ -46,6 +46,13 @@ alt + shift + oem_minus : komorebic resize-axis vertical decrease
 # --- layouts ---
 alt + x                 : komorebic flip-layout horizontal
 alt + y                 : komorebic flip-layout vertical
+# Switch layout algorithm (no River counterpart — rivertile is single-algorithm).
+# v = vertical-stack (default), b = bsp, c = columns, g = grid, u = ultrawide.
+alt + v                 : komorebic change-layout vertical-stack
+alt + b                 : komorebic change-layout bsp
+alt + c                 : komorebic change-layout columns
+alt + g                 : komorebic change-layout grid
+alt + u                 : komorebic change-layout ultrawide-vertical-stack
 
 # --- monitors (River: Alt+,/. focus-output, Alt+Shift+,/. send-to-output) ---
 alt + oem_period        : komorebic cycle-monitor next
