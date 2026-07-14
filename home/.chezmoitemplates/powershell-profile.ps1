@@ -31,6 +31,26 @@ function gll    { git log --graph --pretty=oneline --abbrev-commit @args }
 function gg     { git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative @args }
 function ggs    { gg --stat @args }
 
+# --- kubectl (mirror shell/aliases/kubectl.aliases.sh) ---
+function k     { kubectl @args }
+function kg    { kubectl get @args }
+function kgp   { kubectl get pods @args }
+function kgs   { kubectl get svc @args }
+function kgd   { kubectl get deployments @args }
+function kga   { kubectl get all @args }
+function kd    { kubectl describe @args }
+function kdp   { kubectl describe pod @args }
+function kl    { kubectl logs @args }
+function klf   { kubectl logs -f @args }
+function kex   { kubectl exec -it @args }
+function kaf   { kubectl apply -f @args }
+function kdel  { kubectl delete @args }
+function kpf   { kubectl port-forward @args }
+function ktop  { kubectl top @args }
+function kctx  { kubectl config use-context @args }
+function kctxs { kubectl config get-contexts @args }
+function kns   { kubectl config set-context --current --namespace @args }
+
 # --- portable listing helpers (mirror shell/aliases/general.aliases.sh) ---
 # (the GNU-coreutils-only flags don't port; Get-ChildItem is always "long",
 #  so the -l variants collapse onto it. -Force shows hidden = ls -A.)
