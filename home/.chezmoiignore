@@ -15,6 +15,7 @@ install-packages.sh
 {{/* Windows-only bootstrap script: skip everywhere except Windows */}}
 {{- if ne .chezmoi.os "windows" }}
 set-windows-xdg.ps1
+install-zig.ps1
 install-fonts.ps1
 install-psmodules.ps1
 windows-startup.ps1
