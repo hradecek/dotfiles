@@ -11,6 +11,7 @@
 .zshrc
 Pictures/swaylock
 install-packages.sh
+install-yay.sh
 {{- end }}
 {{/* Windows-only bootstrap script: skip everywhere except Windows */}}
 {{- if ne .chezmoi.os "windows" }}

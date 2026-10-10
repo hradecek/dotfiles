@@ -22,3 +22,6 @@ alias sortbysize="ls -s | sort -n"
 alias diskspace="du -S | sort -n -r | more"
 alias psgrep="ps -aux | grep -v grep | grep -i"
 
+
+# Sync the LazyVim lockfile back into the dotfiles source after :Lazy update
+alias lazysync="chezmoi re-add ~/.config/nvim/lazy-lock.json"

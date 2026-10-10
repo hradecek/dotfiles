@@ -63,6 +63,8 @@ function lla    { Get-ChildItem -Force @args }
 
 # --- navigation / process search ---
 function cd..   { Set-Location .. }
+# Sync the LazyVim lockfile back into the dotfiles source after :Lazy update
+function lazysync { chezmoi re-add "$env:USERPROFILE\.config\nvim\lazy-lock.json" }
 function psgrep { Get-Process | Where-Object { $_.ProcessName -match $args[0] } }
 
 # --- PSReadLine: mirror the zsh keybindings + history behaviour ---

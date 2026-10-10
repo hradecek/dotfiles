@@ -4,7 +4,7 @@
 #                                                                              #
 # Returns the SSH private-key passphrase stored in the login keyring so ssh /  #
 # ssh-add can unlock the key non-interactively. Used via SSH_ASKPASS with      #
-# SSH_ASKPASS_REQUIRE=prefer (see zshrc.zsh). The login keyring is unlocked    #
+# SSH_ASKPASS_REQUIRE=prefer (see ~/.zshrc). The login keyring is unlocked     #
 # automatically at login by pam_gnome_keyring, so no prompt is ever shown.     #
 #                                                                              #
 # Store the passphrase once with:                                             #

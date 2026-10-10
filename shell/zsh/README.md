@@ -1,12 +1,15 @@
 # ZSH
 
-## Plugins
+Runtime pieces sourced by `~/.zshrc` (`home/dot_zshrc`):
 
-- [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
+- `history.zsh` - large, de-duplicated, timestamped history
+- `../aliases/*.aliases.sh` - aliases, shared with the PowerShell profile on Windows
+
+Plugins come from pacman (`home/.chezmoidata/packages.yaml`) and are sourced
+from `/usr/share/zsh/plugins`:
+
 - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
-- [bat](https://github.com/sharkdp/bat)
-- [fzf](https://github.com/junegunn/fzf)
+- [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
+- [zsh-completions](https://github.com/zsh-users/zsh-completions)
 
-## Completions
-
-- [npm](https://docs.npmjs.com/cli/v7/commands/npm-completion)
+Prompt is [Starship](../../home/dot_config/starship.toml).

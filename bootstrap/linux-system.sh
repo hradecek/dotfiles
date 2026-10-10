@@ -21,10 +21,37 @@ if [ -f "${REPO}/dm/ly/config.ini" ]; then
     sudo systemctl enable ly@tty2.service 2>/dev/null || true
 fi
 
-# Anacron scheduled jobs
-if [ -f "${REPO}/jobs/anacron/install.sh" ]; then
-    echo "Installing anacron jobs (requires sudo)..."
-    sudo sh "${REPO}/jobs/anacron/install.sh"
+# River: pin to 0.3.x. 0.4 dropped riverctl/rivertile, which this config needs
+# (home/dot_config/river/init, tag-watch.sh). A fresh `pacman -S river` installs
+# 0.4, so downgrade from the pacman cache or the Arch archive, then add it to
+# IgnorePkg so `pacman -Syu` leaves it alone. Both steps are idempotent.
+RIVER_PKG="river-0.3.13-2-x86_64.pkg.tar.zst"
+RIVER_CACHE="/var/cache/pacman/pkg/${RIVER_PKG}"
+if command -v pacman >/dev/null; then
+    case "$(pacman -Q river 2>/dev/null | awk '{print $2}')" in
+        0.3.*) ;;
+        *)
+            if [ ! -f "${RIVER_CACHE}" ]; then
+                echo "Downloading ${RIVER_PKG} from the Arch archive (requires sudo)..."
+                sudo curl -fsSL -o "${RIVER_CACHE}" \
+                    "https://archive.archlinux.org/packages/r/river/${RIVER_PKG}"
+                sudo curl -fsSL -o "${RIVER_CACHE}.sig" \
+                    "https://archive.archlinux.org/packages/r/river/${RIVER_PKG}.sig"
+            fi
+            echo "Downgrading river to 0.3.13 (requires sudo)..."
+            sudo pacman -U --needed "${RIVER_CACHE}"
+            ;;
+    esac
+    if ! grep -qE '^IgnorePkg[[:space:]]*=.*(^|[[:space:]])river([[:space:]]|$)' /etc/pacman.conf; then
+        echo "Adding river to IgnorePkg in /etc/pacman.conf (requires sudo)..."
+        if grep -qE '^IgnorePkg[[:space:]]*=' /etc/pacman.conf; then
+            sudo sed -i -E 's/^(IgnorePkg[[:space:]]*=.*)$/\1 river/' /etc/pacman.conf
+        elif grep -qE '^#IgnorePkg[[:space:]]*=' /etc/pacman.conf; then
+            sudo sed -i -E 's/^#IgnorePkg[[:space:]]*=.*$/IgnorePkg   = river/' /etc/pacman.conf
+        else
+            echo 'IgnorePkg   = river' | sudo tee -a /etc/pacman.conf >/dev/null
+        fi
+    fi
 fi
 
 # keyd: lone Super-tap -> F13 launcher (River binds F13 to fuzzel). See keyd/.

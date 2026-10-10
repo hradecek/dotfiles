@@ -37,11 +37,9 @@
 
 ```shell
 git clone <repo-url> ~/dotfiles
-# pin chezmoi to the local repo (one-time; --source does not persist)
-mkdir -p ~/.config/chezmoi
-echo 'sourceDir = "~/dotfiles"' > ~/.config/chezmoi/chezmoi.toml
-chezmoi diff          # 👀 preview
-chezmoi apply         # ✍️  write configs into place
+chezmoi init --source ~/dotfiles   # writes ~/.config/chezmoi/chezmoi.toml pointing at the clone
+chezmoi diff                       # 👀 preview
+chezmoi apply                      # ✍️  write configs into place
 ```
 
 > [!IMPORTANT]
@@ -50,17 +48,17 @@ chezmoi apply         # ✍️  write configs into place
 
 ### 📦 Packages
 
-On Linux, `apply` also installs any missing system packages declared in
-[`home/.chezmoidata/packages.yaml`](./home/.chezmoidata/packages.yaml) — a `run_onchange`
-script that re-runs **only** when that list changes and is a no-op once everything is present.
+On Linux, `apply` first bootstraps `yay` (once), then installs any missing system packages
+declared in [`home/.chezmoidata/packages.yaml`](./home/.chezmoidata/packages.yaml) — a
+`run_onchange` script that re-runs **only** when that list changes and is a no-op once everything
+is present.
 
 > [!NOTE]
-> Prerequisites it can't bootstrap itself: `chezmoi`, `yay` (for the AUR packages), and `zplug`
-> (`git clone https://github.com/zplug/zplug ~/.zplug`).
+> The only prerequisite it can't bootstrap itself is `chezmoi`.
 
 ### 🐧 Linux — one-time system setup
 
-Root-level pieces chezmoi doesn't manage (LY display manager, anacron):
+Root-level pieces chezmoi doesn't manage (LY display manager, keyd, the river 0.3.x pin):
 
 ```shell
 sh ~/dotfiles/bootstrap/linux-system.sh
@@ -78,10 +76,9 @@ Prerequisites `winget` can't be relied on to place correctly — install these f
 
 ```powershell
 git clone <repo-url> C:\projects\dotfiles
-mkdir $env:USERPROFILE\.config\chezmoi -Force
-'sourceDir = "C:/projects/dotfiles"' | Set-Content $env:USERPROFILE\.config\chezmoi\chezmoi.toml
-chezmoi diff          # 👀 preview
-chezmoi apply         # ✍️  write configs + run Windows scripts
+chezmoi init --source C:\projects\dotfiles   # writes %USERPROFILE%\.config\chezmoi\chezmoi.toml
+chezmoi diff                                 # 👀 preview
+chezmoi apply                                # ✍️  write configs + run Windows scripts
 ```
 
 `apply` deploys only the cross-platform configs (Alacritty, Neovim, Git, the PowerShell profile);
@@ -101,6 +98,6 @@ Nerd Fonts from `packages.yaml` per-user (**registered**, not just copied, or Wi
 | Path | What lives here |
 |------|-----------------|
 | 📁 `home/` | chezmoi source (`.chezmoiroot` points here) — see [`CLAUDE.md`](./CLAUDE.md) for naming conventions. Includes `.chezmoidata/packages.yaml` (the package manifest) and `run_onchange_install-packages.sh.tmpl`. |
-| 🐚 `shell/` | runtime libs sourced by `~/.zshrc` (aliases, history, themes) |
+| 🐚 `shell/` | runtime libs sourced by `~/.zshrc` (aliases, history, ssh askpass helper) |
 | 🥾 `bootstrap/` | one-time Linux system installers |
 | 🔧 `dm/`, `jobs/`, `swaylock/assets/` | Linux system configs / assets |

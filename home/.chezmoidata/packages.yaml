@@ -7,21 +7,19 @@
 #
 # Prerequisites NOT installed from here (chicken-and-egg — needed first):
 #   - chezmoi   the bootstrapper itself (installed to ~/.local/bin)
-#   - yay       AUR helper, required for the `aur` list below
-#   - zplug     zsh plugin manager, git-cloned to ~/.zplug (see README)
+# yay (AUR helper for the `aur` list) is bootstrapped by run_once_before_install-yay.sh.
 
 packages:
   # Installed with: pacman -S --needed
   pacman:
     # --- Wayland desktop (River session) ---
-    # PIN to 0.3.x: river 0.4.0 was a rewrite that REMOVED riverctl/rivertile,
-    # breaking this whole config (the init script + tag-watch). Keep
-    # `IgnorePkg = river` in /etc/pacman.conf until the config is migrated to the
-    # 0.4 protocol-client model. On a fresh box, after the first install, downgrade
-    # with the cached 0.3.13 pkg or the Arch archive, then pin.
-    - river                       # Wayland compositor (riverctl, rivertile) — PINNED 0.3.x
+    # Pinned to 0.3.x: river 0.4 dropped riverctl/rivertile, which the init
+    # script and tag-watch need. bootstrap/linux-system.sh downgrades a 0.4
+    # install and adds `IgnorePkg = river` to /etc/pacman.conf; this list only
+    # installs it.
+    - river                       # Wayland compositor (riverctl, rivertile) — pinned 0.3.x by bootstrap
     - waybar                      # status bar
-    - fuzzel                      # application launcher (Super+D)
+    - fuzzel                      # application launcher (Super tap, via keyd)
     - mako                        # notification daemon (makoctl)
     - swaylock                    # screen locker (Super+L)
     - swaybg                      # wallpaper
@@ -42,6 +40,9 @@ packages:
     - ttf-nerd-fonts-symbols-mono # icon glyph fallback
     # --- Shell / SSH keyring ---
     - zsh                         # login shell
+    - zsh-autosuggestions         # sourced from /usr/share/zsh/plugins in .zshrc
+    - zsh-syntax-highlighting     # sourced from /usr/share/zsh/plugins in .zshrc
+    - zsh-completions             # extra completions (default fpath)
     - starship                    # cross-shell prompt (Windows: winget Starship.Starship)
     - keyd                        # lone Super-tap -> F13 launcher (see keyd/, bootstrap)
     - git                         # VCS
@@ -54,7 +55,6 @@ packages:
     - jdk21-openjdk               # JAVA_HOME=/usr/lib/jvm/default
     # --- System ---
     - ly                          # TUI display manager (also see bootstrap/)
-    - cronie                      # anacron (zplug-update job in jobs/anacron)
 
   # Installed with: yay -S --needed   (requires yay; see prerequisites above)
   aur:

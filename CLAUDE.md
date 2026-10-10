@@ -11,10 +11,9 @@ The chezmoi **source directory is `home/`** (selected by the repo-root `.chezmoi
 ## Installation
 
 ```shell
-# one-time: pin chezmoi to this repo (keep it at ~/dotfiles on Linux —
-# dot_zshrc sources shell/ from there). The --source flag does NOT persist.
-mkdir -p ~/.config/chezmoi
-echo 'sourceDir = "~/dotfiles"' > ~/.config/chezmoi/chezmoi.toml
+# one-time: `init` renders home/.chezmoi.toml.tmpl into ~/.config/chezmoi/chezmoi.toml,
+# pinning sourceDir to the clone (keep it at ~/dotfiles on Linux — dot_zshrc sources shell/ from there)
+chezmoi init --source ~/dotfiles
 
 chezmoi diff                       # preview changes
 chezmoi apply                      # write configs into place
@@ -22,7 +21,7 @@ chezmoi apply                      # write configs into place
 
 Edit configs with `chezmoi edit --apply <target>` (edits the source then applies), or edit files under `home/` directly and run `chezmoi apply`.
 
-**Linux only**, one-time root-level setup chezmoi does not manage (LY display manager, anacron jobs):
+**Linux only**, one-time root-level setup chezmoi does not manage (LY display manager, keyd, river 0.3.x downgrade + `IgnorePkg` pin):
 
 ```shell
 sh ~/dotfiles/bootstrap/linux-system.sh
@@ -37,9 +36,10 @@ sh ~/dotfiles/bootstrap/linux-system.sh
 - `executable_` prefix preserves the +x bit (e.g. `river/executable_init`)
 - `symlink_` creates a symlink (e.g. `Pictures/symlink_swaylock` → repo `swaylock/assets`)
 - `dot_` prefix is required to deploy a dotfile (e.g. nvim's `dot_neoconf.json`)
-- `run_once_*.ps1` = one-time script (Windows XDG setup; ignored elsewhere)
+- `run_once_*.ps1` = one-time script (Windows XDG setup; ignored elsewhere); `run_once_before_*` runs before any file is written (yay bootstrap)
 - `run_onchange_*` = script re-run whenever its rendered content changes (e.g. `install-packages.sh.tmpl`)
 - `home/.chezmoidata/*.yaml` = template data available to all `.tmpl` files (e.g. the package manifest)
+- `home/.chezmoi.toml.tmpl` = rendered by `chezmoi init` into the chezmoi config (sets `sourceDir`)
 - `home/.chezmoiignore` drops the Linux-only Wayland stack when `.chezmoi.os != linux`
 
 ## Cross-OS strategy
@@ -63,9 +63,9 @@ Windows prerequisites not auto-installed: **PowerShell 7 (MSI build**, not Store
 | `home/run_onchange_windows-tweaks.ps1` | Per-user (HKCU) desktop tweaks: Explorer dev defaults, dark mode, centered/auto-hidden taskbar, declutter, fast key-repeat | Windows-only |
 | `home/dot_config/{river,waybar,fuzzel,mako,swaylock}/` | Wayland desktop stack | Linux-only |
 | `home/dot_zshrc`, `home/dot_dircolors` | Shell entrypoints | Linux-only |
-| `shell/` | Runtime libs sourced by `dot_zshrc` (aliases, `zsh/history.zsh`, `bash/`) — **not** chezmoi-managed | Linux |
+| `shell/` | Runtime libs sourced by `dot_zshrc` (aliases, `zsh/history.zsh`, `ssh/askpass-keyring.sh`) — **not** chezmoi-managed | Linux |
 | `swaylock/assets/` | Lock-screen images (symlinked to `~/Pictures/swaylock`) | Linux |
-| `dm/ly/`, `jobs/anacron/`, `keyd/` | System-level configs installed via `bootstrap/linux-system.sh` (keyd: lone Super-tap → F13 → fuzzel) | Linux |
+| `dm/ly/`, `keyd/` | System-level configs installed via `bootstrap/linux-system.sh` (keyd: lone Super-tap → F13 → fuzzel) | Linux |
 | `bootstrap/` | One-time root/admin installers: `linux-system.sh`; `windows-system.ps1` (admin: Caps Lock → Esc scancode map) | Linux + Windows |
 | `home/.chezmoidata/packages.yaml` | Package manifest: `pacman`/`aur` (Linux, via `run_onchange_install-packages.sh.tmpl`) + `nerdfonts` (Windows, via `run_onchange_install-fonts.ps1.tmpl`) | both |
 
@@ -74,6 +74,6 @@ Windows prerequisites not auto-installed: **PowerShell 7 (MSI build**, not Store
 - `dot_zshrc` keeps `BASE_SHELL_DIR=${HOME}/dotfiles/shell` and sources the runtime libs at startup — so the repo must stay cloned at `~/dotfiles` on Linux.
 - NeoVim uses the LazyVim distribution — add plugins as Lua files in `home/dot_config/nvim/lua/plugins/`.
 - Shell aliases are centralized in `shell/aliases/`.
-- System package dependencies live in `home/.chezmoidata/packages.yaml`. Keep it in sync when a config starts depending on a new binary; `chezmoi apply` installs missing ones on Linux. `chezmoi`/`yay`/`zplug` are prerequisites it can't bootstrap.
+- System package dependencies live in `home/.chezmoidata/packages.yaml`. Keep it in sync when a config starts depending on a new binary; `chezmoi apply` installs missing ones on Linux. `chezmoi` is the only prerequisite it can't bootstrap (`yay` comes from `run_once_before_install-yay.sh`).
 - Color theme is "colors2" (neutral grays + green accent `#56c92b`, calmer `#44a022` borders) across Alacritty, Waybar, Fuzzel, River, and mako.
 - **Cross-OS keybindings are kept in sync** between River (`river/executable_init`) and komorebi/whkd (`whkdrc`): WM modifier = `Alt`; focus `Alt+HJKL`, move `Alt+Shift+HJKL`, workspaces `Alt+1-9`, monitors `Alt+,`/`Alt+.`; lock = `Super+L` (Linux swaylock / Windows native Win+L); terminal `Alt+Shift+Return`, screenshot `Alt+Shift+S`. When changing a binding on one platform, change its counterpart on the other. Irreducible per-WM extras: `Alt+arrows` main-location (River-only); `Alt+X`/`Alt+Y` flip-layout + `Alt+M` minimize + `Alt+V/B/C/G/U` change-layout algorithm (komorebi-only — rivertile is single-algorithm, so River has no counterpart).
