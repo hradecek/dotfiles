@@ -70,6 +70,9 @@ alt + 6                 : komorebic focus-workspace 5
 alt + 7                 : komorebic focus-workspace 6
 alt + 8                 : komorebic focus-workspace 7
 alt + 9                 : komorebic focus-workspace 8
+# --- cycle workspace with wrap-around (River: tags.sh next/prev) ---
+alt + tab               : komorebic cycle-workspace next
+alt + shift + tab       : komorebic cycle-workspace previous
 
 # --- move to workspace (Alt + Shift + 1-9) ---
 alt + shift + 1         : komorebic move-to-workspace 0

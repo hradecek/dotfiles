@@ -82,7 +82,7 @@ riverctl map normal None XF86Tools spawn 'pkill -x fuzzel || fuzzel'
 # Lock on Super+L to mirror Windows' native Win+L (keyd only rewrites a *lone*
 # Super tap to F13; held Super+L passes through as a normal modifier combo).
 riverctl map normal Super L spawn 'swaylock -f -c 0d1410'
-riverctl map normal Alt+Shift S spawn 'grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%s).png'
+riverctl map normal Alt+Shift S spawn 'grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png'
 riverctl map normal None Print spawn 'XDG_CURRENT_DESKTOP=sway flameshot gui'
 
 #
@@ -173,8 +173,8 @@ riverctl map normal Alt 0 set-focused-tags $all_tags
 riverctl map normal Alt+Shift 0 set-view-tags $all_tags
 
 # Cycle focused tag (previous / next workspace) with wrap-around
-riverctl map normal Control+Super H spawn "$HOME/.config/river/tags.sh prev"
-riverctl map normal Control+Super L spawn "$HOME/.config/river/tags.sh next"
+riverctl map normal Alt Tab spawn "$HOME/.config/river/tags.sh next"
+riverctl map normal Alt+Shift Tab spawn "$HOME/.config/river/tags.sh prev"
 
 #
 # Passthrough mode (for nested compositors)
@@ -215,8 +215,11 @@ riverctl border-color-unfocused 0x2a3a30
 riverctl set-repeat 50 300
 riverctl focus-follows-cursor 'normal'
 
+# Keyboard layout: Slovak + US, toggle with Super+Space (mirrors Windows Win+Space)
+riverctl keyboard-layout -options 'grp:win_space_toggle' 'sk,us'
+
 # Mouse pointer acceleration
-riverctl input pointer-7847-102-2.4G_Mouse pointer-accel -0.75
+riverctl input pointer-7847-102-2.4G_Mouse pointer-accel -0.85
 riverctl input pointer-1739-30383-DELL08AF:00_06CB:76AF_Touchpad pointer-accel -0.2
 
 #================================= RULES ======================================
