@@ -58,7 +58,7 @@ is present.
 
 ### 🐧 Linux — one-time system setup
 
-Root-level pieces chezmoi doesn't manage (LY display manager, keyd, the river 0.3.x pin):
+Root-level pieces chezmoi doesn't manage (LY display manager, keyd):
 
 ```shell
 sh ~/dotfiles/bootstrap/linux-system.sh

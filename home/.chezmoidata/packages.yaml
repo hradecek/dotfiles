@@ -13,11 +13,9 @@ packages:
   # Installed with: pacman -S --needed
   pacman:
     # --- Wayland desktop (River session) ---
-    # Pinned to 0.3.x: river 0.4 dropped riverctl/rivertile, which the init
-    # script and tag-watch need. bootstrap/linux-system.sh downgrades a 0.4
-    # install and adds `IgnorePkg = river` to /etc/pacman.conf; this list only
-    # installs it.
-    - river                       # Wayland compositor (riverctl, rivertile) — pinned 0.3.x by bootstrap
+    # river-classic is the 0.3.x line; river 0.4 dropped riverctl/rivertile,
+    # which the init script and tag-watch need.
+    - river-classic               # Wayland compositor (riverctl, rivertile)
     - waybar                      # status bar
     - fuzzel                      # application launcher (Super tap, via keyd)
     - mako                        # notification daemon (makoctl)
@@ -43,6 +41,11 @@ packages:
     - zsh-autosuggestions         # sourced from /usr/share/zsh/plugins in .zshrc
     - zsh-syntax-highlighting     # sourced from /usr/share/zsh/plugins in .zshrc
     - zsh-completions             # extra completions (default fpath)
+    - fzf                         # fuzzy finder (Ctrl+R/Ctrl+T/Alt+C in .zshrc)
+    - fd                          # file lister for fzf Ctrl+T/Alt+C
+    - bat                         # fzf Ctrl+T preview
+    - zoxide                      # `z` directory jumping
+    - ripgrep                     # rg (LazyVim grep)
     - starship                    # cross-shell prompt (Windows: winget Starship.Starship)
     - keyd                        # lone Super-tap -> F13 launcher (see keyd/, bootstrap)
     - git                         # VCS

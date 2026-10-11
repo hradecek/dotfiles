@@ -38,16 +38,42 @@ if command -v dircolors >/dev/null && [ -f ~/.dircolors ]; then
     eval "$(dircolors -b ~/.dircolors)"
 fi
 
+# Emacs keymap explicitly - zsh picks viins when $EDITOR contains "vi"
+bindkey -e
 bindkey "^P" up-line-or-search
 bindkey "^N" down-line-or-search
 bindkey "^A" vi-beginning-of-line
 bindkey "^E" vi-end-of-line
+# Word motion stops at / - . (like bash readline)
+WORDCHARS=${WORDCHARS//[\/\-.]}
+# Ctrl+Left/Right word motion (xterm sequences, not in zsh's default emacs keymap)
+bindkey "^[[1;5D" backward-word
+bindkey "^[[1;5C" forward-word
+bindkey "^[b" backward-word
+bindkey "^[f" forward-word
+bindkey "^W" backward-kill-word
+bindkey "^[^?" backward-kill-word
+bindkey "^[d" kill-word
+bindkey "^U" kill-whole-line
+bindkey "^K" kill-line
+bindkey "^Y" yank
 
 load_aliases "${BASE_SHELL_DIR}/aliases"
 source ${BASE_SHELL_DIR}/zsh/history.zsh
 
 # Completion (zsh-completions installs into the default fpath)
 autoload -Uz compinit && compinit
+
+# fzf key bindings: Ctrl+R history, Ctrl+T file path, Alt+C cd
+# fd honours .gitignore; bat previews the file under the cursor
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range :200 {}'"
+export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
+command -v fzf >/dev/null && source <(fzf --zsh)
+
+# zoxide: `z <fragment>` jumps to a frequently used directory
+command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 
 # Plugins — installed by pacman (see .chezmoidata/packages.yaml).
 # syntax-highlighting must be sourced last: it wraps the widgets defined above.

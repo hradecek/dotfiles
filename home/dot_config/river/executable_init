@@ -113,6 +113,8 @@ riverctl map normal Alt+Shift H swap previous
 riverctl map normal Alt+Shift J swap next
 riverctl map normal Alt+Shift K swap previous
 riverctl map normal Alt+Shift L swap next
+riverctl map normal Alt Tab focus-view next
+riverctl map normal Alt+Shift Tab focus-view previous
 
 riverctl map normal Alt Period focus-output next
 riverctl map normal Alt Comma focus-output previous
@@ -173,8 +175,8 @@ riverctl map normal Alt 0 set-focused-tags $all_tags
 riverctl map normal Alt+Shift 0 set-view-tags $all_tags
 
 # Cycle focused tag (previous / next workspace) with wrap-around
-riverctl map normal Alt Tab spawn "$HOME/.config/river/tags.sh next"
-riverctl map normal Alt+Shift Tab spawn "$HOME/.config/river/tags.sh prev"
+riverctl map normal Control+Alt L spawn "$HOME/.config/river/tags.sh next"
+riverctl map normal Control+Alt H spawn "$HOME/.config/river/tags.sh prev"
 
 #
 # Passthrough mode (for nested compositors)
