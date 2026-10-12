@@ -26,6 +26,7 @@
     { "kind": "Exe", "id": "SnippingTool.exe", "matching_strategy": "Equals" },
     { "kind": "Exe", "id": "ScreenClippingHost.exe", "matching_strategy": "Equals" },
     { "kind": "Exe", "id": "Calculator.exe", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "pinentry.exe", "matching_strategy": "Equals" },
     { "kind": "Title", "id": "Picture-in-Picture", "matching_strategy": "Contains" }
   ],
   "monitors": [
