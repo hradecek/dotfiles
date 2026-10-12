@@ -227,6 +227,8 @@ riverctl input pointer-1739-30383-DELL08AF:00_06CB:76AF_Touchpad pointer-accel -
 #================================= RULES ======================================
 riverctl rule-add -app-id 'float*' -title 'foo' float
 riverctl rule-add -app-id "bar" csd
+# GPG passphrase prompt (pinentry-qt app-id: org.gnupg.pinentry-qt, older builds: pinentry-qt)
+riverctl rule-add -app-id '*pinentry*' float
 
 #============================== LAYOUT MANAGER ================================
 # Gaps: screen-edge inset = outer-padding + view-padding, between-window gap =
