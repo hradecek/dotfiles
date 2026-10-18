@@ -1,0 +1,14 @@
+/* retro: green phosphor CRT. base #030704 / surface #050d07 / seam #0f3d1a
+   muted #3f9f5c / phosphor #4ccf72 / glow #8fe0a8 / phosphor white #c4e8cf
+   warn = phosphor white #c4e8cf (alerts/urgent: brightness, not hue) / red #ff3b3b (critical/destructive) */
+@define-color base    #030704;
+@define-color surface #050d07;
+@define-color hover   #0a1f0f;
+@define-color seam    #0f3d1a;
+@define-color dim     #17602b;
+@define-color muted   #3f9f5c;
+@define-color text    #c4e8cf;
+@define-color rest    #4ccf72;
+@define-color active  #8fe0a8;
+@define-color warn    #c4e8cf;
+@define-color red     #ff3b3b;

@@ -43,11 +43,8 @@ if command -v wlr-randr >/dev/null; then
 fi
 
 #============================== AUTOSTART =====================================
-# Wallpaper (same image on every display)
-if command -v swaybg >/dev/null; then
-    WALLPAPER=~/Pictures/wallpapers/archlinux4.jpg
-    [ -f "$WALLPAPER" ] && swaybg -o '*' -i "$WALLPAPER" -m fill &
-fi
+# Theme: River colors + wallpaper from ~/.config/themes/current (see `theme`)
+"$HOME/.local/bin/theme" --reload
 
 # Status bar
 if command -v waybar >/dev/null; then
@@ -81,7 +78,7 @@ riverctl map normal Alt+Shift Return spawn alacritty
 riverctl map normal None XF86Tools spawn 'pkill -x fuzzel || fuzzel'
 # Lock on Super+L to mirror Windows' native Win+L (keyd only rewrites a *lone*
 # Super tap to F13; held Super+L passes through as a normal modifier combo).
-riverctl map normal Super L spawn 'swaylock -f -c 0d1410'
+riverctl map normal Super L spawn 'swaylock -f'
 riverctl map normal Alt+Shift S spawn 'grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png'
 riverctl map normal None Print spawn 'XDG_CURRENT_DESKTOP=sway flameshot gui'
 
@@ -207,11 +204,6 @@ for mode in normal locked; do
     # Optical drive
     riverctl map $mode None XF86Eject spawn 'eject -T'
 done
-
-#============================== APPEARANCE ====================================
-riverctl background-color 0x0d1410
-riverctl border-color-focused 0x8fe0a8
-riverctl border-color-unfocused 0x2a3a30
 
 #================================ BEHAVIOR ====================================
 riverctl set-repeat 50 300

@@ -1,0 +1,68 @@
+#!/bin/sh
+# Switch the desktop theme.
+#
+# Each theme is a directory under ~/.config/themes; the app configs import
+# their colors/fonts from ~/.config/themes/current, a symlink this script owns
+# (chezmoi does not manage it, so `chezmoi apply` keeps the chosen theme).
+#
+# Usage: theme            list themes, mark the active one
+#        theme <name>     switch to <name> and reload what can reload live
+#        theme --reload   re-apply the active theme (River init)
+
+THEMES="$HOME/.config/themes"
+CURRENT="$THEMES/current"
+DEFAULT=colors2
+
+list() {
+    active=$(readlink "$CURRENT")
+    for d in "$THEMES"/*/; do
+        name=$(basename "$d")
+        [ "$name" = current ] && continue
+        if [ "$name" = "$active" ]; then echo "* $name"; else echo "  $name"; fi
+    done
+}
+
+reload() {
+    # River borders/background
+    # shellcheck disable=SC1091
+    command -v riverctl >/dev/null && . "$CURRENT/river.sh"
+
+    # Wallpaper
+    pkill -x swaybg 2>/dev/null
+    if command -v swaybg >/dev/null && [ -e "$CURRENT/wallpaper" ]; then
+        setsid -f swaybg -o '*' -i "$CURRENT/wallpaper" -m fill >/dev/null 2>&1
+    fi
+
+    # Waybar re-reads its CSS on SIGUSR2; mako re-reads its config
+    pkill -USR2 -x waybar 2>/dev/null
+    command -v makoctl >/dev/null && makoctl reload 2>/dev/null
+
+    # Alacritty live-reloads when its config changes; the import target moved
+    # under it, so poke the main file
+    [ -f "$HOME/.config/alacritty/alacritty.toml" ] && touch "$HOME/.config/alacritty/alacritty.toml"
+
+    # Fuzzel and swaylock read the theme on their next start; GTK apps on restart
+}
+
+case "$1" in
+    "")
+        list
+        ;;
+    --reload)
+        [ -e "$CURRENT" ] || ln -sfn "$DEFAULT" "$CURRENT"
+        reload
+        ;;
+    -*)
+        echo "usage: theme [<name>|--reload]" >&2
+        exit 1
+        ;;
+    *)
+        if [ ! -d "$THEMES/$1" ] || [ "$1" = current ]; then
+            echo "theme: unknown theme '$1'" >&2
+            list >&2
+            exit 1
+        fi
+        ln -sfn "$1" "$CURRENT"
+        reload
+        ;;
+esac

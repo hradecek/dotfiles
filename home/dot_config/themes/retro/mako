@@ -1,0 +1,23 @@
+# retro: black phosphor surface, green 1px frame.
+
+font=Departure Mono 11
+
+background-color=#030704
+text-color=#4ccf72
+border-color=#4ccf72
+progress-color=over #0f3d1a
+border-size=1
+border-radius=0
+
+[urgency=low]
+border-color=#0f3d1a
+text-color=#3f9f5c
+
+[urgency=normal]
+border-color=#4ccf72
+
+# Critical: red, and it stays until dismissed
+[urgency=critical]
+border-color=#ff3b3b
+text-color=#ff3b3b
+default-timeout=0

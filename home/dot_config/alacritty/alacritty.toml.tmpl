@@ -4,9 +4,15 @@
 # @file:   $HOME/.confg/alacritty/alacritty.yml                                #
 # @author: hradecek <ivohradek@gmail.com>                                      #
 #==============================================================================#
+# Colors and font come from the active theme (~/.config/themes/current, switched
+# by `theme` on Linux). Windows has no theme switcher and stays on colors2.
 [general]
 import = [
-  "colors.toml"
+{{- if eq .chezmoi.os "windows" }}
+  "~/.config/themes/colors2/alacritty.toml"
+{{- else }}
+  "~/.config/themes/current/alacritty.toml"
+{{- end }}
 ]
 {{- if eq .chezmoi.os "windows" }}
 # Open new windows in the projects directory.
@@ -29,12 +35,6 @@ LC_CTYPE = "en_US.UTF-8"
 title = "Terminal"
 opacity = 0.95
 
-[font]
-size = 12
-
-[font.normal]
-family = "mononoki nerd font"
-style = "Regular"
 {{- if eq .chezmoi.os "windows" }}
 
 # Windows: launch PowerShell 7 instead of the default Windows PowerShell 5.1.

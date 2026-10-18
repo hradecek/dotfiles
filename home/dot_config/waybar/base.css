@@ -1,0 +1,219 @@
+* {
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+}
+
+/* Bar structure. Colors are named (@surface, @rest, ...) and defined per theme
+   in ~/.config/themes/<theme>/waybar-colors.css; fonts and theme-specific
+   styling live in the theme's waybar.css, imported after this file.
+   Hierarchy: ~90% muted; bright tones reserved for active/alerting modules. */
+
+/* Single continuous bar: the surface lives here, not on each module.
+   The whole floating bar is one rounded pill; modules sit flush on it
+   and only paint a background on hover / active state. */
+window#waybar {
+    background: @surface;
+    color: @text;
+    border-radius: 6px;
+}
+
+/* Left section - Workspaces (flat on the bar, no own pill) */
+#tags {
+    background: transparent;
+    padding: 0 4px;
+    margin: 0;
+}
+
+#tags button {
+    padding: 0 12px;
+    background: transparent;
+    color: @dim;                 /* empty tag - recedes */
+    border: none;
+    box-shadow: none;               /* kill GTK's default hover/focus highlight line */
+    outline: none;
+    border-radius: 3px;             /* keep focused/hover fill inside the pill */
+    transition: all 0.3s ease;
+}
+
+#tags button.occupied {
+    color: @rest;                 /* inactive marker - resting green */
+}
+
+#tags button.focused {
+    color: @active;                 /* active workspace - active green */
+    background: alpha(@active, 0.12);   /* clean rounded fill, no underline */
+}
+
+#tags button:hover {
+    background: alpha(@active, 0.06);
+}
+
+#window {
+    background: transparent;
+    padding: 0 16px 0 18px;
+    border-left: 1px solid @seam;
+    color: @text;                 /* focused window title - primary text */
+    font-weight: 500;
+}
+
+/* Center - Clock (signature green; it changes, so it earns colour).
+   No box, no underline: just clean green text, flat on the bar. */
+#clock {
+    background: transparent;
+    padding: 0 20px;
+    margin: 0;
+    color: @rest;
+    font-weight: bold;
+    font-size: 14px;
+    border-left: 1px solid @seam;    /* bracketed by dividers, both sides */
+    border-right: 1px solid @seam;
+}
+
+#clock:hover {
+    background: @hover;
+}
+
+/* Right section - System info.
+   Calm muted-green on the surface tier; colour carries meaning, not decoration. */
+#custom-pacman,
+#idle_inhibitor,
+#cpu,
+#memory,
+#temperature,
+#disk,
+#network,
+#bluetooth,
+#pulseaudio,
+#backlight,
+#battery,
+#custom-kblayout,
+#custom-notification,
+#tray,
+#custom-power {
+    background: transparent;
+    padding: 0 12px;
+    margin: 0;
+    border-bottom: 2px solid transparent;
+    color: @muted;                 /* passive readout - muted text */
+    border-radius: 4px;             /* keeps hover / active fills rounded */
+    transition: all 0.3s ease;
+}
+
+/* Section dividers: a 1px full-height rule at each logical group seam,
+   in the border tone so it reads as structure, not content. */
+#network {                       /* connectivity / peripherals group */
+    padding-left: 16px;
+    border-left: 1px solid @seam;
+}
+
+/* The tray/system seam is drawn on the last module's trailing edge rather
+   than the notification's leading edge, so the single-glyph bell stays centered. */
+#custom-kblayout {
+    padding-right: 12px;
+    border-right: 1px solid @seam;
+}
+
+/* Updates available - attention */
+#custom-pacman {
+    color: @warn;
+}
+
+/* Idle inhibitor engaged - active green (a state you turned on) */
+#idle_inhibitor.activated {
+    color: @active;
+    border-bottom-color: @rest;
+}
+
+/* Charging - resting green (a good, ongoing state, not an alert).
+   @warn is reserved for warnings/low-battery below. */
+#battery.charging,
+#battery.plugged {
+    color: @rest;
+    border-bottom-color: @rest;
+}
+
+/* Warnings */
+#cpu.warning,
+#memory.warning,
+#disk.warning,
+#battery.warning {
+    color: @warn;
+    border-bottom-color: @warn;
+}
+
+/* Critical / errors - red */
+#cpu.critical,
+#memory.critical,
+#temperature.critical,
+#disk.critical,
+#network.disconnected,
+#battery.critical:not(.charging) {
+    color: @red;
+    border-bottom-color: @red;
+}
+
+/* Bluetooth device connected - resting green */
+#bluetooth.connected {
+    color: @rest;
+}
+
+/* Muted / off - dimmed */
+#bluetooth.off,
+#bluetooth.disabled,
+#pulseaudio.muted {
+    color: @dim;
+}
+
+/* Notification indicator (mako DND) */
+#custom-notification.dnd {
+    color: @dim;
+}
+
+/* Power button - destructive, stays red */
+#custom-power {
+    color: @red;
+}
+
+#custom-power:hover {
+    background: alpha(@red, 0.18);
+}
+
+/* Tray */
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background: alpha(@warn, 0.14);    /* urgent - warning wash */
+}
+
+/* Uniform hover */
+#custom-pacman:hover,
+#idle_inhibitor:hover,
+#cpu:hover,
+#memory:hover,
+#temperature:hover,
+#disk:hover,
+#network:hover,
+#bluetooth:hover,
+#pulseaudio:hover,
+#backlight:hover,
+#battery:hover,
+#custom-kblayout:hover,
+#custom-notification:hover {
+    background: @hover;
+}
+
+/* Tooltip styling */
+tooltip {
+    background: @base;
+    border: 2px solid @seam;
+    color: @text;
+}
+
+tooltip label {
+    color: @text;
+    padding: 4px;
+}

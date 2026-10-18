@@ -1,0 +1,14 @@
+/* colors2: base #0d1410 / surface #16201a / border #2a3a30
+   muted #8ba896 / primary #d6e8dc / resting green #5fa876 / active green #8fe0a8
+   warn amber #d4a85f (alerts/urgent) / red #d65c5c (critical/destructive) */
+@define-color base    #0d1410;
+@define-color surface #16201a;
+@define-color hover   #1d2a22;
+@define-color seam    #2a3a30;
+@define-color dim     #4a5d52;
+@define-color muted   #8ba896;
+@define-color text    #d6e8dc;
+@define-color rest    #5fa876;
+@define-color active  #8fe0a8;
+@define-color warn    #d4a85f;
+@define-color red     #d65c5c;

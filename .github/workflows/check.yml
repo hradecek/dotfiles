@@ -18,7 +18,8 @@ jobs:
         run: |
           shellcheck -S warning -s sh bootstrap/*.sh shell/ssh/*.sh shell/aliases/*.sh \
             home/run_once_before_*.sh \
-            home/dot_config/river/executable_* home/dot_config/waybar/executable_*
+            home/dot_config/river/executable_* home/dot_config/waybar/executable_* \
+            home/dot_config/themes/*/river.sh home/dot_local/bin/executable_*
       - name: shellcheck rendered script templates
         run: |
           for t in home/run_onchange_*.sh.tmpl; do

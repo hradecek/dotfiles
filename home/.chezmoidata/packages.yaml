@@ -67,6 +67,7 @@ packages:
   aur:
     - waybar-updates              # pacman update count module for waybar
     - ristate                     # river-status reader for prev/next tag cycling
+    - otf-departure-mono          # pixel font of the retro theme (icons fall back to the Nerd symbols font)
 
   # Nerd Fonts installed on WINDOWS by run_onchange_install-fonts.ps1 (per-user,
   # no admin). Each name is a nerd-fonts release archive basename, downloaded

@@ -5,6 +5,12 @@
 .config/fuzzel
 .config/mako
 .config/swaylock
+.local
+{{/* Themes: Windows only uses colors2's Alacritty colors */}}
+.config/themes/*
+!.config/themes/colors2
+.config/themes/colors2/*
+!.config/themes/colors2/alacritty.toml
 .config/gtk-3.0
 .config/gtk-4.0
 .dircolors

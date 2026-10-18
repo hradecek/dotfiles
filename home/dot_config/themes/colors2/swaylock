@@ -4,4 +4,4 @@ font=mononoki nerd font
 indicator-radius=80
 indicator-thickness=20
 image=$HOME/Pictures/swaylock/*
-
+color=0d1410

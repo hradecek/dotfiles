@@ -4,19 +4,6 @@
 # @file:   $HOME/.config/mako/config                                           #
 # @author: hradecek <ivohradek@gmail.com>                                      #
 #==============================================================================#
-# dark-green theme: surface (#16201a) with a resting green accent (#5fa876),
-# matching alacritty / waybar / fuzzel / river.
-
-font=mononoki nerd font 11
-
-# Surface tier, primary foreground, resting green border (matches waybar pills)
-background-color=#16201a
-text-color=#d6e8dc
-border-color=#5fa876
-progress-color=over #2a3a30
-
-border-size=2
-border-radius=6
 padding=12
 margin=10
 width=360
@@ -28,17 +15,5 @@ anchor=top-right
 layer=overlay
 default-timeout=5000
 
-# Low priority (e.g. routine info): dimmed, no green pull
-[urgency=low]
-border-color=#2a3a30
-text-color=#8ba896
-
-# Normal (e.g. "updates available"): resting green accent
-[urgency=normal]
-border-color=#5fa876
-
-# Critical: red, and it stays until dismissed
-[urgency=critical]
-border-color=#d65c5c
-text-color=#d6e8dc
-default-timeout=0
+# Font, colors, border and per-urgency styling come from the active theme.
+include=~/.config/themes/current/mako

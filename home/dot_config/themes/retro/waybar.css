@@ -1,0 +1,32 @@
+/* Pixel font; icons fall back to the Nerd Font symbols. */
+* {
+    font-family: "Departure Mono", "Symbols Nerd Font Mono", monospace;
+    font-size: 11px;
+    border-radius: 0;
+}
+
+/* Square terminal frame, faint scanlines, phosphor glow on all text */
+window#waybar {
+    border: 1px solid @seam;
+    background-image: repeating-linear-gradient(to bottom,
+        alpha(@rest, 0.035) 0px, alpha(@rest, 0.035) 1px,
+        transparent 1px, transparent 3px);
+    text-shadow: 0 0 3px alpha(@rest, 0.35);
+}
+
+/* Focused tag = inverted block cursor */
+#tags button.focused {
+    background: @rest;
+    color: @base;
+    text-shadow: none;
+}
+
+/* Red rule under the clock */
+#clock {
+    border-bottom: 1px solid @red;
+}
+
+tooltip {
+    border: 1px solid @rest;
+    border-radius: 0;
+}

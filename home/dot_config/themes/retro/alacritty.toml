@@ -1,0 +1,48 @@
+# retro: green phosphor on black, pixel font.
+
+[font]
+size = 11
+
+[font.normal]
+family = "Departure Mono"
+style = "Regular"
+
+[colors.primary]
+background = '#030704'
+foreground = '#9fdcb0'
+
+[colors.cursor]
+text = '#030704'
+cursor = '#4ccf72'
+
+[colors.normal]
+black = '#030704'
+red = '#ff3b3b'
+green = '#4ccf72'
+yellow = '#d9c56a'
+blue = '#2a7fff'
+magenta = '#c86bff'
+cyan = '#2de2c8'
+white = '#b8ffc8'
+
+[colors.bright]
+black = '#17602b'
+red = '#ff6b6b'
+green = '#8fe0a8'
+yellow = '#ece08f'
+blue = '#5fa0ff'
+magenta = '#dc9bff'
+cyan = '#6ff5e0'
+white = '#e8fff0'
+
+[colors.selection]
+background = '#0f3d1a'
+foreground = '#c4e8cf'
+
+[[colors.indexed_colors]]
+index = 16
+color = '#d9c56a'
+
+[[colors.indexed_colors]]
+index = 17
+color = '#ff6b6b'

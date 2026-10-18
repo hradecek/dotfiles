@@ -1,0 +1,46 @@
+/* retro (green phosphor) overrides for GTK4 / libadwaita.
+ * Retints the libadwaita named colors toward the desktop palette:
+ *   base #030704 / surface #050d07 / border #0f3d1a
+ *   text #c4e8cf / muted #3f9f5c / resting green #4ccf72 / active green #8fe0a8
+ * Reserved: phosphor white #c4e8cf (warnings), red #ff3b3b (errors/destructive). */
+
+/* Accents: bg variant for filled selections, lighter variant for standalone
+ * colored text/links/checkmarks so they stay legible on the dark base. */
+@define-color accent_color          #8fe0a8;
+@define-color accent_bg_color       #4ccf72;
+@define-color accent_fg_color       #030704;
+
+/* Window + content surfaces */
+@define-color window_bg_color       #030704;
+@define-color window_fg_color       #c4e8cf;
+@define-color view_bg_color         #030704;
+@define-color view_fg_color         #c4e8cf;
+
+@define-color headerbar_bg_color    #050d07;
+@define-color headerbar_fg_color    #c4e8cf;
+@define-color headerbar_border_color #0f3d1a;
+@define-color headerbar_backdrop_color #040a05;
+
+@define-color card_bg_color         #050d07;
+@define-color card_fg_color         #c4e8cf;
+
+@define-color popover_bg_color      #050d07;
+@define-color popover_fg_color      #c4e8cf;
+
+@define-color dialog_bg_color       #050d07;
+@define-color dialog_fg_color       #c4e8cf;
+
+@define-color sidebar_bg_color      #040a05;
+@define-color sidebar_fg_color      #c4e8cf;
+
+@define-color borders               #0f3d1a;
+
+/* Status colors */
+@define-color success_color         #4ccf72;
+@define-color success_bg_color      #4ccf72;
+@define-color warning_color         #c4e8cf;
+@define-color warning_bg_color      #c4e8cf;
+@define-color error_color           #ff3b3b;
+@define-color error_bg_color        #ff3b3b;
+@define-color destructive_color     #ff3b3b;
+@define-color destructive_bg_color  #ff3b3b;

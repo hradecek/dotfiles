@@ -1,3 +1,12 @@
+# colors2: neutral dark-green surfaces, resting green #5fa876 accent.
+
+[font]
+size = 12
+
+[font.normal]
+family = "mononoki nerd font"
+style = "Regular"
+
 [colors.primary]
 background = '#0d1410'
 foreground = '#d6e8dc'
