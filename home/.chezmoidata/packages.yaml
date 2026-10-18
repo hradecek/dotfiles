@@ -33,6 +33,10 @@ packages:
     - brightnessctl               # brightness keys
     # --- Network ---
     - nm-connection-editor        # waybar network on-click
+    # --- Bluetooth ---
+    - bluez                       # bluetoothd (waybar bluetooth module reads it over D-Bus)
+    - bluez-utils                 # bluetoothctl
+    - blueman                     # blueman-manager (waybar bluetooth on-click)
     # --- Fonts (UI + waybar glyphs) ---
     - ttf-mononoki-nerd           # primary UI/terminal font
     - ttf-nerd-fonts-symbols-mono # icon glyph fallback

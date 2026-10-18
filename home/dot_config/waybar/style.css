@@ -54,7 +54,6 @@ window#waybar {
 #window {
     background: transparent;
     padding: 0 16px 0 18px;
-    margin-left: 10px;              /* divider seam from the workspaces */
     border-left: 1px solid #2a3a30;
     color: #d6e8dc;                 /* focused window title - primary text */
     font-weight: 500;
@@ -86,9 +85,11 @@ window#waybar {
 #temperature,
 #disk,
 #network,
+#bluetooth,
 #pulseaudio,
 #backlight,
 #battery,
+#custom-kblayout,
 #custom-notification,
 #tray,
 #custom-power {
@@ -104,16 +105,14 @@ window#waybar {
 /* Section dividers: a 1px full-height rule at each logical group seam,
    in the border tone so it reads as structure, not content. */
 #network {                       /* connectivity / peripherals group */
-    margin-left: 10px;
     padding-left: 16px;
     border-left: 1px solid #2a3a30;
 }
 
-/* The tray/system seam is drawn on battery's trailing edge rather than the
-   notification's leading edge, so the single-glyph bell stays centered. */
-#battery {
-    margin-right: 10px;
-    padding-right: 16px;
+/* The tray/system seam is drawn on the last module's trailing edge rather
+   than the notification's leading edge, so the single-glyph bell stays centered. */
+#custom-kblayout {
+    padding-right: 12px;
     border-right: 1px solid #2a3a30;
 }
 
@@ -156,7 +155,14 @@ window#waybar {
     border-bottom-color: #d65c5c;
 }
 
-/* Muted - dimmed */
+/* Bluetooth device connected - resting green */
+#bluetooth.connected {
+    color: #5fa876;
+}
+
+/* Muted / off - dimmed */
+#bluetooth.off,
+#bluetooth.disabled,
 #pulseaudio.muted {
     color: #4a5d52;
 }
@@ -193,9 +199,11 @@ window#waybar {
 #temperature:hover,
 #disk:hover,
 #network:hover,
+#bluetooth:hover,
 #pulseaudio:hover,
 #backlight:hover,
 #battery:hover,
+#custom-kblayout:hover,
 #custom-notification:hover {
     background: #1d2a22;
 }

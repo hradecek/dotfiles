@@ -30,4 +30,10 @@ if [ -f "${REPO}/keyd/default.conf" ]; then
     sudo keyd reload 2>/dev/null || true
 fi
 
+# Bluetooth daemon (waybar bluetooth module, blueman)
+if command -v bluetoothd >/dev/null 2>&1 || [ -x /usr/lib/bluetooth/bluetoothd ]; then
+    echo "Enabling bluetooth service (requires sudo)..."
+    sudo systemctl enable --now bluetooth 2>/dev/null || true
+fi
+
 echo "Linux system bootstrap complete."

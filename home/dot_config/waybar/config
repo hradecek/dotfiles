@@ -19,9 +19,11 @@
     "idle_inhibitor",
     "group/hardware",
     "network",
+    "bluetooth",
     "pulseaudio",
     "backlight",
     "battery",
+    "custom/kblayout",
     "custom/notification",
     "tray",
     "custom/power"
@@ -52,6 +54,13 @@
       "updated": ""
     },
     "exec": "waybar-updates"
+  },
+  "custom/kblayout": {
+    "format": "󰌌 {}",
+    "return-type": "json",
+    "exec": "~/.config/river/kb-layout.sh status",
+    "signal": 8,
+    "on-click": "~/.config/river/kb-layout.sh toggle"
   },
   "custom/notification": {
     "exec": "~/.config/waybar/notification.sh",
@@ -137,6 +146,19 @@
     "format-alt": "{ifname}: {ipaddr}/{cidr} [{signalStrength}%]",
     "tooltip-format": "{ifname}: {ipaddr}",
     "on-click": "nm-connection-editor"
+  },
+  "bluetooth": {
+    "format": "󰂯",
+    "format-off": "󰂲",
+    "format-disabled": "󰂲",
+    "format-connected": "󰂱 {num_connections}",
+    "format-connected-battery": "󰂱 {device_battery_percentage}%",
+    "tooltip-format": "{controller_alias}: {status}",
+    "tooltip-format-connected": "{controller_alias}\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias} {device_battery_percentage}%",
+    "on-click": "blueman-manager",
+    "on-click-right": "rfkill toggle bluetooth"
   },
   "pulseaudio": {
     "format": "{icon} {volume}%",
