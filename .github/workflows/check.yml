@@ -41,7 +41,11 @@ jobs:
         run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/local/bin
       - name: Install chezmoi (Windows)
         if: runner.os == 'Windows'
-        run: choco install chezmoi --no-progress -y
+        shell: pwsh
+        run: |
+          iex "&{$(irm 'https://get.chezmoi.io/ps1')} -b 'C:\chezmoi'"
+          C:\chezmoi\chezmoi.exe --version
+          "C:\chezmoi" >> $env:GITHUB_PATH
       - name: Render every template and diff against an empty home
         shell: bash
         run: |
