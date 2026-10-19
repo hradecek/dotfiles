@@ -5,6 +5,7 @@
 .config/fuzzel
 .config/mako
 .config/swaylock
+.config/btop
 .local
 {{/* Themes: Windows only uses colors2's Alacritty colors */}}
 .config/themes/*

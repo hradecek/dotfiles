@@ -30,6 +30,7 @@ packages:
     - alsa-utils                  # amixer, alsamixer (volume keys)
     - wireplumber                 # wpctl (PipeWire session manager)
     - playerctl                   # media play/pause/next keys
+    - btop                        # system monitor (config follows the terminal theme)
     - brightnessctl               # brightness keys
     # --- Network ---
     - nm-connection-editor        # waybar network on-click
