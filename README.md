@@ -12,14 +12,16 @@
 <br>
 
 <table>
-<tr><th>colors2</th><th>retro</th></tr>
+<tr><th>colors2</th><th>retro</th><th>paper</th></tr>
 <tr>
-<td><img src="./.github/desktop.jpg" alt="colors2 theme - clean River desktop with Arch wallpaper and Waybar" width="420"></td>
-<td><img src="./.github/desktop-retro.jpg" alt="retro theme - green phosphor CRT wallpaper and Waybar" width="420"></td>
+<td><img src="./.github/desktop.jpg" alt="colors2 theme - clean River desktop with Arch wallpaper and Waybar" width="280"></td>
+<td><img src="./.github/desktop-retro.jpg" alt="retro theme - green phosphor CRT wallpaper and Waybar" width="280"></td>
+<td><img src="./.github/desktop-paper.jpg" alt="paper theme - light grid-paper wallpaper and Waybar" width="280"></td>
 </tr>
 <tr>
-<td><img src="./.github/preview.png" alt="colors2 theme - fastfetch, lazygit and btop tiled" width="420"></td>
-<td><img src="./.github/preview-retro.png" alt="retro theme - fastfetch, lazygit and btop tiled" width="420"></td>
+<td><img src="./.github/preview.png" alt="colors2 theme - fastfetch, lazygit and btop tiled" width="280"></td>
+<td><img src="./.github/preview-retro.png" alt="retro theme - fastfetch, lazygit and btop tiled" width="280"></td>
+<td><img src="./.github/preview-paper.png" alt="paper theme - fastfetch, lazygit and btop tiled" width="280"></td>
 </tr>
 </table>
 
