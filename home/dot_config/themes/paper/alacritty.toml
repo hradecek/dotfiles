@@ -1,4 +1,5 @@
-# paper: ink on warm paper.
+# paper: ink on warm paper. ANSI white is mid-gray: programs assume white text
+# stays visible on the default background, which it would not on paper.
 
 [font]
 size = 12
@@ -23,7 +24,7 @@ yellow = '#8a5a00'
 blue = '#2d5b8c'
 magenta = '#7a3e7a'
 cyan = '#1f6f78'
-white = '#d3ccbd'
+white = '#6b665c'
 
 [colors.bright]
 black = '#7a756b'
@@ -33,7 +34,7 @@ yellow = '#a6741a'
 blue = '#4a78aa'
 magenta = '#985a98'
 cyan = '#3d8a92'
-white = '#ebe6db'
+white = '#8a8478'
 
 [colors.selection]
 background = '#d3ccbd'
