@@ -212,7 +212,7 @@ riverctl focus-follows-cursor 'normal'
 # Keyboard layout: Slovak + US, toggle with Super+Space (mirrors Windows Win+Space).
 # Switched by kb-layout.sh (not xkb grp:) so Waybar can show the active layout.
 "$HOME/.config/river/kb-layout.sh" init
-riverctl map normal Super Space spawn '~/.config/river/kb-layout.sh toggle'
+riverctl map normal Super Space spawn "$HOME/.config/river/kb-layout.sh toggle"
 
 # Mouse pointer acceleration
 riverctl input pointer-7847-102-2.4G_Mouse pointer-accel -0.85
