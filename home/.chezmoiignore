@@ -33,3 +33,6 @@ komorebi.bar.json
 windows-tweaks.ps1
 .config/whkdrc
 {{- end }}
+{{/* Docs kept next to the sources, not deployed */}}
+.config/themes/README.md
+.config/themes/*/*.py

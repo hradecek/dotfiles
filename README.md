@@ -11,13 +11,19 @@
 
 <br>
 
-<img src="./.github/desktop.jpg" alt="Clean River desktop — Arch wallpaper and themed Waybar" width="850">
+<table>
+<tr><th>colors2</th><th>retro</th></tr>
+<tr>
+<td><img src="./.github/desktop.jpg" alt="colors2 theme - clean River desktop with Arch wallpaper and Waybar" width="420"></td>
+<td><img src="./.github/desktop-retro.jpg" alt="retro theme - green phosphor CRT wallpaper and Waybar" width="420"></td>
+</tr>
+<tr>
+<td><img src="./.github/preview.png" alt="colors2 theme - fastfetch, lazygit and btop tiled" width="420"></td>
+<td><img src="./.github/preview-retro.png" alt="retro theme - fastfetch, lazygit and btop tiled" width="420"></td>
+</tr>
+</table>
 
-<sub>⬆️ clean desktop · ⬇️ tiled session</sub>
-
-<img src="./.github/preview.png" alt="River / Wayland desktop — fastfetch, lazygit and btop on a themed Waybar" width="850">
-
-<sub>🎨 Themed **colors2** — neutral grays + a green accent (`#56c92b`), calmer borders (`#44a022`) — unified across Alacritty, Waybar, Fuzzel, River & mako.</sub>
+<sub>🎨 Switchable themes - one command restyles Alacritty, Waybar, Fuzzel, mako, River, swaylock, GTK and the wallpaper.</sub>
 
 </div>
 
@@ -30,6 +36,7 @@
 | 🪟 **WM** · [River](./home/dot_config/river/) | 📊 **Bar** · [Waybar](./home/dot_config/waybar/) | 🚀 **Launcher** · [Fuzzel](./home/dot_config/fuzzel/) |
 | 🔔 **Notifications** · [mako](./home/dot_config/mako/) | 🐚 **Shell** · [ZSH](./shell/zsh/README.md) / PowerShell | ✨ **Prompt** · [Starship](./home/dot_config/starship.toml) |
 | 🖥️ **Terminal** · [Alacritty](./home/dot_config/alacritty/) | 📝 **Editor** · [NeoVim / LazyVim](./home/dot_config/nvim/README.md) | 🌿 **VCS** · [Git](./home/dot_gitconfig.tmpl) |
+| 🎨 **Themes** · [`theme`](./home/dot_config/themes/README.md) | 🔒 **Lock** · [swaylock](./home/dot_config/swaylock/) | ⌨️ **Keys** · [keyd](./keyd/) |
 
 ---
 
@@ -88,8 +95,23 @@ Nerd Fonts from `packages.yaml` per-user (**registered**, not just copied, or Wi
 
 > [!NOTE]
 > **Alacritty on Windows ignores `XDG_CONFIG_HOME`** — it only reads `%APPDATA%\alacritty`. A
-> generated shim there imports the real `~/.config\alacritty` config (single source of truth), and
+> generated shim there imports the real `~/.config\alacritty` config (single source of truth, colors2 theme), and
 > launches **PowerShell 7** in `C:\projects` with the same **Starship** prompt and git aliases as zsh.
+
+---
+
+## 🎨 Themes
+
+Colors, fonts and the wallpaper live in [`home/dot_config/themes/`](./home/dot_config/themes/), one
+directory per theme. Switch on Linux with:
+
+```shell
+theme           # list themes, * marks the active one
+theme retro     # switch and live-reload
+```
+
+The choice survives `chezmoi apply`. Windows has no switcher; Alacritty there uses colors2. What a
+theme contains and how to add one: [themes README](./home/dot_config/themes/README.md).
 
 ---
 
