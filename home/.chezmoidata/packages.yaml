@@ -40,6 +40,7 @@ packages:
     # --- Fonts (UI + waybar glyphs) ---
     - ttf-mononoki-nerd           # primary UI/terminal font
     - ttf-nerd-fonts-symbols-mono # icon glyph fallback
+    - ttf-iosevka-nerd            # paper theme font
     # --- Shell / SSH keyring ---
     - zsh                         # login shell
     - zsh-autosuggestions         # sourced from /usr/share/zsh/plugins in .zshrc

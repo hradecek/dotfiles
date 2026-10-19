@@ -1,0 +1,10 @@
+* {
+    font-family: "Iosevka Nerd Font", monospace;
+    font-size: 14px;
+}
+
+/* Paper sheet: base tone with a hairline edge instead of a filled surface */
+window#waybar {
+    background: @base;
+    border: 1px solid @seam;
+}

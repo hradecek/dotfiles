@@ -25,6 +25,8 @@ Every theme must provide every file; a missing one leaves that app unthemed or f
 | `river.sh` | sourced; `riverctl` background and border colors | live |
 | `swaylock` | `~/.config/swaylock/config` symlink | next lock |
 | `gtk3.css`, `gtk4.css` | `~/.config/gtk-{3,4}.0/gtk.css` symlinks | app restart |
+| `gtk-settings.ini` | `~/.config/gtk-{3,4}.0/settings.ini` symlinks (Adwaita vs Adwaita-dark, icons) | app restart |
+| `scheme` | `dark` or `light`; `theme` sets gsettings `color-scheme` (GTK4, browsers via the portal) | live |
 | `wallpaper` | swaybg (any image format, no extension needed) | live |
 
 ## Adding a theme
@@ -33,8 +35,8 @@ Every theme must provide every file; a missing one leaves that app unthemed or f
 2. Fonts it needs go to [`packages.yaml`](../../.chezmoidata/packages.yaml).
 3. `chezmoi apply`, then `theme <name>`.
 
-A theme may keep the source of a generated wallpaper next to it (`*.py`, not deployed). The retro
-one is regenerated with `python3 home/dot_config/themes/retro/wallpaper.py` (needs `python-pillow`).
+A theme may keep the source of a generated wallpaper next to it (`*.py`, not deployed), e.g.
+`python3 home/dot_config/themes/retro/wallpaper.py` (needs `python-pillow`).
 
 > [!WARNING]
 > Waybar exits on any CSS property GTK3 does not know (e.g. `text-transform`, `font-variant-*`)

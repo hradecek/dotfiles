@@ -1,0 +1,15 @@
+/* paper: base #f4f1ea / surface #ebe6db / seam #d3ccbd
+   muted #7a756b / ink #2b2a27 / resting green #3d7a58 / active green #1f5a3c
+   warn #8a5a00 (alerts/urgent) / red #b3261e (critical/destructive)
+   On a light base, emphasis is darker, not brighter. */
+@define-color base    #f4f1ea;
+@define-color surface #ebe6db;
+@define-color hover   #e2dccf;
+@define-color seam    #d3ccbd;
+@define-color dim     #b0a999;
+@define-color muted   #7a756b;
+@define-color text    #2b2a27;
+@define-color rest    #3d7a58;
+@define-color active  #1f5a3c;
+@define-color warn    #8a5a00;
+@define-color red     #b3261e;

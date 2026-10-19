@@ -102,11 +102,11 @@
       "weeks-pos": "left",
       "on-scroll": 1,
       "format": {
-        "months": "<span color='#d6e8dc'><b>{}</b></span>",
-        "days": "<span color='#d6e8dc'><b>{}</b></span>",
-        "weeks": "<span color='#5fa876'><b>W{}</b></span>",
-        "weekdays": "<span color='#8ba896'><b>{}</b></span>",
-        "today": "<span color='#8fe0a8'><b><u>{}</u></b></span>"
+        "months": "<b>{}</b>",
+        "days": "<b>{}</b>",
+        "weeks": "<span alpha='55%'><b>W{}</b></span>",
+        "weekdays": "<span alpha='70%'><b>{}</b></span>",
+        "today": "<b><u>{}</u></b>"
       }
     },
     "actions": {

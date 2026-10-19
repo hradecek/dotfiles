@@ -1,0 +1,48 @@
+# paper: ink on warm paper.
+
+[font]
+size = 12
+
+[font.normal]
+family = "Iosevka Nerd Font"
+style = "Regular"
+
+[colors.primary]
+background = '#f4f1ea'
+foreground = '#2b2a27'
+
+[colors.cursor]
+text = '#f4f1ea'
+cursor = '#2b2a27'
+
+[colors.normal]
+black = '#2b2a27'
+red = '#b3261e'
+green = '#3d7a58'
+yellow = '#8a5a00'
+blue = '#2d5b8c'
+magenta = '#7a3e7a'
+cyan = '#1f6f78'
+white = '#d3ccbd'
+
+[colors.bright]
+black = '#7a756b'
+red = '#d0453b'
+green = '#4f8a68'
+yellow = '#a6741a'
+blue = '#4a78aa'
+magenta = '#985a98'
+cyan = '#3d8a92'
+white = '#ebe6db'
+
+[colors.selection]
+background = '#d3ccbd'
+foreground = '#2b2a27'
+
+[[colors.indexed_colors]]
+index = 16
+color = '#a6741a'
+
+[[colors.indexed_colors]]
+index = 17
+color = '#d0453b'
